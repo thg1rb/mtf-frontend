@@ -1,35 +1,15 @@
 import React from 'react'
-import { Home, Building, Users, Files, ReceiptText, ChevronUp, User, LogOut } from 'lucide-react'
+import { Users, Building, ChevronUp, LogOut } from 'lucide-react'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../ui/sidebar'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
 import { Avatar, AvatarFallback } from '../ui/avatar'
 
 const menuItems = [
     {
-        title: "แดชบอร์ด",
-        url: "/dashboard",
-        icon: Home,
-    },
-    {
-        title: "นายจ้าง",
-        url: "/employers",
-        icon: Building,
-    },
-    {
-        title: "ลูกจ้าง",
-        url: "/employees",
+        title: "นายหน้า",
+        url: "/agents",
         icon: Users,
-    },
-    {
-        title: "เอกสาร",
-        url: "documents",
-        icon: Files,
-    },
-    {
-        title: "ใบเสร็จ",
-        url: "receipts",
-        icon: ReceiptText,
-    },
+    }
 ]
 
 export default function AgentSidebar() {
@@ -87,11 +67,6 @@ export default function AgentSidebar() {
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-56">
-                                <DropdownMenuItem>
-                                    <User className="w-4 h-4 mr-2" />
-                                    ตั้งค่าบัญชี
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
                                 <DropdownMenuItem>
                                     <LogOut className="w-4 h-4 mr-2" />
                                     ออกจากระบบ
