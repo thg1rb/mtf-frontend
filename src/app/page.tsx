@@ -12,9 +12,9 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className='m-auto'>
+    <div className='m-auto max-w-[1000px]'>
       <div className='flex flex-row gap-x-[120px]'>
-        <div className='w-[540px] hidden lg:flex flex-col gap-y-[18px]'>
+        <div className='w-1/2 hidden lg:flex flex-col gap-y-[18px]'>
           <div className='flex flex-row items-center gap-x-[12px]'>
             <div className='flex flex-col justify-center items-center w-14 h-14 bg-black rounded-[12px]'>
               <Users className='w-6 h-6 text-white' />
@@ -42,13 +42,13 @@ export default function LoginPage() {
             </div>
           </div>
         </div>
-        <div className='w-[500px] flex flex-col gap-y-[32px] bg-white px-[48px] py-[36px] rounded-2xl border-[1px] shadow-2xl'>
+
+        <div className='w-[350px] lg:w-1/2 flex flex-col gap-y-[32px] bg-white px-[36px] lg:px-[48px] py-[24px] lg:py-[36px] rounded-2xl border-[1px] shadow-2xl'>
           <div className='flex flex-col items-center gap-y-[8px]'>
             <p className='font-medium'>เข้าสู่ระบบ</p>
-            <p className='font-light text-zinc-400'>กรุณาเข้าสู่ระบบเพื่อจัดการแรงงานต่างด้าว</p>
+            <p className='font-light text-center text-zinc-400'>กรุณาเข้าสู่ระบบเพื่อจัดการแรงงานต่างด้าว</p>
           </div>
           <div className='flex flex-col gap-y-4'>
-            {/* Input */}
             <div className='flex flex-col gap-y-[10px]'>
               <Label className='font-light'>อีเมล</Label>
               <Input

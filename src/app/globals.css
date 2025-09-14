@@ -162,6 +162,30 @@ body {
   font-weight: 100;
 }
 
+@media (max-width: 1024px) {
+  .font-black { font-size: 78px; }
+  .font-extrabold { font-size: 59px; }
+  .font-bold { font-size: 45px; }
+  .font-semibold { font-size: 34px; }
+  .font-medium { font-size: 25px; }
+  .font-normal { font-size: 19px; }
+  .font-light { font-size: 14px; }
+  .font-extralight { font-size: 10px; }
+  .font-thin { font-size: 7px; }
+}
+
+@media (max-width: 768px) {
+  .font-black { font-size: 76px; }
+  .font-extrabold { font-size: 57px; }
+  .font-bold { font-size: 43px; }
+  .font-semibold { font-size: 32px; }
+  .font-medium { font-size: 23px; }
+  .font-normal { font-size: 17px; }
+  .font-light { font-size: 12px; }
+  .font-extralight { font-size: 8px; }
+  .font-thin { font-size: 5px; }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
