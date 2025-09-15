@@ -230,35 +230,21 @@ const mockEmployees = [
 
 export default function AgentsPage() {
   const router = useRouter()
-  const [searchTerm, setSearchTerm] = useState("");
-  const [nationalityFilter, setNationalityFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [employees] = useState(mockEmployees);
-  const [agents] = useState(mockAgents); // TODO: search agent by filter
-
-  const filteredEmployees = employees.filter((employee) => {
-    const matchesSearch =
-      employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.employerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.passportNo.toLowerCase().includes(searchTerm.toLowerCase())
-
-    const matchesNationality = nationalityFilter === "all" || employee.nationality === nationalityFilter
-    const matchesStatus = statusFilter === "all" || employee.status === statusFilter
-
-    return matchesSearch && matchesNationality && matchesStatus
-  });
+  const [agents] = useState(mockAgents); // TODO: search and filter agents
+  const [ searchTerm, setSearchTerm ] = useState<string>("");
+  const [ status, setStatus ] = useState<string>("");
 
   return (
     <div className='flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>
       {/* HeaderSection */}
       <HeaderSection
-        topic='อะไรก็ได้'
-        desc='อธิบายเพิ่มเติม...'
+        topic='นายจ้าง'
+        desc='รายชื่อนายจ้างทั้งหมดในระบบ'
         actionButton={
           <Button asChild className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
             <Link href='/agents/new'>
               <Plus className='size-[24px] mr-2' />
-              กดเพื่อกระทำ!
+              เพิ่มนายจ้างใหม่
             </Link>
           </Button>
         }
@@ -267,7 +253,9 @@ export default function AgentsPage() {
       {/* StatSection */}
       <StatGrid statItems={statItems} />
 
-      {/* TODO: TableSection */}
+      {/* TableSection */}
+      {/* TODO: Pagination */}
+      {/* TODO: filter agents by search or status */}
       <div className='flex flex-col gap-y-[20px] p-[20px] border rounded-2xl shadow-lg'>
         <div className='flex flex-col'>
           <p className='font-normal'>ค้นหานายหน้า</p>
@@ -276,13 +264,17 @@ export default function AgentsPage() {
         <div className='flex flex-row gap-x-[14px] md:gap-x-[26px]'>
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input 
-              className='pl-10' 
+            <Input
+              className='pl-10'
               placeholder='ค้นหานายจ้างที่ต้องการ...'
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+              }}
             />
           </div>
-          <Select>
-            <SelectTrigger className='font-normal'>
+          <Select value={status} onValueChange={setStatus}>
+            <SelectTrigger className='font-light'>
               <SelectValue placeholder="สถานะ" />
               <SelectContent>
                 <SelectItem value="active">ใช้งาน</SelectItem>
@@ -290,7 +282,7 @@ export default function AgentsPage() {
               </SelectContent>
             </SelectTrigger>
           </Select>
-          <Button className='font-normal'>ค้นหา</Button>
+          <Button className='font-light'>ค้นหา</Button>
         </div>
         <div className="rounded-md border">
           <Table>
@@ -354,6 +346,14 @@ export default function AgentsPage() {
               }
             </TableBody>
           </Table>
+        </div>
+        <div className='flex flex-row justify-between items-center'>
+          {/* TODO: insert the amount of agents and filtered agents */}
+          <p className='font-light text-zinc-500'>... จากทั้งหมด ... คน</p>
+          <div className='flex flex-row gap-x-[10px]'>
+            <Button variant={"ghost"} className='font-light border'>กลับ</Button>
+            <Button variant={"ghost"} className='font-light border'>ถัดไป</Button>
+          </div>
         </div>
       </div>
     </div>

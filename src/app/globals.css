@@ -117,6 +117,26 @@ body {
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
+/* Hide scrollbar for all browsers */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+
+/* Alternative: Hide scrollbar for specific elements */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+
 .font-black {
   font-size: 80px;
   font-weight: 900;
