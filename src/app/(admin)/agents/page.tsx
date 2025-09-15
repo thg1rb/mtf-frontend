@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Edit, MoreHorizontal, Plus, Search, Trash2 } from 'lucide-react'
+import { Building, CircleCheck, CircleX, Edit, MoreHorizontal, Plus, Search, Trash2 } from 'lucide-react'
 import StatGrid from '@/components/shared/StatGrid'
 import HeaderSection from '@/components/shared/HeaderSection'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -17,24 +17,24 @@ import { mockAgents, tableHeaders } from '@/lib/mock-data'
 const statItems = [
   {
     id: 'stat-1',
-    title: 'สถิติที่ 1',
+    title: 'นายหน้าทั้งหมด (คน)',
     amount: 100,
     amountTextColor: 'text-black',
-    icon: Plus,
+    icon: Building,
   },
   {
     id: 'stat-2',
-    title: 'สถิติที่ 2',
+    title: 'นายหน้าที่ใช้งานได้ (คน)',
     amount: 100,
     amountTextColor: 'text-green-500',
-    icon: Plus,
+    icon: CircleCheck,
   },
   {
     id: 'stat-3',
-    title: 'สถิติที่ 3',
+    title: 'นายหน้าที่ไม่ใช้งาน (คน)',
     amount: 1000,
     amountTextColor: 'text-red-500',
-    icon: Plus,
+    icon: CircleX,
   },
 ]
 
@@ -48,13 +48,13 @@ export default function AgentsPage() {
     <div className='flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>
       {/* HeaderSection */}
       <HeaderSection
-        topic='นายจ้าง'
-        desc='รายชื่อนายจ้างทั้งหมดในระบบ'
+        topic='นายหน้า'
+        desc='รายชื่อนายหน้าทั้งหมดในระบบ'
         actionButton={
           <Button asChild className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
             <Link href='/agents/new'>
               <Plus className='size-[24px] mr-2' />
-              เพิ่มนายจ้างใหม่
+              เพิ่มนายหน้าใหม่
             </Link>
           </Button>
         }
@@ -84,15 +84,15 @@ export default function AgentsPage() {
             />
           </div>
           <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger className='font-light'>
+            <SelectTrigger className='font-light cursor-pointer'>
               <SelectValue placeholder="สถานะ" />
               <SelectContent>
-                <SelectItem value="active">ใช้งาน</SelectItem>
-                <SelectItem value="inactive">ไม่ใช้งาน</SelectItem>
+                <SelectItem value="active" className='cursor-pointer'>ใช้งาน</SelectItem>
+                <SelectItem value="inactive" className='cursor-pointer'>ไม่ใช้งาน</SelectItem>
               </SelectContent>
             </SelectTrigger>
           </Select>
-          <Button className='font-light'>ค้นหา</Button>
+          <Button className='font-light cursor-pointer'>ค้นหา</Button>
         </div>
         <div className="rounded-md border">
           <Table>
@@ -128,7 +128,7 @@ export default function AgentsPage() {
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
+                        <DropdownMenuTrigger asChild className='cursor-pointer'>
                           <Button
                             variant="ghost"
                             className="h-8 w-8 p-0"
@@ -138,13 +138,13 @@ export default function AgentsPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
+                          <DropdownMenuItem asChild className='cursor-pointer'>
                             <Link href={`/agents/${agent.id}/edit`}>
                               <Edit className="mr-2 h-4 w-4" />
                               แก้ไข
                             </Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-destructive">
+                          <DropdownMenuItem className="text-destructive cursor-pointer">
                             <Trash2 className="mr-2 h-4 w-4" />
                             ลบ
                           </DropdownMenuItem>
@@ -161,8 +161,8 @@ export default function AgentsPage() {
           {/* TODO: insert the amount of agents and filtered agents */}
           <p className='font-light text-zinc-500'>... จากทั้งหมด ... คน</p>
           <div className='flex flex-row gap-x-[10px]'>
-            <Button variant={"ghost"} className='font-light border'>กลับ</Button>
-            <Button variant={"ghost"} className='font-light border'>ถัดไป</Button>
+            <Button variant={"ghost"} className='font-light border cursor-pointer'>กลับ</Button>
+            <Button variant={"ghost"} className='font-light border cursor-pointer'>ถัดไป</Button>
           </div>
         </div>
       </div>
