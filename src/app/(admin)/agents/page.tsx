@@ -12,7 +12,8 @@ import { Badge } from '@/components/ui/badge'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { mockAgents, tableHeaders } from '@/lib/mock-data'
+import { mockAgents, agentTableHeaders } from '@/lib/mock-data'
+import { Agent } from '@/types'
 
 const statItems = [
   {
@@ -40,7 +41,7 @@ const statItems = [
 
 export default function AgentsPage() {
   const router = useRouter()
-  const [agents] = useState(mockAgents); // TODO: search and filter agents
+  const [ agents ] = useState<Agent[]>(mockAgents); // TODO: search and filter agents
   const [ searchTerm, setSearchTerm ] = useState<string>("");
   const [ status, setStatus ] = useState<string>("");
 
@@ -98,7 +99,7 @@ export default function AgentsPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                {tableHeaders.map((tableHeader) => (
+                {agentTableHeaders.map((tableHeader) => (
                   <TableHead key={tableHeader.index} className='font-normal text-center'>
                     {tableHeader.headerName}
                   </TableHead>

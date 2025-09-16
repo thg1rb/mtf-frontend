@@ -3,7 +3,6 @@ import StatGrid from '@/components/shared/StatGrid'
 import { Button } from '@/components/ui/button'
 import { Plus, UserCheck2, Users2, UserX2 } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
 
 const statItems = [
     {

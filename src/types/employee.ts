@@ -1,15 +1,25 @@
 export interface Employee {
-  id: number
-  name: string
-  nationality: string
+  id: string
   passportNo: string
-  employerName: string
-  position: string
-  workPermitStatus: 'active' | 'expiring' | 'expired'
-  workPermitExpiry: string
-  visaStatus: 'active' | 'expiring' | 'expired'
-  visaExpiry: string
-  healthCheckExpiry: string
-  status: 'active' | 'inactive'
-  registeredDate: string
+  firstname: string
+  lastname: string
+  nationality: "myanmar" | "laos" | "cambodia"
+  bloodType: "A" | "B" | "AB" | "O"
+  currentEmployerCompany: string
+  status: "active" | "inactive"
+  address_details: string
+  district: string
+  subDistrict: string
+  province: string
+  postelCode: string
+  healthCheckExpiryDate: string
+  insuranceExpiryDate: string
+  workPermitExpiryDate: string
+  certificateOfIdentityExpiryDate: string
+  nonThaiIdentificationExpiryDate: string
+}
+
+export interface EmployeeTableHeader {
+    index: string
+    headerName: string
 }
