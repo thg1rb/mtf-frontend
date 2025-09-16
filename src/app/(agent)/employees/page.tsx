@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { mockEmployees, employeeTableHeaders } from '@/lib/mock-data'
+import { getNationalityDisplay } from '@/lib/utils/index'
 import { Employee } from '@/types'
 import { Edit, MoreHorizontal, Plus, Search, Trash2, UserCheck2, Users2, UserX2 } from 'lucide-react'
 import Link from 'next/link'
@@ -117,7 +118,7 @@ export default function EmployersPage() {
                       <p className='font-extralight zinc-400'>พาสพอร์ต: {employee.passportNo}</p>
                     </TableCell>
                     <TableCell className='font-light'>
-                      {employee.nationality}
+                      {getNationalityDisplay(employee.nationality)}
                     </TableCell>
                     <TableCell className='font-light'>
                      {employee.currentEmployerCompany}
