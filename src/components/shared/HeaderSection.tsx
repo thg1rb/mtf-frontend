@@ -3,17 +3,21 @@ import React from 'react'
 interface HeaderSectionProps {
     topic: string
     desc?: string
-    actionButton?: React.ReactElement
+    leftActionButton?: React.ReactElement
+    rightActionButton?: React.ReactElement
 }
 
-export default function HeaderSection({ topic, desc, actionButton }: HeaderSectionProps) {
+export default function HeaderSection({ topic, desc, leftActionButton, rightActionButton }: HeaderSectionProps) {
     return (
         <div className='flex flex-col md:flex-row items-start md:items-center justify-between gap-y-[10px] w-full'>
-            <div className='flex flex-col'>
-                <p className='font-bold'>{topic}</p>
-                <p className='font-normal text-zinc-400'>{desc}</p>
+            <div className='flex flex-col md:flex-row items-start md:items-center gap-x-[20px] gap-y-[10px] w-full'>
+                {leftActionButton}
+                <div className='flex flex-col'>
+                    <p className='font-bold'>{topic}</p>
+                    <p className='font-normal text-zinc-400'>{desc}</p>
+                </div>
             </div>
-            {actionButton}
+            {rightActionButton}
         </div>
     )
 }

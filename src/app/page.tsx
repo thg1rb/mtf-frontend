@@ -50,7 +50,7 @@ export default function LoginPage() {
           </div>
           <div className='flex flex-col gap-y-4'>
             <div className='flex flex-col gap-y-[10px]'>
-              <Label className='font-light'>อีเมล</Label>
+              <Label htmlFor='email' className='font-light'>อีเมล</Label>
               <Input
                 id="email"
                 type="email"
@@ -62,7 +62,7 @@ export default function LoginPage() {
               />
             </div>
             <div className='flex flex-col gap-y-[10px]'>
-              <Label className='font-light'>รหัสผ่าน</Label>
+              <Label htmlFor='password' className='font-light'>รหัสผ่าน</Label>
               {/* TODO: hide and show password */}
               <div className='relative'>
                 <Input

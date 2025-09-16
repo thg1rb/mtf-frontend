@@ -30,7 +30,9 @@ export default async function RootLayout({
         className={`${kanit.variable} antialiased`}
       >
         <SidebarProvider defaultOpen={defaultOpen}>
-            <ConditionalSidebar>{children}</ConditionalSidebar>
+          <ConditionalSidebar>
+            {children}
+          </ConditionalSidebar>
         </SidebarProvider>
       </body>
     </html>

@@ -41,9 +41,9 @@ const statItems = [
 
 export default function AgentsPage() {
   const router = useRouter()
-  const [ agents ] = useState<Agent[]>(mockAgents); // TODO: search and filter agents
-  const [ searchTerm, setSearchTerm ] = useState<string>("");
-  const [ status, setStatus ] = useState<string>("");
+  const [agents] = useState<Agent[]>(mockAgents); // TODO: search and filter agents
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
 
   return (
     <div className='flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>
@@ -51,7 +51,7 @@ export default function AgentsPage() {
       <HeaderSection
         topic='นายหน้า'
         desc='รายชื่อนายหน้าทั้งหมดในระบบ'
-        actionButton={
+        rightActionButton={
           <Button asChild className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
             <Link href='/agents/new'>
               <Plus className='size-[24px] mr-2' />
@@ -87,11 +87,11 @@ export default function AgentsPage() {
           <Select value={status} onValueChange={setStatus}>
             <SelectTrigger className='font-light cursor-pointer'>
               <SelectValue placeholder="สถานะ" />
-              <SelectContent>
-                <SelectItem value="active" className='cursor-pointer'>ใช้งาน</SelectItem>
-                <SelectItem value="inactive" className='cursor-pointer'>ไม่ใช้งาน</SelectItem>
-              </SelectContent>
             </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="active" className='cursor-pointer'>ใช้งาน</SelectItem>
+              <SelectItem value="inactive" className='cursor-pointer'>ไม่ใช้งาน</SelectItem>
+            </SelectContent>
           </Select>
           <Button className='font-light cursor-pointer'>ค้นหา</Button>
         </div>

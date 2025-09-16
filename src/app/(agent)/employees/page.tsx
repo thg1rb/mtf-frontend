@@ -52,7 +52,7 @@ export default function EmployersPage() {
       <HeaderSection
         topic='ลูกจ้าง'
         desc='ข้อมูลลูกจ้างทั้งหมดในระบบ'
-        actionButton={
+        rightActionButton={
           <Button asChild className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
             <Link href='/employees/new'>
               <Plus className='size-[24px] mr-2' />
@@ -86,11 +86,11 @@ export default function EmployersPage() {
           <Select value={status} onValueChange={setStatus}>
             <SelectTrigger className='font-light cursor-pointer'>
               <SelectValue placeholder="สถานะ" />
-              <SelectContent>
-                <SelectItem value="active" className='cursor-pointer'>ใช้งาน</SelectItem>
-                <SelectItem value="inactive" className='cursor-pointer'>ไม่ใช้งาน</SelectItem>
-              </SelectContent>
             </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="active" className='cursor-pointer'>ใช้งาน</SelectItem>
+              <SelectItem value="inactive" className='cursor-pointer'>ไม่ใช้งาน</SelectItem>
+            </SelectContent>
           </Select>
           <Button className='font-light cursor-pointer'>ค้นหา</Button>
         </div>
@@ -121,7 +121,7 @@ export default function EmployersPage() {
                       {getNationalityDisplay(employee.nationality)}
                     </TableCell>
                     <TableCell className='font-light'>
-                     {employee.currentEmployerCompany}
+                      {employee.currentEmployerCompany}
                     </TableCell>
                     {/* TODO: Expiry Documents */}
                     <TableCell>

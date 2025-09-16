@@ -36,7 +36,7 @@ export default function EmployersPage() {
       <HeaderSection
         topic='นายจ้าง'
         desc='ข้อมูลนายจ้างทั้งหมดในระบบ'
-        actionButton={
+        rightActionButton={
           <Button asChild className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
             <Link href='/employers/new'>
               <Plus className='size-[24px] mr-2' />
