@@ -1,5 +1,5 @@
 export interface Agent {
-  id: string
+  citizenId: string
   email: string
   firstname: string
   lastname: string

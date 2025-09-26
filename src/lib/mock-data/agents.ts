@@ -21,7 +21,7 @@ export const agentTableHeaders: AgentTableHeader[] = [
 
 export const mockAgents: Agent[] = [
   {
-    id: '1101700234567',
+    citizenId: '1101700234567',
     email: "teeradej.w@example.com",
     firstname: "ธีรเดช",
     lastname: "วัฒนากิจไพศาล",
@@ -33,7 +33,7 @@ export const mockAgents: Agent[] = [
     postelCode: '10110'
   },
   {
-    id: '1101700234568',
+    citizenId: '1101700234568',
     email: "sudarat.p@example.com",
     firstname: "สุดารัตน์",
     lastname: "ผลเจริญ",
@@ -45,7 +45,7 @@ export const mockAgents: Agent[] = [
     postelCode: '10540'
   },
   {
-    id: '1101700234569',
+    citizenId: '1101700234569',
     email: "anusorn.k@example.com",
     firstname: "อนุสรณ์",
     lastname: "เกียรติศักดิ์",
@@ -57,7 +57,7 @@ export const mockAgents: Agent[] = [
     postelCode: '50200'
   },
   {
-    id: '1101700234570',
+    citizenId: '1101700234570',
     email: "kanokwan.t@example.com",
     firstname: "กนกวรรณ",
     lastname: "ทรัพย์เพิ่ม",
@@ -69,7 +69,7 @@ export const mockAgents: Agent[] = [
     postelCode: '11000'
   },
   {
-    id: '1101700234571',
+    citizenId: '1101700234571',
     email: "prasit.n@example.com",
     firstname: "ประสิทธิ์",
     lastname: "ณรงค์ชัย",
@@ -81,7 +81,7 @@ export const mockAgents: Agent[] = [
     postelCode: '44000'
   },
   {
-    id: '1101700234572',
+    citizenId: '1101700234572',
     email: "natthanan.s@example.com",
     firstname: "ณัฐธนัช",
     lastname: "ศรีวัฒนา",
@@ -93,7 +93,7 @@ export const mockAgents: Agent[] = [
     postelCode: '57000'
   },
   {
-    id: '1101700234573',
+    citizenId: '1101700234573',
     email: "warangkana.k@example.com",
     firstname: "วรางคณา",
     lastname: "คำพันธ์",
@@ -105,7 +105,7 @@ export const mockAgents: Agent[] = [
     postelCode: '20130'
   },
   {
-    id: '1101700234574',
+    citizenId: '1101700234574',
     email: "chatchai.r@example.com",
     firstname: "ชาติชาย",
     lastname: "เรืองฤทธิ์",
@@ -117,7 +117,7 @@ export const mockAgents: Agent[] = [
     postelCode: '30000'
   },
   {
-    id: '1101700234575',
+    citizenId: '1101700234575',
     email: "pimchanok.t@example.com",
     firstname: "พิมพ์ชนก",
     lastname: "ทองศรี",
@@ -129,7 +129,7 @@ export const mockAgents: Agent[] = [
     postelCode: '10140'
   },
   {
-    id: '1101700234576',
+    citizenId: '1101700234576',
     email: "surasak.m@example.com",
     firstname: "สุรศักดิ์",
     lastname: "มีศักดิ์",

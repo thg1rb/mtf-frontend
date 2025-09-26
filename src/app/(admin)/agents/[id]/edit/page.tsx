@@ -1,0 +1,35 @@
+import AgentForm from '@/components/agents/AgentForm'
+import HeaderSection from '@/components/shared/HeaderSection'
+import { Button } from '@/components/ui/button'
+import { mockAgents } from '@/lib/mock-data'
+import { ChevronLeft } from 'lucide-react'
+import Link from 'next/link'
+import React from 'react'
+
+export default async function AgentEditPage({ params }: { params: { id: string } }) {
+  const { id } = await params;
+
+  // TODO: GET method `/api/agents/${id}` to fetch existing agent details
+  const data = mockAgents.find(agent => agent.citizenId === id)
+
+  return (
+    <div className='flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>
+      <HeaderSection
+        topic="แก้ไขข้อมูลนายหน้า"
+        leftActionButton={
+          <Button asChild variant="ghost" className='flex flex-row font-normal px-[17px] py-[5px] w-full md:w-auto border border-zinc-300 cursor-pointer'>
+            <Link href={`/agents/${id}`}>
+              <ChevronLeft className='size-[24px] mr-2' />
+              ย้อนกลับ
+            </Link>
+          </Button>
+        }
+      />
+
+      <AgentForm
+        mode='edit'
+        defaultValues={data}
+      />
+    </div>
+  )
+}

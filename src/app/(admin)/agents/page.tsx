@@ -110,9 +110,9 @@ export default function AgentsPage() {
               {
                 agents.map((agent) => (
                   <TableRow
-                    key={agent.id}
+                    key={agent.citizenId}
                     className='text-center cursor-pointer hover:bg-muted/50'
-                    onClick={() => router.push(`/agents/${agent.id}`)}
+                    onClick={() => router.push(`/agents/${agent.citizenId}`)}
                   >
                     <TableCell className='font-light'>
                       {agent.email}
@@ -140,7 +140,7 @@ export default function AgentsPage() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem asChild className='cursor-pointer'>
-                            <Link href={`/agents/${agent.id}/edit`}>
+                            <Link href={`/agents/${agent.citizenId}/edit`}>
                               <Edit className="mr-2 h-4 w-4" />
                               แก้ไข
                             </Link>

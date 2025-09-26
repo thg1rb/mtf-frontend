@@ -28,7 +28,7 @@ export default function NewAgentPage() {
           </Button>} />
 
       {/* FormSection */}
-      <AgentForm />
+      <AgentForm mode='create'/>
     </div>
   )
 }
