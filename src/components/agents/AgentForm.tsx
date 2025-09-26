@@ -10,18 +10,42 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Link from 'next/link'
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog'
 
-export default function AgentForm() {
+type AgentFormMode = 'create' | 'edit' | 'view'
+
+interface AgentFormProps {
+    mode?: AgentFormMode
+    defaultValues?: Partial<AgentFormData>
+    onSubmit?: (data: AgentFormData) => void
+    onCancel?: () => void
+}
+
+export default function AgentForm({ mode = 'create', defaultValues, onSubmit: onSubmitProp, onCancel }: AgentFormProps) {
     const router = useRouter();
 
     const {
         register,
         handleSubmit,
         setValue,
-        formState: { errors }
+        reset,
+        formState: { errors, isValid }
     } = useForm<AgentFormData>({
-        resolver: zodResolver(agentSchema)
+        resolver: zodResolver(agentSchema),
+        defaultValues: defaultValues as any,
+        mode: 'onChange'
     });
+
+    React.useEffect(() => {
+        if (defaultValues) {
+            reset(defaultValues as any)
+            if (defaultValues.status) {
+                setValue('status', defaultValues.status as 'active' | 'inactive', { shouldValidate: false })
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [defaultValues])
 
     const onSubmit = (data: AgentFormData) => {
 
@@ -29,6 +53,10 @@ export default function AgentForm() {
 
         // TODO: api POST `/agents/new` endpoint
 
+        if (onSubmitProp) {
+            onSubmitProp(data)
+            return
+        }
         router.push("/agents");
     }
 
@@ -40,7 +68,7 @@ export default function AgentForm() {
                     <Info />
                     <p className='font-normal'>ข้อมูลนายหน้า</p>
                 </div>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-x-[25px] md:gap-x-[50px] gap-y-[15px]'>
+                <fieldset disabled={mode === 'view'} className='grid grid-cols-1 md:grid-cols-2 gap-x-[25px] md:gap-x-[50px] gap-y-[15px]'>
 
                     <div className='flex flex-col gap-y-[10px]'>
                         <Label htmlFor='citizenId' className='font-light'>เลขประจำตัวประชาชน (13 หลัก)</Label>
@@ -68,7 +96,11 @@ export default function AgentForm() {
 
                     <div className='flex flex-col gap-y-[10px]'>
                         <Label htmlFor='status' className='font-light'>สถานะ</Label>
-                        <Select onValueChange={(val) => setValue("status", val as "active" | "inactive")}>
+                        <Select
+                            defaultValue={(defaultValues?.status as 'active' | 'inactive') || undefined}
+                            onValueChange={(val) => setValue("status", val as "active" | "inactive", { shouldValidate: true })}
+                            disabled={mode === 'view'}
+                        >
                             <SelectTrigger className='w-full font-light cursor-pointer'>
                                 <SelectValue placeholder="สถานะ" />
                             </SelectTrigger>
@@ -80,7 +112,7 @@ export default function AgentForm() {
                         {errors.status && <span className="text-red-500 font-light">{errors.status.message}</span>}
                     </div>
 
-                </div>
+                </fieldset>
             </div>
 
             {/* AddressInfoSection */}
@@ -89,7 +121,7 @@ export default function AgentForm() {
                     <Home />
                     <p className='font-normal'>ข้อมูลที่อยู่</p>
                 </div>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-x-[25px] md:gap-x-[50px] gap-y-[15px]'>
+                <fieldset disabled={mode === 'view'} className='grid grid-cols-1 md:grid-cols-2 gap-x-[25px] md:gap-x-[50px] gap-y-[15px]'>
 
                     <div className='flex flex-col gap-y-[10px]'>
                         <Label htmlFor='addressDetails' className='font-light'>บ้านเลขที่, หมู่, ซอย, ถนน [ภาษาไทย]</Label>
@@ -121,12 +153,46 @@ export default function AgentForm() {
                         {errors.postelCode && <span className="text-red-500 font-light">{errors.postelCode.message}</span>}
                     </div>
 
-                </div>
+                </fieldset>
             </div>
 
             <div className='flex flex-col md:flex-row gap-x-[10px] gap-y-[10px] justify-end'>
-                <Button type='button' variant='ghost' className='font-light border border-slate-300'>ยกเลิก</Button>
-                <Button type='submit' className='font-light'>บันทึกข้อมูล</Button>
+                <Button
+                    type='button'
+                    variant='ghost'
+                    className='font-light border border-slate-300'
+                    onClick={() => onCancel ? onCancel() : router.back()}
+                >
+                    ยกเลิก
+                </Button>
+
+                {mode !== 'view' && (
+                    isValid ? (
+                        <Button type='submit' className='font-light'>
+                            {mode === 'edit' ? 'บันทึกการแก้ไข' : 'บันทึกข้อมูล'}
+                        </Button>
+                    ) : (
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button type='button' className='font-light'>
+                                    {mode === 'edit' ? 'บันทึกการแก้ไข' : 'บันทึกข้อมูล'}
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle className='font-medium'>ไม่สามารถบันทึกได้</AlertDialogTitle>
+                                    <AlertDialogDescription className='font-light'>
+                                        ระบุข้อมูลของนายหน้าให้ครบถ้วนและตรวจสอบรูปแบบของข้อมูลให้ถูกต้องก่อนคลิก "{mode === 'edit' ? 'บันทึกการแก้ไข' : 'บันทึกข้อมูล'}"
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogAction className='font-light'>ตกลง</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    )
+                )}
+
             </div>
         </form>
     )
