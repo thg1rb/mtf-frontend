@@ -1,0 +1,133 @@
+'use client'
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { AgentFormData, agentSchema } from '@/lib/validations'
+import { Home, Info } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+export default function AgentForm() {
+    const router = useRouter();
+
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        formState: { errors }
+    } = useForm<AgentFormData>({
+        resolver: zodResolver(agentSchema)
+    });
+
+    const onSubmit = (data: AgentFormData) => {
+
+        console.log("Form data:", data);
+
+        // TODO: api POST `/agents/new` endpoint
+
+        router.push("/agents");
+    }
+
+    return (
+        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-y-[29px] md:gap-y-[45px]'>
+            {/* PersonalInfoSection */}
+            <div className='flex flex-col gap-y-[25px] p-[27px] border border-slate-300 rounded-2xl shadow-md'>
+                <div className='flex flex-row gap-x-[5px] items-center'>
+                    <Info />
+                    <p className='font-normal'>ข้อมูลนายหน้า</p>
+                </div>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-x-[25px] md:gap-x-[50px] gap-y-[15px]'>
+
+                    <div className='flex flex-col gap-y-[10px]'>
+                        <Label htmlFor='citizenId' className='font-light'>เลขประจำตัวประชาชน (13 หลัก)</Label>
+                        <Input maxLength={13} id='citizenId' {...register("citizenId")} />
+                        {errors.citizenId && <span className="text-red-500 font-light">{errors.citizenId.message}</span>}
+                    </div>
+
+                    <div className='flex flex-col gap-y-[10px]'>
+                        <Label htmlFor='email' className='font-light'>อีเมล</Label>
+                        <Input type='email' id='email' {...register("email")} />
+                        {errors.email && <span className="text-red-500 font-light">{errors.email.message}</span>}
+                    </div>
+
+                    <div className='flex flex-col gap-y-[10px]'>
+                        <Label htmlFor='firstname' className='font-light'>ชื่อจริง</Label>
+                        <Input id='firstname' {...register("firstname")} />
+                        {errors.firstname && <span className="text-red-500 font-light">{errors.firstname.message}</span>}
+                    </div>
+
+                    <div className='flex flex-col gap-y-[10px]'>
+                        <Label htmlFor='lastname' className='font-light'>นามสกุล</Label>
+                        <Input id='lastname' {...register("lastname")} />
+                        {errors.lastname && <span className="text-red-500 font-light">{errors.lastname.message}</span>}
+                    </div>
+
+                    <div className='flex flex-col gap-y-[10px]'>
+                        <Label htmlFor='status' className='font-light'>สถานะ</Label>
+                        <Select onValueChange={(val) => setValue("status", val as "active" | "inactive")}>
+                            <SelectTrigger className='w-full font-light cursor-pointer'>
+                                <SelectValue placeholder="สถานะ" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="active" className='cursor-pointer'>ใช้งาน</SelectItem>
+                                <SelectItem value="inactive" className='cursor-pointer'>ไม่ใช้งาน</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        {errors.status && <span className="text-red-500 font-light">{errors.status.message}</span>}
+                    </div>
+
+                </div>
+            </div>
+
+            {/* AddressInfoSection */}
+            <div className='flex flex-col gap-y-[25px] p-[27px] border border-slate-300 rounded-2xl shadow-md'>
+                <div className='flex flex-row gap-x-[5px] items-center'>
+                    <Home />
+                    <p className='font-normal'>ข้อมูลที่อยู่</p>
+                </div>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-x-[25px] md:gap-x-[50px] gap-y-[15px]'>
+
+                    <div className='flex flex-col gap-y-[10px]'>
+                        <Label htmlFor='addressDetails' className='font-light'>บ้านเลขที่, หมู่, ซอย, ถนน [ภาษาไทย]</Label>
+                        <Input id='addressDetails' {...register("addressDetails")} />
+                        {errors.addressDetails && <span className="text-red-500 font-light">{errors.addressDetails.message}</span>}
+                    </div>
+
+                    <div className='flex flex-col gap-y-[10px]'>
+                        <Label htmlFor='district' className='font-light'>เขต/อำเภอ</Label>
+                        <Input id='district' {...register("district")} />
+                        {errors.district && <span className="text-red-500 font-light">{errors.district.message}</span>}
+                    </div>
+
+                    <div className='flex flex-col gap-y-[10px]'>
+                        <Label htmlFor='subDistrict' className='font-light'>แขวง/ตำบล</Label>
+                        <Input id='subDistrict' {...register("subDistrict")} />
+                        {errors.subDistrict && <span className="text-red-500 font-light">{errors.subDistrict.message}</span>}
+                    </div>
+
+                    <div className='flex flex-col gap-y-[10px]'>
+                        <Label htmlFor='province' className='font-light'>จังหวัด</Label>
+                        <Input id='province' {...register("province")} />
+                        {errors.province && <span className="text-red-500 font-light">{errors.province.message}</span>}
+                    </div>
+
+                    <div className='flex flex-col gap-y-[10px]'>
+                        <Label htmlFor='postelCode' className='font-light'>รหัสไปรษณีย์</Label>
+                        <Input maxLength={5} id='postelCode' {...register("postelCode")} />
+                        {errors.postelCode && <span className="text-red-500 font-light">{errors.postelCode.message}</span>}
+                    </div>
+
+                </div>
+            </div>
+
+            <div className='flex flex-col md:flex-row gap-x-[10px] gap-y-[10px] justify-end'>
+                <Button type='button' variant='ghost' className='font-light border border-slate-300'>ยกเลิก</Button>
+                <Button type='submit' className='font-light'>บันทึกข้อมูล</Button>
+            </div>
+        </form>
+    )
+}
