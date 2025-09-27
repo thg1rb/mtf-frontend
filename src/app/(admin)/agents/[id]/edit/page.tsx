@@ -1,5 +1,6 @@
 import AgentForm from '@/components/agents/AgentForm'
 import HeaderSection from '@/components/shared/HeaderSection'
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { mockAgents } from '@/lib/mock-data'
 import { ChevronLeft } from 'lucide-react';
@@ -27,6 +28,22 @@ export default async function AgentEditPage({ params }: { params: { id: string }
       />
 
       <AgentForm mode='edit' defaultValues={data} />
+
+      {!data && <AlertDialog open={true}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className='font-medium'>ไม่พบข้อมูลนายหน้า</AlertDialogTitle>
+            <AlertDialogDescription className='font-light'>
+              ตรวจสอบหมายเลขบัตรประชาชนของนายหน้าว่าอยู่ในระบบหรือไม่
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction className='font-light'>
+              <Link href='/agents'>ย้อนกลับ</Link>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>}
     </div>
   )
 }
