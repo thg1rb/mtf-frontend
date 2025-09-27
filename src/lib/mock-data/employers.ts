@@ -1,4 +1,5 @@
 import { Employer, EmployerHeaderTable } from "@/types";
+import { mockEmployees } from "./employees";
 
 export const employerTableHeaders: EmployerHeaderTable[] = [
   {
@@ -289,3 +290,9 @@ export const mockEmployers: Employer[] = [
     status: "active",
   },
 ];
+
+export const findMockEmployerById = (id: string) =>
+  mockEmployers.find((employer) => employer.taxId === id);
+
+export const countEmployees = (id: string) =>
+  mockEmployees.filter((employee) => employee.employerId === id).length;

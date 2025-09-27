@@ -8,7 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { employerTableHeaders, mockEmployers } from '@/lib/mock-data/employers'
+import { countEmployees, employerTableHeaders, mockEmployers } from '@/lib/mock-data/employers'
 import { Employer } from '@/types'
 import { Edit, Mail, MoreHorizontal, Phone, Plus, Search, Trash2, UserCheck2, Users2, UserX2 } from 'lucide-react'
 import Link from 'next/link'
@@ -112,7 +112,7 @@ export default function EmployersPage() {
                   <TableRow
                     key={employer.taxId}
                     className='cursor-pointer hover:bg-muted/50'
-                    onClick={() => router.push(`/agents/${employer.taxId}`)}
+                    onClick={() => router.push(`/employers/${employer.taxId}`)}
                   >
                     <TableCell className='font-light px-[20px]'>
                       {employer.firstname + " " + employer.lastname}
@@ -130,7 +130,7 @@ export default function EmployersPage() {
                       </div>
                     </TableCell>
                     <TableCell className='font-light px-[20px]'>
-                      {employer.firstname + " " + employer.lastname}
+                      <Badge variant='outline' className='w-[70px] font-light'>{countEmployees(employer.taxId)} คน</Badge>
                     </TableCell>
                     <TableCell className='px-[20px]'>
                       {employer.status === "active" ? (
@@ -152,7 +152,7 @@ export default function EmployersPage() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem asChild className='cursor-pointer' onClick={(e) => e.stopPropagation()}>
-                            <Link href={`/agents/${employer.taxId}/edit`}>
+                            <Link href={`/employers/${employer.taxId}/edit`}>
                               <Edit className="mr-2 h-4 w-4" />
                               แก้ไข
                             </Link>

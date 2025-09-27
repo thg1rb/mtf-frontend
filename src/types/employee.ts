@@ -1,11 +1,11 @@
 export interface Employee {
   id: string
+  employerId: string
   passportNo: string
   firstname: string
   lastname: string
   nationality: "myanmar" | "laos" | "cambodia"
   bloodType: "A" | "B" | "AB" | "O"
-  currentEmployerCompany: string
   status: "active" | "inactive"
   address_details: string
   district: string

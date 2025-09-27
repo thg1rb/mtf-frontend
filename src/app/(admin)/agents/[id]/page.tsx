@@ -1,7 +1,7 @@
 import AgentForm from '@/components/agents/AgentForm'
 import HeaderSection from '@/components/shared/HeaderSection'
 import { Button } from '@/components/ui/button'
-import { mockAgents } from '@/lib/mock-data'
+import { findMockAgentById } from '@/lib/mock-data'
 import { ChevronLeft, SquarePen } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
@@ -10,7 +10,7 @@ export default async function AgentPage({ params }: { params: { id: string } }) 
     const { id } = await params;
 
     // TODO: GET method `/api/agents/${id}`
-    const data = mockAgents.find(agent => agent.citizenId === id);
+    const data = findMockAgentById(id);
 
     return (
         <div className='flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>
