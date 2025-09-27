@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { employerTableHeaders, mockEmployers } from '@/lib/mock-data/employers'
 import { Employer } from '@/types'
-import { Edit, MoreHorizontal, Plus, Search, Trash2, UserCheck2, Users2, UserX2 } from 'lucide-react'
+import { Edit, Mail, MoreHorizontal, Phone, Plus, Search, Trash2, UserCheck2, Users2, UserX2 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -39,11 +39,11 @@ const statItems = [
   },
 ]
 
-export default function EmployersPage() { 
+export default function EmployersPage() {
   const router = useRouter();
-  const [ employers ] = useState<Employer[]>(mockEmployers);
-  const [ status, setStatus ] = useState<string>("");
-  const [ searchTerm, setSearchTerm ] = useState("");
+  const [employers] = useState<Employer[]>(mockEmployers);
+  const [status, setStatus] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   return (
     <div className='flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>
@@ -100,7 +100,7 @@ export default function EmployersPage() {
             <TableHeader>
               <TableRow>
                 {employerTableHeaders.map((tableHeader) => (
-                  <TableHead key={tableHeader.index} className='font-normal text-center'>
+                  <TableHead key={tableHeader.index} className={`font-normal px-[20px] ${tableHeader.index === 'header-5' ? "text-right" : ""}`}>
                     {tableHeader.headerName}
                   </TableHead>
                 ))}
@@ -111,26 +111,35 @@ export default function EmployersPage() {
                 employers.map((employer) => (
                   <TableRow
                     key={employer.taxId}
-                    className='text-center cursor-pointer hover:bg-muted/50'
+                    className='cursor-pointer hover:bg-muted/50'
                     onClick={() => router.push(`/agents/${employer.taxId}`)}
                   >
-                    <TableCell className='font-light'>
-                      {employer.email}
-                    </TableCell>
-                    <TableCell className='font-light'>
+                    <TableCell className='font-light px-[20px]'>
                       {employer.firstname + " " + employer.lastname}
                     </TableCell>
-                    <TableCell className='font-light'>
+                    <TableCell className='font-light px-[20px]'>
+                      <div className='flex flex-col'>
+                        <div className='flex flex-row items-center gap-x-[8px]'>
+                          <Mail size={16} />
+                          {employer.email}
+                        </div>
+                        <div className='flex flex-row items-center gap-x-[8px]'>
+                          <Phone size={16} />
+                          {employer.phoneNumber}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className='font-light px-[20px]'>
                       {employer.firstname + " " + employer.lastname}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className='px-[20px]'>
                       {employer.status === "active" ? (
                         <Badge className="w-[75px] bg-green-200 font-light text-green-800">ใช้งาน</Badge>
                       ) : (
                         <Badge className='w-[75px] bg-red-200 font-light text-red-800'>ไม่ใช้งาน</Badge>
                       )}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className='text-right px-[20px]'>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild className='cursor-pointer'>
                           <Button
