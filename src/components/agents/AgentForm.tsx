@@ -7,11 +7,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { AgentFormData, agentSchema } from '@/lib/validations'
 import { Home, Info } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
-import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog'
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
 
 interface AgentFormProps {
     mode: "create" | "view" | "edit"
@@ -20,24 +20,40 @@ interface AgentFormProps {
 
 export default function AgentForm({ mode, defaultValues }: AgentFormProps) {
     const router = useRouter();
+    const [showValidationAlert, setShowValidationAlert] = useState(false);
+
+    const cleanedDefaultValues: Partial<AgentFormData> = useMemo(() => ({
+        citizenId: defaultValues?.citizenId ?? "",
+        email: defaultValues?.email ?? "",
+        firstname: defaultValues?.firstname ?? "",
+        lastname: defaultValues?.lastname ?? "",
+        status: defaultValues?.status ?? "active",
+        addressDetails: defaultValues?.addressDetails ?? "",
+        subDistrict: defaultValues?.subDistrict ?? "",
+        district: defaultValues?.district ?? "",
+        province: defaultValues?.province ?? "",
+        postelCode: defaultValues?.postelCode ?? "",
+    }), [defaultValues]);
+
     const {
         register,
         handleSubmit,
         reset,
         control,
-        formState: { errors, isValid }
+        formState: { errors }
     } = useForm<AgentFormData>({
         resolver: zodResolver(agentSchema),
-        defaultValues
+        defaultValues: cleanedDefaultValues,
+        mode: 'onChange'
     });
 
     useEffect(() => {
-        if (defaultValues) {
-            reset(defaultValues);
-        }
-    }, [defaultValues, reset]);
+        reset(cleanedDefaultValues);
+    }, [cleanedDefaultValues, reset]);
 
-    const onSubmit = (data: AgentFormData) => {
+    // Form submit successfully (There is no invalid input)
+    const handleFormSubmit = (data: AgentFormData) => {
+        setShowValidationAlert(false);
         if (mode === "create") {
             // TODO: POST method `api/agents`
         } else if (mode === "edit") {
@@ -49,10 +65,15 @@ export default function AgentForm({ mode, defaultValues }: AgentFormProps) {
         router.push("/agents");
     }
 
+    // Form submit failed (There are invalid input )
+    const handleFormInvalid = () => {
+        setShowValidationAlert(true);
+    }
+
     const isReadOnly = mode === "view";
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-y-[29px] md:gap-y-[45px]'>
+    <form onSubmit={handleSubmit(handleFormSubmit, handleFormInvalid)} className='flex flex-col gap-y-[29px] md:gap-y-[45px]'>
             {/* PersonalInfoSection */}
             <div className='flex flex-col gap-y-[25px] p-[27px] border border-slate-300 rounded-2xl shadow-md'>
                 <div className='flex flex-row gap-x-[5px] items-center'>
@@ -152,17 +173,15 @@ export default function AgentForm({ mode, defaultValues }: AgentFormProps) {
             </div>
 
             {
-                mode !== 'view' && (<div className='flex flex-col md:flex-row gap-x-[10px] gap-y-[10px] justify-end'>
-                    <Button asChild type='button' variant='ghost' className='font-light border border-slate-300'>
-                        <Link href='/agents'>
-                            ยกเลิก
-                        </Link>
-                    </Button>
-                    {isValid ? (<Button type='submit' className='font-light'>{mode === "create" ? "บันทึกข้อมูล" : "บันทึกการแก้ไข"}</Button>) : (
-                        <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                                <Button type='button' className='font-light'>{mode === "create" ? "บันทึกข้อมูล" : "บันทึกการแก้ไข"}</Button>
-                            </AlertDialogTrigger>
+                mode !== 'view' && (
+                    <div className='flex flex-col md:flex-row gap-x-[10px] gap-y-[10px] justify-end'>
+                        <Button asChild type='button' variant='ghost' className='font-light border border-slate-300'>
+                            <Link href='/agents'>
+                                ยกเลิก
+                            </Link>
+                        </Button>
+                        <Button type='submit' className='font-light'>{mode === "create" ? "บันทึกข้อมูล" : "บันทึกการแก้ไข"}</Button>
+                        <AlertDialog open={showValidationAlert} onOpenChange={setShowValidationAlert}>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
                                     <AlertDialogTitle className='font-medium'>{mode === "create" ? "เพิ่มนายหน้าใหม่ไม่สำเร็จ!" : "แก้ไขข้อมูลนายหน้าไม่สำเร็จ!"}</AlertDialogTitle>
@@ -174,8 +193,9 @@ export default function AgentForm({ mode, defaultValues }: AgentFormProps) {
                                     <AlertDialogAction className='font-light'>ตกลง</AlertDialogAction>
                                 </AlertDialogFooter>
                             </AlertDialogContent>
-                        </AlertDialog>)}
-                </div>)
+                        </AlertDialog>
+                    </div>
+                )
             }
 
         </form>
