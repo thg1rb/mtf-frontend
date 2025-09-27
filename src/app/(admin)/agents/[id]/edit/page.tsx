@@ -1,9 +1,9 @@
 import AgentForm from '@/components/agents/AgentForm'
 import HeaderSection from '@/components/shared/HeaderSection'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
 import { mockAgents } from '@/lib/mock-data'
-import { ChevronLeft } from 'lucide-react'
-import Link from 'next/link'
+import { ChevronLeft } from 'lucide-react';
+import Link from 'next/link';
 import React from 'react'
 
 export default async function AgentEditPage({ params }: { params: { id: string } }) {
@@ -26,10 +26,7 @@ export default async function AgentEditPage({ params }: { params: { id: string }
         }
       />
 
-      <AgentForm
-        mode='edit'
-        defaultValues={data}
-      />
+      <AgentForm mode='edit' defaultValues={data} />
     </div>
   )
 }

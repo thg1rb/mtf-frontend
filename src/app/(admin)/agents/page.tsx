@@ -139,13 +139,13 @@ export default function AgentsPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild className='cursor-pointer'>
+                          <DropdownMenuItem asChild className='cursor-pointer' onClick={(e) => e.stopPropagation()}>
                             <Link href={`/agents/${agent.citizenId}/edit`}>
                               <Edit className="mr-2 h-4 w-4" />
                               แก้ไข
                             </Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-destructive cursor-pointer">
+                          <DropdownMenuItem className='text-destructive cursor-pointer' onClick={(e) => e.stopPropagation()}>
                             <Trash2 className="mr-2 h-4 w-4" />
                             ลบ
                           </DropdownMenuItem>

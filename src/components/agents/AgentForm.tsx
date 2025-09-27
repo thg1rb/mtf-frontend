@@ -62,26 +62,26 @@ export default function AgentForm({ mode, defaultValues }: AgentFormProps) {
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-x-[25px] md:gap-x-[50px] gap-y-[15px]'>
 
                     <div className='flex flex-col gap-y-[10px]'>
-                        <Label htmlFor='citizenId' className='font-light'>เลขประจำตัวประชาชน (13 หลัก)</Label>
-                        <Input readOnly={isReadOnly} maxLength={13} id='citizenId' {...register("citizenId")} />
+                        <Label htmlFor='citizenId' className='font-light text-zinc-700'>เลขประจำตัวประชาชน (13 หลัก)</Label>
+                        <Input readOnly={isReadOnly} maxLength={13} id='citizenId' {...register("citizenId")} className={`${isReadOnly ? "text-zinc-500" : ""}`} />
                         {errors.citizenId && <span className="text-red-500 font-light">{errors.citizenId.message}</span>}
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
-                        <Label htmlFor='email' className='font-light'>อีเมล</Label>
-                        <Input readOnly={isReadOnly} type='email' id='email' {...register("email")} />
+                        <Label htmlFor='email' className='font-light text-zinc-700'>อีเมล</Label>
+                        <Input readOnly={isReadOnly} type='email' id='email' {...register("email")} className={`${isReadOnly ? "text-zinc-500" : ""}`} />
                         {errors.email && <span className="text-red-500 font-light">{errors.email.message}</span>}
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
-                        <Label htmlFor='firstname' className='font-light'>ชื่อจริง</Label>
-                        <Input readOnly={isReadOnly} id='firstname' {...register("firstname")} />
+                        <Label htmlFor='firstname' className='font-light text-zinc-700'>ชื่อจริง</Label>
+                        <Input readOnly={isReadOnly} id='firstname' {...register("firstname")} className={`${isReadOnly ? "text-zinc-500" : ""}`} />
                         {errors.firstname && <span className="text-red-500 font-light">{errors.firstname.message}</span>}
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
-                        <Label htmlFor='lastname' className='font-light'>นามสกุล</Label>
-                        <Input readOnly={isReadOnly} id='lastname' {...register("lastname")} />
+                        <Label htmlFor='lastname' className='font-light text-zinc-700'>นามสกุล</Label>
+                        <Input readOnly={isReadOnly} id='lastname' {...register("lastname")} className={`${isReadOnly ? "text-zinc-500" : ""}`} />
                         {errors.lastname && <span className="text-red-500 font-light">{errors.lastname.message}</span>}
                     </div>
 
@@ -90,7 +90,7 @@ export default function AgentForm({ mode, defaultValues }: AgentFormProps) {
                         control={control}
                         render={({ field }) => (
                             <div className="flex flex-col gap-y-[10px]">
-                                <Label htmlFor="status" className="font-light">สถานะ</Label>
+                                <Label htmlFor="status" className="font-light text-zinc-700">สถานะ</Label>
                                 <Select
                                     disabled={isReadOnly}
                                     value={field.value} // ผูกค่า value จาก react-hook-form
@@ -120,32 +120,32 @@ export default function AgentForm({ mode, defaultValues }: AgentFormProps) {
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-x-[25px] md:gap-x-[50px] gap-y-[15px]'>
 
                     <div className='flex flex-col gap-y-[10px]'>
-                        <Label htmlFor='addressDetails' className='font-light'>บ้านเลขที่, หมู่, ซอย, ถนน [ภาษาไทย]</Label>
-                        <Input readOnly={isReadOnly} id='addressDetails' {...register("addressDetails")} />
+                        <Label htmlFor='addressDetails' className='font-light text-zinc-700'>บ้านเลขที่, หมู่, ซอย, ถนน [ภาษาไทย]</Label>
+                        <Input readOnly={isReadOnly} id='addressDetails' {...register("addressDetails")} className={`${isReadOnly ? "text-zinc-500" : ""}`} />
                         {errors.addressDetails && <span className="text-red-500 font-light">{errors.addressDetails.message}</span>}
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
-                        <Label htmlFor='district' className='font-light'>เขต/อำเภอ</Label>
-                        <Input readOnly={isReadOnly} id='district' {...register("district")} />
+                        <Label htmlFor='district' className='font-light text-zinc-700'>เขต/อำเภอ</Label>
+                        <Input readOnly={isReadOnly} id='district' {...register("district")} className={`${isReadOnly ? "text-zinc-500" : ""}`} />
                         {errors.district && <span className="text-red-500 font-light">{errors.district.message}</span>}
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
-                        <Label htmlFor='subDistrict' className='font-light'>แขวง/ตำบล</Label>
-                        <Input readOnly={isReadOnly} id='subDistrict' {...register("subDistrict")} />
+                        <Label htmlFor='subDistrict' className='font-light text-zinc-700'>แขวง/ตำบล</Label>
+                        <Input readOnly={isReadOnly} id='subDistrict' {...register("subDistrict")} className={`${isReadOnly ? "text-zinc-500" : ""}`} />
                         {errors.subDistrict && <span className="text-red-500 font-light">{errors.subDistrict.message}</span>}
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
-                        <Label htmlFor='province' className='font-light'>จังหวัด</Label>
-                        <Input readOnly={isReadOnly} id='province' {...register("province")} />
+                        <Label htmlFor='province' className='font-light text-zinc-700'>จังหวัด</Label>
+                        <Input readOnly={isReadOnly} id='province' {...register("province")} className={`${isReadOnly ? "text-zinc-500" : ""}`} />
                         {errors.province && <span className="text-red-500 font-light">{errors.province.message}</span>}
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
-                        <Label htmlFor='postelCode' className='font-light'>รหัสไปรษณีย์</Label>
-                        <Input readOnly={isReadOnly} maxLength={5} id='postelCode' {...register("postelCode")} />
+                        <Label htmlFor='postelCode' className='font-light text-zinc-700'>รหัสไปรษณีย์</Label>
+                        <Input readOnly={isReadOnly} maxLength={5} id='postelCode' {...register("postelCode")} className={`${isReadOnly ? "text-zinc-500" : ""}`} />
                         {errors.postelCode && <span className="text-red-500 font-light">{errors.postelCode.message}</span>}
                     </div>
                 </div>
@@ -177,7 +177,7 @@ export default function AgentForm({ mode, defaultValues }: AgentFormProps) {
                         </AlertDialog>)}
                 </div>)
             }
-            
+
         </form>
     )
 }
