@@ -1,6 +1,6 @@
 'use client'
 
-import AgentForm from '@/components/agents/AgentForm'
+import AgentForm from '@/components/agent/AgentForm'
 import HeaderSection from '@/components/shared/HeaderSection'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft } from 'lucide-react'

@@ -1,4 +1,4 @@
-import AgentForm from '@/components/agents/AgentForm'
+import AgentForm from '@/components/agent/AgentForm'
 import HeaderSection from '@/components/shared/HeaderSection'
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';

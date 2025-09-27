@@ -1,11 +1,10 @@
-import AgentForm from '@/components/agents/AgentForm'
+import AgentForm from '@/components/agent/AgentForm'
 import HeaderSection from '@/components/shared/HeaderSection'
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { findMockAgentById } from '@/lib/mock-data'
 import { ChevronLeft, SquarePen } from 'lucide-react'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
 import React from 'react'
 
 export default async function AgentPage({ params }: { params: { id: string } }) {
