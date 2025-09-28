@@ -12,7 +12,11 @@ import { useRouter } from 'next/navigation';
 import StatusBadge from '../shared/StatusBadge';
 import DocumentExpiryBadge from './DocumentExpiryBadge';
 
-export default function EmployeeTable({ employees }: { employees: Employee[] }) {
+interface EmployeeTableProps {
+    employees: Employee[],
+}
+
+export default function EmployeeTable({ employees }: EmployeeTableProps) {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [status, setStatus] = useState<string>("");
@@ -62,7 +66,7 @@ export default function EmployeeTable({ employees }: { employees: Employee[] }) 
                     </TableHeader>
                     <TableBody>
                         {
-                            employees.map((employee) => (
+                            employees.map((employee: Employee) => (
                                 <TableRow
                                     key={employee.id}
                                     className='cursor-pointer hover:bg-muted/50'

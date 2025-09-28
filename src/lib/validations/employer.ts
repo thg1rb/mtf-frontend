@@ -79,7 +79,6 @@ export const employerSchema = z.object({
 
   status: z.enum(["active", "inactive"]),
 });
-
 export type EmployerFormData = z.infer<typeof employerSchema>;
 
 export const employerUpdateSchema = employerSchema.partial();

@@ -8,7 +8,6 @@ import { Building, CircleCheck, CircleX, Edit, MoreHorizontal, Plus, Search, Tra
 import StatGrid from '@/components/shared/StatGrid'
 import HeaderSection from '@/components/shared/HeaderSection'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
