@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { mockAgents, agentTableHeaders, countTotalAgents, countActiveAgents, countInactiveAgents } from '@/lib/mock-data'
 import { Agent } from '@/types'
+import StatusBadge from '@/components/shared/StatusBadge'
 
 const statItems = [
   {
@@ -121,11 +122,7 @@ export default function AgentsPage() {
                       {agent.firstname + " " + agent.lastname}
                     </TableCell>
                     <TableCell>
-                      {agent.status === "active" ? (
-                        <Badge className="w-[75px] bg-green-200 font-light text-green-800">ใช้งาน</Badge>
-                      ) : (
-                        <Badge className='w-[75px] bg-red-200 font-light text-red-800'>ไม่ใช้งาน</Badge>
-                      )}
+                      {<StatusBadge status={agent.status} />}
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>

@@ -3,19 +3,39 @@ import { Employee, EmployeeTableHeader } from "@/types";
 export const employeeTableHeaders: EmployeeTableHeader[] = [
   {
     index: "header-1",
-    headerName: "ลูกจ้าง",
+    headerName: "ชื่อ-นามสกุล",
   },
   {
     index: "header-2",
-    headerName: "สัญชาติ",
-  },
-  {
-    index: "header-3",
     headerName: "นายจ้าง",
   },
   {
+    index: "header-3",
+    headerName: "ใบรับรองแพทย์",
+  },
+  {
     index: "header-4",
-    headerName: "การดำเนินการ",
+    headerName: "ประกันสุขภาพ",
+  },
+  {
+    index: "header-5",
+    headerName: "ใบอนุญาตทำงาน",
+  },
+  {
+    index: "header-6",
+    headerName: "เอกสาร CI",
+  },
+  {
+    index: "header-7",
+    headerName: "บัตรชมพู",
+  },
+  {
+    index: "header-8",
+    headerName: "สถานะ",
+  },
+  {
+    index: "header-9",
+    headerName: "ดำเนินการ",
   },
 ];
 
@@ -34,7 +54,7 @@ export const mockEmployees: Employee[] = [
     subDistrict: "พระโขนง",
     province: "กรุงเทพมหานคร",
     postelCode: "10110",
-    healthCheckExpiryDate: "2024-12-31",
+    healthCheckExpiryDate: "2025-10-01",
     insuranceExpiryDate: "2024-11-30",
     workPermitExpiryDate: "2024-10-15",
     certificateOfIdentityExpiryDate: "2025-01-20",

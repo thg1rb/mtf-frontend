@@ -2,6 +2,7 @@
 
 import HeaderSection from '@/components/shared/HeaderSection'
 import StatGrid from '@/components/shared/StatGrid'
+import StatusBadge from '@/components/shared/StatusBadge'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
@@ -63,7 +64,6 @@ export default function EmployersPage() {
       {/* StatGrid */}
       <StatGrid statItems={statItems} />
 
-      {/* TableSection */}
       {/* TableSection */}
       {/* TODO: Pagination */}
       {/* TODO: filter agents by search or status */}
@@ -133,11 +133,7 @@ export default function EmployersPage() {
                       <Badge variant='outline' className='w-[70px] font-light'>{countEmployees(employer.taxId)} คน</Badge>
                     </TableCell>
                     <TableCell className='px-[20px]'>
-                      {employer.status === "active" ? (
-                        <Badge className="w-[75px] bg-green-200 font-light text-green-800">ใช้งาน</Badge>
-                      ) : (
-                        <Badge className='w-[75px] bg-red-200 font-light text-red-800'>ไม่ใช้งาน</Badge>
-                      )}
+                      {<StatusBadge status={employer.status} />}
                     </TableCell>
                     <TableCell className='text-right px-[20px]'>
                       <DropdownMenu>

@@ -3,7 +3,7 @@ import HeaderSection from '@/components/shared/HeaderSection'
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { findMockEmployerById } from '@/lib/mock-data/employers'
-import { ChevronLeft, SquarePen } from 'lucide-react'
+import { ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
