@@ -294,5 +294,13 @@ export const mockEmployers: Employer[] = [
 export const findMockEmployerById = (id: string) =>
   mockEmployers.find((employer) => employer.taxId === id);
 
+export const countTotalEmployers = (): number => mockEmployers.length;
+
+export const countActiveEmployers = (): number =>
+  mockEmployers.filter((employer) => employer.status === "active").length;
+
+export const countInactiveEmployers = (): number =>
+  mockEmployers.filter((employer) => employer.status === "inactive").length;
+
 export const countEmployees = (id: string) =>
   mockEmployees.filter((employee) => employee.employerId === id).length;

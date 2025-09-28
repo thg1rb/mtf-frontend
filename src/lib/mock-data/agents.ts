@@ -142,5 +142,13 @@ export const mockAgents: Agent[] = [
   },
 ];
 
+export const countTotalAgents = (): number => mockAgents.length;
+
+export const countActiveAgents = (): number =>
+  mockAgents.filter((agent) => agent.status === "active").length;
+
+export const countInactiveAgents = (): number =>
+  mockAgents.filter((agent) => agent.status === "inactive").length;
+
 export const findMockAgentById = (id: string) =>
   mockAgents.find((agent) => agent.citizenId === id);

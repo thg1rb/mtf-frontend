@@ -8,7 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { countEmployees, employerTableHeaders, mockEmployers } from '@/lib/mock-data/employers'
+import { countActiveEmployers, countEmployees, countInactiveEmployers, countTotalEmployers, employerTableHeaders, mockEmployers } from '@/lib/mock-data/employers'
 import { Employer } from '@/types'
 import { Edit, Mail, MoreHorizontal, Phone, Plus, Search, Trash2, UserCheck2, Users2, UserX2 } from 'lucide-react'
 import Link from 'next/link'
@@ -19,21 +19,21 @@ const statItems = [
   {
     id: 'stat-1',
     title: 'นายจ้างทั้งหมด (คน)',
-    amount: 100,
+    amount: countTotalEmployers(), // TODO: GET method `/api/employers`
     amountTextColor: 'text-black',
     icon: Users2,
   },
   {
     id: 'stat-2',
     title: 'นายจ้างที่ใช้งานได้ (คน)',
-    amount: 100,
+    amount: countActiveEmployers(), // TODO: GET method `/api/employers/active`
     amountTextColor: 'text-green-500',
     icon: UserCheck2,
   },
   {
     id: 'stat-3',
     title: 'นายจ้างที่ไม่ใช้งาน (คน)',
-    amount: 1000,
+    amount: countInactiveEmployers(), // TODO: GET method `/api/employers/inactive`
     amountTextColor: 'text-red-500',
     icon: UserX2,
   },

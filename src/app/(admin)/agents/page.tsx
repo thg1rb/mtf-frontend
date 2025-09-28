@@ -12,28 +12,28 @@ import { Badge } from '@/components/ui/badge'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { mockAgents, agentTableHeaders } from '@/lib/mock-data'
+import { mockAgents, agentTableHeaders, countTotalAgents, countActiveAgents, countInactiveAgents } from '@/lib/mock-data'
 import { Agent } from '@/types'
 
 const statItems = [
   {
     id: 'stat-1',
     title: 'นายหน้าทั้งหมด (คน)',
-    amount: 100,
+    amount: countTotalAgents(), // TODO: GET method `/api/agents/`
     amountTextColor: 'text-black',
     icon: Building,
   },
   {
     id: 'stat-2',
     title: 'นายหน้าที่ใช้งานได้ (คน)',
-    amount: 100,
+    amount: countActiveAgents(), // TODO: GET method `/api/agents/active`
     amountTextColor: 'text-green-500',
     icon: CircleCheck,
   },
   {
     id: 'stat-3',
     title: 'นายหน้าที่ไม่ใช้งาน (คน)',
-    amount: 1000,
+    amount: countInactiveAgents(), // TODO: GET method `/api/agents/inactive`,
     amountTextColor: 'text-red-500',
     icon: CircleX,
   },
