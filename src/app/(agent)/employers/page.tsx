@@ -9,7 +9,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { countActiveEmployers, countEmployees, countInactiveEmployers, countTotalEmployers, employerTableHeaders, mockEmployers } from '@/lib/mock-data/employers'
+import { countActiveEmployers, countInactiveEmployers, countTotalEmployers, employerTableHeaders, mockEmployers, countEmployeesByEmployerId } from '@/lib/mock-data'
 import { Employer } from '@/types'
 import { Edit, Mail, MoreHorizontal, Phone, Plus, Search, Trash2, UserCheck2, Users2, UserX2 } from 'lucide-react'
 import Link from 'next/link'
@@ -130,7 +130,7 @@ export default function EmployersPage() {
                       </div>
                     </TableCell>
                     <TableCell className='font-light px-[20px]'>
-                      <Badge variant='outline' className='w-[70px] font-light'>{countEmployees(employer.taxId)} คน</Badge>
+                      <Badge variant='outline' className='w-[70px] font-light'>{countEmployeesByEmployerId(employer.taxId)} คน</Badge>
                     </TableCell>
                     <TableCell className='px-[20px]'>
                       {<StatusBadge status={employer.status} />}

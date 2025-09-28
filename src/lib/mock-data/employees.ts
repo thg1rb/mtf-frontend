@@ -1,4 +1,5 @@
 import { Employee, EmployeeTableHeader } from "@/types";
+import { getDocumentStatus } from "@/lib/utils/document";
 
 export const employeeTableHeaders: EmployeeTableHeader[] = [
   {
@@ -241,3 +242,58 @@ export const mockEmployees: Employee[] = [
     nonThaiIdentificationExpiryDate: "2025-05-20",
   },
 ];
+
+export const constTotalEmployees = () => mockEmployees.length;
+
+export const findMockEmployeeById = (id: string) =>
+  mockEmployees.find((employee) => employee.id === id);
+
+export const countEmployeesByEmployerId = (id: string) =>
+  mockEmployees.filter((employee) => employee.employerId === id).length;
+
+export const countTotalEmployees = (): number => mockEmployees.length;
+
+export const countEmployeesDocumentValid = () =>
+  mockEmployees.filter((employee) => {
+    const documents = [
+      employee.healthCheckExpiryDate,
+      employee.insuranceExpiryDate,
+      employee.workPermitExpiryDate,
+      employee.certificateOfIdentityExpiryDate,
+      employee.nonThaiIdentificationExpiryDate,
+    ];
+
+    return documents.some(
+      (expiryDate) => getDocumentStatus(expiryDate).status === "valid"
+    );
+  }).length;
+
+export const countEmployeesDocumentExpired = () =>
+  mockEmployees.filter((employee) => {
+    const documents = [
+      employee.healthCheckExpiryDate,
+      employee.insuranceExpiryDate,
+      employee.workPermitExpiryDate,
+      employee.certificateOfIdentityExpiryDate,
+      employee.nonThaiIdentificationExpiryDate,
+    ];
+
+    return documents.some(
+      (expiryDate) => getDocumentStatus(expiryDate).status === "expired"
+    );
+  }).length;
+
+export const countEmployeesDocumentNearlyExpired = () =>
+  mockEmployees.filter((employee) => {
+    const documents = [
+      employee.healthCheckExpiryDate,
+      employee.insuranceExpiryDate,
+      employee.workPermitExpiryDate,
+      employee.certificateOfIdentityExpiryDate,
+      employee.nonThaiIdentificationExpiryDate,
+    ];
+
+    return documents.some(
+      (expiryDate) => getDocumentStatus(expiryDate).status === "nearly"
+    );
+  }).length;

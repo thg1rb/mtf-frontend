@@ -4,7 +4,7 @@ import EmployeeTable from '@/components/employee/EmployeeTable'
 import HeaderSection from '@/components/shared/HeaderSection'
 import StatGrid from '@/components/shared/StatGrid'
 import { Button } from '@/components/ui/button'
-import { mockEmployees } from '@/lib/mock-data'
+import { countEmployeesDocumentExpired, countEmployeesDocumentNearlyExpired, countEmployeesDocumentValid, countTotalEmployees, mockEmployees } from '@/lib/mock-data'
 import { Employee } from '@/types'
 import { CheckCircle2, CircleX, Loader, Plus, Users2 } from 'lucide-react'
 import Link from 'next/link'
@@ -14,28 +14,28 @@ const statItems = [
   {
     id: 'stat-1',
     title: 'ลูกจ้างจ้างทั้งหมด (คน)',
-    amount: 100,
+    amount: countTotalEmployees(),
     amountTextColor: 'text-black',
     icon: Users2,
   },
   {
     id: 'stat-2',
     title: 'เอกสารที่ใช้งานได้ (คน)',
-    amount: 100,
+    amount: countEmployeesDocumentValid(),
     amountTextColor: 'text-green-500',
     icon: CheckCircle2,
   },
   {
     id: 'stat-3',
     title: 'เอกสารใกล้หมดอายุ (คน)',
-    amount: 1000,
+    amount: countEmployeesDocumentNearlyExpired(),
     amountTextColor: 'text-yellow-400',
     icon: Loader,
   },
   {
     id: 'stat-4',
     title: 'เอกสารหมดอายุ (คน)',
-    amount: 1000,
+    amount: countEmployeesDocumentExpired(),
     amountTextColor: 'text-red-500',
     icon: CircleX,
   },

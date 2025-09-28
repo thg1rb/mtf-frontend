@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { EmployeeFormData, employeeSchema } from '@/lib/validations'
-import { Bed, Info } from 'lucide-react'
+import { Bed, Clock8, Info } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Controller, type Resolver, useForm } from 'react-hook-form'
@@ -292,7 +292,7 @@ export default function EmployeeForm({ mode, defaultValues }: EmployeeFormProps)
             {/* DocumentExpirySection */}
             <div className='flex flex-col gap-y-[25px] p-[27px] border border-slate-300 rounded-2xl shadow-md'>
                 <div className='flex flex-row gap-x-[5px] items-center'>
-                    <Info />
+                    <Clock8 />
                     <p className='font-normal'>วันหมดอายุเอกสารสำคัญ</p>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-x-[25px] md:gap-x-[50px] gap-y-[15px]'>

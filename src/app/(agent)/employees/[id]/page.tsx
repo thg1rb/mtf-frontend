@@ -1,9 +1,58 @@
+import EmployeeForm from '@/components/employee/EmployeeForm'
+import HeaderSection from '@/components/shared/HeaderSection'
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
+import { findMockEmployeeById } from '@/lib/mock-data'
+import { ChevronLeft, SquarePen } from 'lucide-react'
+import Link from 'next/link'
 import React from 'react'
 
-export default function EmployeePage() {
+export default async function EmployeePage({ params }: { params: { id: string } }) {
+  const { id } = await params;
+
+  // TODO: GET method `/api/employees/${id}` to fetch existing employer details
+  const data = findMockEmployeeById(id);
+
   return (
-    <div>
-      
+    <div className='flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>
+      {/* HeaderSection */}
+      <HeaderSection
+        topic="ข้อมูลของลูกจ้าง"
+        leftActionButton={
+          <Button asChild variant="ghost" className='flex flex-row font-normal px-[17px] py-[5px] w-full md:w-auto border border-zinc-300 cursor-pointer'>
+            <Link href='/employees'>
+              <ChevronLeft className='size-[24px] mr-2' />
+              ย้อนกลับ
+            </Link>
+          </Button>}
+        rightActionButton={
+          <Button asChild className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
+            <Link href={`/employees/${id}/edit`}>
+              <SquarePen className='size-[24px] mr-2' />
+              แก้ไขข้อมูล
+            </Link>
+          </Button>
+        } />
+
+      {/* FormSection */}
+      <EmployeeForm mode='view' defaultValues={data} />
+
+      {/* EmployerNotFoundSection */}
+      {!data && <AlertDialog open={true}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className='font-medium'>ไม่พบข้อมูลลูกจ้าง</AlertDialogTitle>
+            <AlertDialogDescription className='font-light'>
+              ตรวจสอบหมายเลขประจำตัวลูกจ้างว่าอยู่ในระบบหรือไม่
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction className='font-light'>
+              <Link href='/employees'>ย้อนกลับ</Link>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>}
     </div>
   )
 }
