@@ -32,7 +32,7 @@ export const mockEmployers: Employer[] = [
     businessType: "ก่อสร้างอาคาร",
     phoneNumber: "0212345678",
     email: "hr@watthana.co.th",
-    financialStatusYear: 2567,
+  financialStatusYear: 2024,
     financialStatusIncome: 18500000,
     financialStatusTax: 1250000,
     currentIncome: 1750000,
@@ -56,7 +56,7 @@ export const mockEmployers: Employer[] = [
     businessType: "โรงแรม/รีสอร์ท",
     phoneNumber: "0539876543",
     email: "hi@nimman.co",
-    financialStatusYear: 2567,
+  financialStatusYear: 2024,
     financialStatusIncome: 9200000,
     financialStatusTax: 380000,
     currentIncome: 760000,
@@ -80,7 +80,7 @@ export const mockEmployers: Employer[] = [
     businessType: "โลจิสติกส์/คลังสินค้า",
     phoneNumber: "0381234567",
     email: "ops@srlog.co.th",
-    financialStatusYear: 2567,
+  financialStatusYear: 2024,
     financialStatusIncome: 14500000,
     financialStatusTax: 650000,
     currentIncome: 980000,
@@ -104,7 +104,7 @@ export const mockEmployers: Employer[] = [
     businessType: "แปรรูปอาหารทะเล",
     phoneNumber: "0763456789",
     email: "sale@phuketsea.co",
-    financialStatusYear: 2567,
+  financialStatusYear: 2024,
     financialStatusIncome: 12800000,
     financialStatusTax: 520000,
     currentIncome: 890000,
@@ -128,7 +128,7 @@ export const mockEmployers: Employer[] = [
     businessType: "โรงงานแปรรูปอาหาร",
     phoneNumber: "0351239990",
     email: "hr@ayuprod.co.th",
-    financialStatusYear: 2567,
+  financialStatusYear: 2024,
     financialStatusIncome: 16700000,
     financialStatusTax: 740000,
     currentIncome: 1120000,
@@ -152,7 +152,7 @@ export const mockEmployers: Employer[] = [
     businessType: "โรงงานประกอบชิ้นส่วน",
     phoneNumber: "0445552101",
     email: "contact@koratauto.co.th",
-    financialStatusYear: 2567,
+  financialStatusYear: 2024,
     financialStatusIncome: 13850000,
     financialStatusTax: 610000,
     currentIncome: 910000,
@@ -176,7 +176,7 @@ export const mockEmployers: Employer[] = [
     businessType: "บริการทำความสะอาด",
     phoneNumber: "0742223334",
     email: "sales@hatyaitrade.co",
-    financialStatusYear: 2567,
+  financialStatusYear: 2024,
     financialStatusIncome: 7200000,
     financialStatusTax: 210000,
     currentIncome: 540000,
@@ -200,7 +200,7 @@ export const mockEmployers: Employer[] = [
     businessType: "โรงงานแปรรูปอาหาร",
     phoneNumber: "0431112223",
     email: "it@kkits.co",
-    financialStatusYear: 2567,
+  financialStatusYear: 2024,
     financialStatusIncome: 5600000,
     financialStatusTax: 150000,
     currentIncome: 420000,
@@ -224,7 +224,7 @@ export const mockEmployers: Employer[] = [
     businessType: "โรงงานยางพารา",
     phoneNumber: "0388887776",
     email: "service@rayongpetro.co.th",
-    financialStatusYear: 2567,
+    financialStatusYear: 2024,
     financialStatusIncome: 21200000,
     financialStatusTax: 1320000,
     currentIncome: 1650000,
@@ -248,7 +248,7 @@ export const mockEmployers: Employer[] = [
     businessType: "เกษตร/ฟาร์ม",
     phoneNumber: "0531238885",
     email: "farm@crfood.co",
-    financialStatusYear: 2567,
+  financialStatusYear: 2024,
     financialStatusIncome: 4800000,
     financialStatusTax: 120000,
     currentIncome: 350000,
@@ -293,6 +293,16 @@ export const mockEmployers: Employer[] = [
 export const findMockEmployerById = (id: string) =>
   mockEmployers.find((employer) => employer.taxId === id);
 
+export const findEmployerNameById = (id: string) => {
+  const employer = findMockEmployerById(id);
+  
+  if (employer) {
+    return employer.firstname + " " + employer.lastname;
+  }
+
+  return "ไม่พบชื่อนายจ้าง";
+};
+
 export const countTotalEmployers = (): number => mockEmployers.length;
 
 export const countActiveEmployers = (): number =>
@@ -300,4 +310,3 @@ export const countActiveEmployers = (): number =>
 
 export const countInactiveEmployers = (): number =>
   mockEmployers.filter((employer) => employer.status === "inactive").length;
-

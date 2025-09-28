@@ -13,6 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
 import { DatePicker } from '../shared/DatePicker'
+import { findMockEmployerById } from '@/lib/mock-data'
 
 interface EmployeeFormProps {
     mode: "create" | "view" | "edit"
@@ -59,11 +60,12 @@ const toDateOrNull = (value: string | Date | null | undefined) => {
 
 export default function EmployeeForm({ mode, defaultValues }: EmployeeFormProps) {
     const router = useRouter();
-    const [showValidationAlert, setShowValidationAlert] = useState(false);
+    const [showValidationAlert, setShowValidationAlert] = useState<boolean>(false);
+    const [showInvalidEmployerId, setInvalidEmployerId] = useState<boolean>(false);
 
     const cleanedDefaultValues: EmployeeFormData = useMemo(() => ({
-        employerId: defaultValues?.employerId ?? "",
         passportNo: defaultValues?.passportNo ?? "",
+        employerId: defaultValues?.employerId ?? "",
         firstname: defaultValues?.firstname ?? "",
         lastname: defaultValues?.lastname ?? "",
         nationality: defaultValues?.nationality ?? "myanmar",
@@ -100,6 +102,12 @@ export default function EmployeeForm({ mode, defaultValues }: EmployeeFormProps)
     // Form submit successfully (There is no invalid input)
     const handleFormSubmit = (data: EmployeeFormData) => {
         setShowValidationAlert(false);
+
+        if (!findMockEmployerById(data.employerId) || (findMockEmployerById(data.employerId)?.status === "inactive")) {
+            setInvalidEmployerId(true);
+            return;
+        }
+
         if (mode === "create") {
             // TODO: POST method `api/employees`
         } else if (mode === "edit") {
@@ -331,12 +339,27 @@ export default function EmployeeForm({ mode, defaultValues }: EmployeeFormProps)
                         </Link>
                     </Button>
                     <Button type='submit' className='font-light'>{mode === 'create' ? 'บันทึกข้อมูล' : 'บันทึกการแก้ไข'}</Button>
+
                     <AlertDialog open={showValidationAlert} onOpenChange={setShowValidationAlert}>
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle className='font-medium'>{mode === 'create' ? 'เพิ่มลูกจ้างใหม่ไม่สำเร็จ!' : 'แก้ไขข้อมูลลูกจ้างไม่สำเร็จ!'}</AlertDialogTitle>
                                 <AlertDialogDescription className='font-light'>
                                     ระบุข้อมูลของลูกจ้างให้ครบถ้วนและตรวจสอบรูปแบบของข้อมูลให้ถูกต้องก่อนคลิก {mode === 'create' ? 'บันทึกข้อมูล' : 'บันทึกการแก้ไข'}
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogAction className='font-light'>ตกลง</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+
+                    <AlertDialog open={showInvalidEmployerId} onOpenChange={setInvalidEmployerId}>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle className='font-medium'>ไม่พบหมายเลขประจำตัวผู้เสียภาษี!</AlertDialogTitle>
+                                <AlertDialogDescription className='font-light'>
+                                    ระบุเลขประจำตัวผู้เสียภาษีของนายจ้างที่อยู่ในระบบและมีสถานะ &quot;ใช้งาน&quot;
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

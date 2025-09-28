@@ -8,7 +8,7 @@ interface DocumentExpiryBadgeProps {
 }
 
 export default function DocumentExpiryBadge({ expiryDate }: DocumentExpiryBadgeProps) {
-    const { status, daysLeft } = getDocumentStatus(expiryDate);
+    const { status } = getDocumentStatus(expiryDate);
 
     let icon: React.ReactElement;
     let text: string, className: string;
@@ -17,31 +17,31 @@ export default function DocumentExpiryBadge({ expiryDate }: DocumentExpiryBadgeP
         case 'expired':
             icon = <FileWarning className="text-white" />
             text = 'หมดอายุ'
-            className = 'bg-red-500 text-white'
+            className = 'w-[120px] bg-red-500 text-white'
             break
 
         case 'nearly':
             icon = <FileClock className="text-red-800" />
-            text = `หมดอายุในอีก ${daysLeft} วัน`
-            className = 'bg-yellow-100 text-red-800'
+            text = `ใกล้หมดอายุ`
+            className = 'w-[120px] bg-yellow-100 text-red-800'
             break
 
         case 'valid':
             icon = <FileCheck2 className="text-green-800" />
             text = 'ใช้งานได้'
-            className = 'bg-green-200 text-green-800'
+            className = 'w-[120px] bg-green-200 text-green-800'
             break
 
         case 'none':
             icon = <FileX2 className="text-gray-600" />
             text = 'ไม่มี'
-            className = 'bg-gray-200 text-gray-600'
+            className = 'w-[120px] bg-gray-200 text-gray-600'
             break
 
         default:
             icon = <FileX className="text-gray-600" />
             text = 'ไม่ทราบสถานะ'
-            className = 'bg-gray-200 text-gray-600'
+            className = 'w-[120px] bg-gray-200 text-gray-600'
     }
 
     return (

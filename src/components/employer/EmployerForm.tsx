@@ -59,6 +59,8 @@ export default function EmployerForm({ mode, defaultValues }: EmployerFormProps)
         mode: 'onChange'
     });
 
+    const convertCetoBe = (year: number) => year + 543;
+
     useEffect(() => {
         reset(cleanedDefaultValues);
     }, [cleanedDefaultValues, reset]);
@@ -199,7 +201,7 @@ export default function EmployerForm({ mode, defaultValues }: EmployerFormProps)
                                     <SelectContent>
                                         {financialStatusYearOptions.map((year) => (
                                             <SelectItem key={year} value={year.toString()} className='cursor-pointer'>
-                                                {year}
+                                                {convertCetoBe(year)}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>

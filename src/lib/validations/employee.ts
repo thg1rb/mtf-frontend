@@ -1,13 +1,18 @@
 import { z } from "zod";
 
 export const employeeSchema = z.object({
-  employerId: z.string().min(1, "กรุณาระบุรหัสนายจ้าง"),
-
-  passportNo: z
+    
+    passportNo: z
     .string()
     .min(1, "กรุณาระบุหมายเลขหนังสือเดินทาง")
     .nullable()
     .optional(),
+
+    employerId: z
+      .string()
+      .min(1, "กรุณาระบุรหัสนายจ้าง")
+      .length(13, "รหัสไปรษณีย์ต้องมี 13 หลัก")
+      .regex(/^[0-9]{13}$/, "รหัสไปรษณีย์ต้องเป็นตัวเลขเท่านั้น"),
 
   firstname: z.string().min(1, "กรุณาระบุชื่อจริง"),
 

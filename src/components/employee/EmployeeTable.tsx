@@ -6,7 +6,7 @@ import { Button } from '../ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import Link from 'next/link';
-import { employeeTableHeaders } from '@/lib/mock-data';
+import { employeeTableHeaders, findEmployerNameById } from '@/lib/mock-data';
 import { Employee } from '@/types';
 import { useRouter } from 'next/navigation';
 import StatusBadge from '../shared/StatusBadge';
@@ -76,7 +76,7 @@ export default function EmployeeTable({ employees }: EmployeeTableProps) {
                                         {employee.firstname + " " + employee.lastname}
                                     </TableCell>
                                     <TableCell className='font-light px-[20px]'>
-                                        {employee.employerId}
+                                        {findEmployerNameById(employee.employerId)}
                                     </TableCell>
                                     <TableCell className='font-light px-[20px]'>
                                         {<DocumentExpiryBadge expiryDate={employee.healthCheckExpiryDate} />}

@@ -1,11 +1,10 @@
 import { z } from "zod";
 
 const currentYear = new Date().getFullYear();
-const BUDDHIST_YEAR_OFFSET = 543;
 
 export const financialStatusYearOptions = Array.from(
   { length: 4 },
-  (_, index) => currentYear + BUDDHIST_YEAR_OFFSET - index
+  (_, index) => currentYear - index
 );
 
 export const employerSchema = z.object({
