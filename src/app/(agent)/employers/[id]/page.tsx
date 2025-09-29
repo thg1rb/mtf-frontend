@@ -3,7 +3,7 @@ import EmployerForm from '@/components/employer/EmployerForm'
 import HeaderSection from '@/components/shared/HeaderSection'
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { findMockEmployeesByEmployerId, findMockEmployerById, getMockEmployees } from '@/lib/mock-data'
+import { findMockEmployeesByEmployerId, findMockEmployerById } from '@/lib/mock-data'
 import { ChevronLeft, SquarePen } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
@@ -42,7 +42,6 @@ export default async function EmployerPage({ params }: { params: { id: string } 
 
       {/* TODO: EmployeeTableSection */}
       <EmployeeTable employees={employees} />
-
 
       {/* EmployerNotFoundSection */}
       {!data && <AlertDialog open={true}>

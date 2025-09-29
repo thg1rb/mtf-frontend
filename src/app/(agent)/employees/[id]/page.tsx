@@ -3,7 +3,7 @@ import HeaderSection from '@/components/shared/HeaderSection'
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { findMockEmployeeById } from '@/lib/mock-data'
-import { ChevronLeft, SquarePen } from 'lucide-react'
+import { ChevronLeft, File, Files, SquarePen } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -34,25 +34,61 @@ export default async function EmployeePage({ params }: { params: { id: string } 
           </Button>
         } />
 
-      {/* FormSection */}
-      <EmployeeForm mode='view' defaultValues={data} />
+      <div className='flex flex-col lg:flex-row gap-x-[53px] gap-y-[51px]'>
 
-      {/* EmployerNotFoundSection */}
-      {!data && <AlertDialog open={true}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className='font-medium'>ไม่พบข้อมูลลูกจ้าง</AlertDialogTitle>
-            <AlertDialogDescription className='font-light'>
-              ตรวจสอบหมายเลขประจำตัวลูกจ้างว่าอยู่ในระบบหรือไม่
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction className='font-light'>
-              <Link href='/employees'>ย้อนกลับ</Link>
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>}
-    </div>
+        {/* FormSection */}
+        <div className='flex-2'>
+          <EmployeeForm mode='view' defaultValues={data} />
+        </div>
+
+        <div className='flex-1 flex flex-col gap-y-[25px] p-[27px] h-min border border-slate-300 rounded-2xl shadow-md'>
+          <div className='flex flex-row gap-x-[5px] items-center'>
+            <Files />
+            <p className='font-normal'>เอกสารที่เกี่ยวข้อง</p>
+          </div>
+          <div className='flex flex-col gap-y-[25px] '>
+            <div className='flex flex-col gap-y-[18px]'>
+              <Button asChild variant='outline' className='flex flex-row justify-start cursor-pointer'>
+                <Link href='/'>
+                  <File />
+                  <p className="font-light">หนังสือรับรองการจ้าง (บต. 46)</p>
+                </Link>
+              </Button>
+              <Button asChild variant='outline' className='flex flex-row justify-start cursor-pointer'>
+                <Link href='/'>
+                  <File />
+                  <p className="font-light">สัญญาจ้าง 3 ภาษา</p>
+                </Link>
+              </Button>
+              <Button asChild variant='outline' className='flex flex-row justify-start cursor-pointer'>
+                <Link href='/'>
+                  <File />
+                  <p className="font-light">หนังสือมอบอำนาจ</p>
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* EmployerNotFoundSection */}
+        {!data && <AlertDialog open={true}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className='font-medium'>ไม่พบข้อมูลลูกจ้าง</AlertDialogTitle>
+              <AlertDialogDescription className='font-light'>
+                ตรวจสอบหมายเลขประจำตัวลูกจ้างว่าอยู่ในระบบหรือไม่
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction className='font-light'>
+                <Link href='/employees'>ย้อนกลับ</Link>
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>}
+      </div>
+
+
+    </div >
   )
 }
