@@ -1,3 +1,5 @@
+'use client'
+
 import { Edit, MoreHorizontal, Search, Trash2 } from 'lucide-react';
 import React, { useState } from 'react'
 import { Input } from '../ui/input';
@@ -27,8 +29,8 @@ export default function EmployeeTable({ employees }: EmployeeTableProps) {
         // {/* TODO: filter agents by search or status */ }
         <div className='flex flex-col gap-y-[20px] p-[20px] border rounded-2xl shadow-lg'>
             <div className='flex flex-col'>
-                <p className='font-normal'>ค้นหานายหน้า</p>
-                <p className='font-light'>ค้นหานายหน้าจากอีเมล, ชื่อจริง หรือนามสกุล</p>
+                <p className='font-normal'>ค้นหาลูกจ้าง</p>
+                <p className='font-light'>ค้นหาจากส่วนหนึ่งของชื่อหรือนามสกุล</p>
             </div>
             <div className='flex flex-row gap-x-[14px] md:gap-x-[26px]'>
                 <div className="relative flex-1">

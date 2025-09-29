@@ -1,8 +1,9 @@
+import EmployeeTable from '@/components/employee/EmployeeTable'
 import EmployerForm from '@/components/employer/EmployerForm'
 import HeaderSection from '@/components/shared/HeaderSection'
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { findMockEmployerById } from '@/lib/mock-data'
+import { findMockEmployeesByEmployerId, findMockEmployerById, getMockEmployees } from '@/lib/mock-data'
 import { ChevronLeft, SquarePen } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
@@ -12,6 +13,7 @@ export default async function EmployerPage({ params }: { params: { id: string } 
 
   // TODO: GET method `/api/employers/${id}` to fetch existing employer details
   const data = findMockEmployerById(id);
+  const employees = findMockEmployeesByEmployerId(id);
 
   return (
     <div className='flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>
@@ -39,6 +41,7 @@ export default async function EmployerPage({ params }: { params: { id: string } 
       <EmployerForm mode='view' defaultValues={data} />
 
       {/* TODO: EmployeeTableSection */}
+      <EmployeeTable employees={employees} />
 
 
       {/* EmployerNotFoundSection */}

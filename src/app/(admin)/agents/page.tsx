@@ -70,7 +70,7 @@ export default function AgentsPage() {
       <div className='flex flex-col gap-y-[20px] p-[20px] border rounded-2xl shadow-lg'>
         <div className='flex flex-col'>
           <p className='font-normal'>ค้นหานายหน้า</p>
-          <p className='font-light'>ค้นหานายหน้าจากอีเมล, ชื่อจริง หรือนามสกุล</p>
+          <p className='font-light'>ค้นหาจากส่วนหนึ่งของชื่อหรือนามสกุล</p>
         </div>
         <div className='flex flex-row gap-x-[14px] md:gap-x-[26px]'>
           <div className="relative flex-1">
@@ -100,7 +100,7 @@ export default function AgentsPage() {
             <TableHeader>
               <TableRow>
                 {agentTableHeaders.map((tableHeader) => (
-                  <TableHead key={tableHeader.index} className='font-normal text-center'>
+                  <TableHead key={tableHeader.index} className={`font-normal px-[20px] ${tableHeader.index === 'header-4' ? "text-right" : ""}`}>
                     {tableHeader.headerName}
                   </TableHead>
                 ))}
@@ -111,19 +111,19 @@ export default function AgentsPage() {
                 agents.map((agent) => (
                   <TableRow
                     key={agent.citizenId}
-                    className='text-center cursor-pointer hover:bg-muted/50'
+                    className='cursor-pointer hover:bg-muted/50'
                     onClick={() => router.push(`/agents/${agent.citizenId}`)}
                   >
-                    <TableCell className='font-light'>
+                    <TableCell className='font-light px-[20px]'>
                       {agent.email}
                     </TableCell>
-                    <TableCell className='font-light'>
+                    <TableCell className='font-light px-[20px]'>
                       {agent.firstname + " " + agent.lastname}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className='px-[20px]'>
                       {<StatusBadge status={agent.status} />}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className='text-right px-[20px]'>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild className='cursor-pointer'>
                           <Button
