@@ -49,7 +49,7 @@ export default async function EmployeePage({ params }: { params: { id: string } 
           <div className='flex flex-col gap-y-[25px] '>
             <div className='flex flex-col gap-y-[18px]'>
               <Button asChild variant='outline' className='flex flex-row justify-start cursor-pointer'>
-                <Link href='/'>
+                <Link href={`/employees/${id}/wp`}>
                   <File />
                   <p className="font-light">หนังสือรับรองการจ้าง (บต. 46)</p>
                 </Link>
