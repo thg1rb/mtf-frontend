@@ -30,11 +30,27 @@ export default function WorkPermitForm({ id, workPermits }: { id: string, workPe
         register,
         handleSubmit,
         control,
+        setValue,
         formState: { errors }
     } = useForm<WorkPermitFormData>({
         resolver: zodResolver(workPermitSchema) as Resolver<WorkPermitFormData>,
         mode: 'onChange'
     });
+
+    // Handler to populate form with selected work permit data
+    const handleLoadWorkPermit = (permit: WorkPermit) => {
+        setValue('typeOfWork', permit.typeOfWork);
+        setValue('natureOfWork', permit.natureOfWork);
+        setValue('periodOfEmploymentYear', permit.periodOfEmploymentYear);
+        setValue('periodOfEmploymentMonth', permit.periodOfEmploymentMonth);
+        setValue('periodOfEmploymentDay', permit.periodOfEmploymentDay);
+        setValue('employmentValidUntil', permit.employmentValidUntil);
+        setValue('incomePerDay', permit.incomePerDay);
+        setValue('benefitPerDay', permit.benefitPerDay);
+        setValue('highestEducation', permit.highestEducation);
+        setValue('workExperiences', permit.workExperiences);
+        setValue('reasonOfNotEmployingThaiPerson', permit.reasonOfNotEmployingThaiPerson);
+    };
 
     // Form submit successfully (There is no invalid input)
     const handleFormSubmit = (data: WorkPermitFormData) => {
@@ -204,9 +220,14 @@ export default function WorkPermitForm({ id, workPermits }: { id: string, workPe
                 </div>
                 <div className='flex flex-col gap-y-[25px] '>
                     <div className='flex flex-col gap-y-[18px]'>
-                        {/* TODO: Click to apply the data to every fields */}
                         {workPermits.map((permit) => (
-                            <Button key={permit.id} type='button' variant='outline' className='flex flex-row justify-start font-light cursor-pointer'>
+                            <Button 
+                                key={permit.id} 
+                                type='button' 
+                                variant='outline' 
+                                className='flex flex-row justify-start font-light cursor-pointer'
+                                onClick={() => handleLoadWorkPermit(permit)}
+                            >
                                 <History />
                                 {permit.createdAt.toLocaleDateString("th-TH", {
                                     year: "numeric",

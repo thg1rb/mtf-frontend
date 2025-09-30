@@ -290,11 +290,11 @@ export const mockEmployers: Employer[] = [
   },
 ];
 
-export const findMockEmployerById = (id: string) =>
+export const findEmployerById = (id: string) =>
   mockEmployers.find((employer) => employer.taxId === id);
 
 export const findEmployerNameById = (id: string) => {
-  const employer = findMockEmployerById(id);
+  const employer = findEmployerById(id);
   
   if (employer) {
     return employer.firstname + " " + employer.lastname;
