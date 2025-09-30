@@ -212,7 +212,7 @@ export default function WorkPermitForm({ id, workPermits }: { id: string, workPe
                 </div>
             </div>
 
-            {/* OperationSection*/}
+            {/* OperationsSection*/}
             <div className='flex-1 flex flex-col gap-y-[25px] p-[27px] h-min border border-slate-300 rounded-2xl shadow-md'>
                 <div className='flex flex-row gap-x-[5px] items-center'>
                     <Sparkles />

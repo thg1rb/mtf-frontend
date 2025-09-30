@@ -55,7 +55,7 @@ export default async function EmployeePage({ params }: { params: { id: string } 
                 </Link>
               </Button>
               <Button asChild variant='outline' className='flex flex-row justify-start cursor-pointer'>
-                <Link href='/'>
+                <Link href={`/employees/${id}/contract`}>
                   <File />
                   <p className="font-light">สัญญาจ้าง 3 ภาษา</p>
                 </Link>

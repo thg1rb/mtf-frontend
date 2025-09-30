@@ -1,4 +1,5 @@
 export * from './agents'
 export * from './employers'
 export * from './employees'
-export * from './work-permit'
+export * from './work-permits'
+export * from './employment-contract'
