@@ -10,8 +10,3 @@ export interface Agent {
   province: string
   postelCode: string
 }
-
-export interface AgentTableHeader {
-  index: string
-  headerName: string
-}

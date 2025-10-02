@@ -1,6 +1,6 @@
-import { Employer, EmployerHeaderTable } from "@/types";
+import { Employer, TableHeader } from "@/types";
 
-export const employerTableHeaders: EmployerHeaderTable[] = [
+export const employerTableHeaders: TableHeader[] = [
   {
     index: "header-1",
     headerName: "ชื่อ-นามสกุล",

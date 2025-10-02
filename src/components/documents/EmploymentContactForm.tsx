@@ -4,20 +4,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { EmploymentContractFormData, employmentContractSchema } from '@/lib/validations'
-import { BriefcaseBusiness, Bus, Clock, Clock8, HandCoins, History, Hourglass, Printer, Save, Sparkles } from 'lucide-react'
+import { BriefcaseBusiness, Bus, Clock8, HandCoins, History, Hourglass, Printer, Save, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { type Resolver, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
 import { EmploymentContract } from '@/types'
-
-function toDateOrNull(value: string | Date | null | undefined): Date | null {
-    if (!value) return null
-    if (value instanceof Date) return value
-    const parsed = new Date(value)
-    return isNaN(parsed.getTime()) ? null : parsed
-}
 
 export default function EmploymentContactForm({ id, employmentContracts }: { id: string, employmentContracts: EmploymentContract[] }) {
     const router = useRouter();
@@ -26,7 +19,6 @@ export default function EmploymentContactForm({ id, employmentContracts }: { id:
     const {
         register,
         handleSubmit,
-        control,
         setValue,
         formState: { errors }
     } = useForm<EmploymentContractFormData>({

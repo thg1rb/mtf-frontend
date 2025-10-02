@@ -11,7 +11,7 @@ import React, { useState } from 'react'
 import { Controller, type Resolver, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
-import { HighestEducation, highestEducationMapping, WorkPermit } from '@/types'
+import { HighestEducation, highestEducationMappingRecord, WorkPermit } from '@/types'
 import { Textarea } from '../ui/textarea'
 import { DatePicker } from '../shared/DatePicker'
 
@@ -179,7 +179,7 @@ export default function WorkPermitForm({ id, workPermits }: { id: string, workPe
                                         </SelectTrigger>
                                         <SelectContent>
                                             {
-                                                Object.values(HighestEducation).map(educationLevel => (<SelectItem key={educationLevel} value={educationLevel}>{highestEducationMapping[educationLevel]}</SelectItem>))
+                                                Object.values(HighestEducation).map(educationLevel => (<SelectItem key={educationLevel} value={educationLevel}>{highestEducationMappingRecord[educationLevel]}</SelectItem>))
                                             }
                                         </SelectContent>
                                     </Select>

@@ -4,10 +4,10 @@ interface HeaderSectionProps {
     topic: string
     desc?: string
     leftActionButton?: React.ReactElement
-    rightActionButton?: React.ReactElement[]
+    rightActionButtons?: React.ReactElement[]
 }
 
-export default function HeaderSection({ topic, desc, leftActionButton, rightActionButton }: HeaderSectionProps) {
+export default function HeaderSection({ topic, desc, leftActionButton, rightActionButtons: rightActionButtons }: HeaderSectionProps) {
     return (
         <div className='flex flex-col md:flex-row items-start md:items-center justify-between gap-y-[10px] w-full'>
             <div className='flex flex-col md:flex-row items-start md:items-center gap-x-[20px] gap-y-[10px] w-full'>
@@ -18,7 +18,7 @@ export default function HeaderSection({ topic, desc, leftActionButton, rightActi
                 </div>
             </div>
             <div className='flex flex-col md:flex-row gap-x-[20px] gap-y-[10px] w-full md:w-min'>
-                {rightActionButton && rightActionButton.map((button) => button)}
+                {rightActionButtons && rightActionButtons.map((button) => button)}
             </div>
         </div>
     )

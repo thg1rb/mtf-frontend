@@ -9,7 +9,7 @@ export enum HighestEducation {
   MASTER_OR_HIGHER = "master_or_higher", // สูงกว่าปริญญาตรี
 }
 
-export const highestEducationMapping = {
+export const highestEducationMappingRecord: Record<HighestEducation, string> = {
   [HighestEducation.NO_FORMAL_EDUCATION]: "ไม่มีการศึกษา",
   [HighestEducation.LOWER_THAN_PRIMARY]: "ต่ำกว่าประถมศึกษา",
   [HighestEducation.PRIMARY_SCHOOL]: "ประถมศึกษา",

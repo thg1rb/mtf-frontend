@@ -22,8 +22,3 @@ export interface Employer {
     postalCode: string
     status: "active" | "inactive"
 }
-
-export interface EmployerHeaderTable {
-    index: string
-    headerName: string
-}

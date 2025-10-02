@@ -53,7 +53,7 @@ export default function EmployersPage() {
       <HeaderSection
         topic='จัดการนายจ้าง'
         desc='ข้อมูลนายจ้างทั้งหมดในระบบ'
-        rightActionButton={[
+        rightActionButtons={[
           (<Button asChild key='เพิ่มนายจ้างใหม่' className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
             <Link href='/employers/new'>
               <Plus className='size-[24px] mr-2' />

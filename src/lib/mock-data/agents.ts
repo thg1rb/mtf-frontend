@@ -1,6 +1,6 @@
-import { Agent, AgentTableHeader } from "@/types";
+import { Agent, TableHeader } from "@/types";
 
-export const agentTableHeaders: AgentTableHeader[] = [
+export const agentTableHeaders: TableHeader[] = [
   {
     index: "header-1",
     headerName: "อีเมล",

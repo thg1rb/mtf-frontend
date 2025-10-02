@@ -25,7 +25,7 @@ export default async function AgentPage({ params }: { params: { id: string } }) 
                             ย้อนกลับ
                         </Link>
                     </Button>}
-                rightActionButton={[
+                rightActionButtons={[
                     (<Button asChild key='แก้ไขข้อมูล' className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
                         <Link href={`/agents/${id}/edit`}>
                             <SquarePen className='size-[24px] mr-2' />

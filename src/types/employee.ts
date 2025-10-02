@@ -18,8 +18,3 @@ export interface Employee {
   certificateOfIdentityExpiryDate: string | Date | null
   nonThaiIdentificationExpiryDate: string | Date | null
 }
-
-export interface EmployeeTableHeader {
-    index: string
-    headerName: string
-}
