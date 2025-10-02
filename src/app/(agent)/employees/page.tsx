@@ -49,21 +49,22 @@ export default function EmployersPage() {
 
       {/* HeaderSection */}
       <HeaderSection
-        topic='ลูกจ้าง'
+        topic='จัดการลูกจ้าง'
         desc='ข้อมูลลูกจ้างทั้งหมดในระบบ'
-        rightActionButton={
-          <Button asChild className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
+        rightActionButton={[
+          (<Button asChild key='เพิ่มลูกจ้างใหม่' className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
             <Link href='/employees/new'>
               <Plus className='size-[24px] mr-2' />
               เพิ่มลูกจ้างใหม่
             </Link>
-          </Button>} />
+          </Button>),
+        ]} />
 
       {/* StatGrid */}
       <StatGrid statItems={statItems} />
 
       {/* TODO: TableSection */}
-      <EmployeeTable employees={employees}/>
+      <EmployeeTable employees={employees} />
 
     </div>
   )

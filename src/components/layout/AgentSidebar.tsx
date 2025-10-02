@@ -6,6 +6,11 @@ import { Avatar, AvatarFallback } from '../ui/avatar'
 
 const menuItems = [
     {
+        title: "จัดการงาน",
+        url: "/tasks",
+        icon: Files,
+    },
+    {
         title: "แดชบอร์ด",
         url: "/dashboard",
         icon: Home,
@@ -21,12 +26,7 @@ const menuItems = [
         icon: Users,
     },
     {
-        title: "เอกสาร",
-        url: "documents",
-        icon: Files,
-    },
-    {
-        title: "ใบเสร็จ",
+        title: "จัดการใบเสร็จ",
         url: "receipts",
         icon: ReceiptText,
     },
@@ -79,7 +79,7 @@ export default function AgentSidebar() {
                                             <AvatarFallback className="text-xs">นจ</AvatarFallback>
                                         </Avatar>
                                         <div className="text-left">
-                                            <p className="font-extralight">นายหน้า</p>
+                                            <p className="font-extralight">จัดการนายหน้า</p>
                                             <p className="text-thin text-sidebar-foreground/70">admin@mtf.com</p>
                                         </div>
                                     </div>

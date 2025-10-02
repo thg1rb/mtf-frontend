@@ -25,14 +25,14 @@ export default async function EmployeePage({ params }: { params: { id: string } 
               ย้อนกลับ
             </Link>
           </Button>}
-        rightActionButton={
-          <Button asChild className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
+        rightActionButton={[
+          (<Button asChild key='แก้ไขข้อมูล' className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
             <Link href={`/employees/${id}/edit`}>
               <SquarePen className='size-[24px] mr-2' />
               แก้ไขข้อมูล
             </Link>
-          </Button>
-        } />
+          </Button>),
+        ]} />
 
       <div className='flex flex-col lg:flex-row gap-x-[53px] gap-y-[51px]'>
 

@@ -49,16 +49,16 @@ export default function AgentsPage() {
     <div className='flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>
       {/* HeaderSection */}
       <HeaderSection
-        topic='นายหน้า'
+        topic='จัดการนายหน้า'
         desc='รายชื่อนายหน้าทั้งหมดในระบบ'
-        rightActionButton={
-          <Button asChild className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
+        rightActionButton={[
+          (<Button asChild key='เพิ่มนายหน้าใหม่' className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
             <Link href='/agents/new'>
               <Plus className='size-[24px] mr-2' />
               เพิ่มนายหน้าใหม่
             </Link>
-          </Button>
-        }
+          </Button>)
+        ]}
       />
 
       {/* StatSection */}

@@ -4,7 +4,7 @@ interface HeaderSectionProps {
     topic: string
     desc?: string
     leftActionButton?: React.ReactElement
-    rightActionButton?: React.ReactElement
+    rightActionButton?: React.ReactElement[]
 }
 
 export default function HeaderSection({ topic, desc, leftActionButton, rightActionButton }: HeaderSectionProps) {
@@ -17,7 +17,9 @@ export default function HeaderSection({ topic, desc, leftActionButton, rightActi
                     <p className='font-normal text-zinc-400'>{desc}</p>
                 </div>
             </div>
-            {rightActionButton}
+            <div className='flex flex-col md:flex-row gap-x-[20px] gap-y-[10px] w-full md:w-min'>
+                {rightActionButton && rightActionButton.map((button) => button)}
+            </div>
         </div>
     )
 }
