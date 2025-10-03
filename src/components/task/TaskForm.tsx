@@ -33,19 +33,19 @@ interface TaskFormProps {
 export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState<string>("");
-    const [selectedStartStep, setSelectedStartStep] = useState<number>(1);
+    const [stepUpdates, setStepUpdates] = useState<(Date | null)[]>([new Date(), null, null, null, null]);
     const [showValidationAlert, setShowValidationAlert] = useState<boolean>(false);
     const [employers] = useState<Employer[]>(() => getActiveEmployers());
-    const [employees, setEmployees] = useState<Employee[]>([]);
-    const [selectedEmployeeIds, setSelectedEmployeeIds] = useState<string[]>(
-        defaultValues?.selectedEmployeeIds ?? []
+    const [totalEmployees, setTotalEmployees] = useState<Employee[]>([]);
+    const [employeeIds, setEmployeeIds] = useState<string[]>(
+        defaultValues?.employeeIds ?? []
     );
 
     const cleanedDefaultValues: Partial<TaskFormData> = useMemo(() => ({
         employerId: defaultValues?.employerId ?? "",
         startStep: defaultValues?.startStep ?? 1,
         desc: defaultValues?.desc ?? "",
-        selectedEmployeeIds: defaultValues?.selectedEmployeeIds ?? [],
+        employeeIds: defaultValues?.employeeIds ?? [],
         periodUpdates: defaultValues?.periodUpdates ?? [],
     }), [defaultValues]);
     const {
@@ -69,18 +69,18 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
     }, [cleanedDefaultValues, reset]);
 
     useEffect(() => {
-        setValue('selectedEmployeeIds', selectedEmployeeIds);
-    }, [selectedEmployeeIds, setValue]);
+        setValue('employeeIds', employeeIds);
+    }, [employeeIds, setValue]);
 
     // Employee data management
     useEffect(() => {
         if (employerId) {
-            setEmployees(getActiveEmployeesByEmployerId(employerId));
+            setTotalEmployees(getActiveEmployeesByEmployerId(employerId));
         } else {
-            setEmployees([]);
+            setTotalEmployees([]);
         }
         // Clear selected employees when employer changes
-        setSelectedEmployeeIds([]);
+        setEmployeeIds([]);
     }, [employerId]);
 
     // Form handles
@@ -214,7 +214,13 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
                                                 value={field.value.toString()}
                                                 onValueChange={(value) => {
                                                     field.onChange(parseInt(value));
-                                                    setSelectedStartStep(parseInt(value));
+                                                    const steps: (Date | null)[] = [null, null, null, null, null];
+
+                                                    for (let i: number = 0; i < parseInt(value); i++) {
+                                                        steps[i] = new Date();
+                                                    }
+
+                                                    setStepUpdates(steps);
                                                 }}
                                             >
                                                 <SelectTrigger className="w-full font-light cursor-pointer">
@@ -267,7 +273,7 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
                                     }}
                                 />
                             </div>
-                            <Button className='font-light cursor-pointer'>ค้นหา</Button>
+                            <Button type='button' className='font-light cursor-pointer'>ค้นหา</Button>
                         </div>
                         <div className="rounded-md border">
                             <Table>
@@ -281,7 +287,7 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {employees.length === 0 ? (
+                                    {totalEmployees.length === 0 ? (
                                         <TableRow>
                                             <TableCell
                                                 colSpan={selectEmployeeTableHeaders.length}
@@ -291,20 +297,22 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
                                             </TableCell>
                                         </TableRow>
                                     ) : (
-                                        employees.map((employee: Employee) => (
+                                        totalEmployees.map((employee: Employee) => (
                                             <TableRow
                                                 key={employee.id}
                                                 className='cursor-pointer hover:bg-muted/50'
                                                 onClick={() => router.push(`/employees/${employee.id}`)}
+                                            // TODO: Move on click to the ... button
                                             >
                                                 <TableCell className='font-light px-[20px]'>
                                                     <Checkbox
-                                                        checked={selectedEmployeeIds.includes(employee.id)}
+                                                        disabled={isReadOnly}
+                                                        checked={employeeIds.includes(employee.id)}
                                                         onCheckedChange={(checked) => {
                                                             if (checked) {
-                                                                setSelectedEmployeeIds(prev => [...prev, employee.id]);
+                                                                setEmployeeIds(prev => [...prev, employee.id]);
                                                             } else {
-                                                                setSelectedEmployeeIds(prev => prev.filter(id => id !== employee.id));
+                                                                setEmployeeIds(prev => prev.filter(id => id !== employee.id));
                                                             }
                                                         }}
                                                         onClick={(e) => e.stopPropagation()}
@@ -344,14 +352,14 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
                                 </TableBody>
                             </Table>
                         </div>
-                        {errors.selectedEmployeeIds && (
+                        {errors.employeeIds && (
                             <span className='text-red-500 font-light px-2'>
-                                {errors.selectedEmployeeIds.message}
+                                {errors.employeeIds.message}
                             </span>
                         )}
                         <div className='flex flex-row justify-between items-center'>
                             {/* TODO: insert the amount of agents and filtered agents */}
-                            <p className='font-light text-zinc-500'>เลือกแล้ว {selectedEmployeeIds.length} จากทั้งหมด {employees.length} คน</p>
+                            <p className='font-light text-zinc-500'>เลือกแล้ว {employeeIds.length} จากทั้งหมด {totalEmployees.length} คน</p>
                             <div className='flex flex-row gap-x-[10px]'>
                                 <Button variant={"ghost"} type='button' className='font-light border cursor-pointer'>กลับ</Button>
                                 <Button variant={"ghost"} type='button' className='font-light border cursor-pointer'>ถัดไป</Button>
@@ -360,7 +368,8 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
                     </div>
                 </div>
                 <div className='flex-1'>
-                    <TaskSteps type={type} currentStep={selectedStartStep} />
+                    {/* TODO: If there's no defaultValues then use ...  */}
+                    <TaskSteps type={type} stepUpdates={stepUpdates} />
                 </div>
             </div>
             {/* SubmitAndCancelSection */}

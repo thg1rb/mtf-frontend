@@ -14,16 +14,14 @@ export const getMaxStepsForTaskType = (taskType: "register" | "renew"): number =
 
 export const getCurrentStep = (task: Task): number => {
   const { periodUpdates } = task;
-  let currentPeriod = 0;
 
   for (let i: number = 0; i < periodUpdates.length; i++) {
     if (periodUpdates[i] === null) {
-      currentPeriod = i;
-      break;
+      return i;
     }
   }
 
-  return currentPeriod;
+  return getMaxStepsForTaskType(task.typeOfTask);
 };
 
 export const isTaskCompleted = (task: Task): boolean => {

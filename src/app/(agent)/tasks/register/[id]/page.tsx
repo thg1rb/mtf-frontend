@@ -1,11 +1,16 @@
 import HeaderSection from '@/components/shared/HeaderSection'
 import TaskForm from '@/components/task/TaskForm'
 import { Button } from '@/components/ui/button'
+import { findTaskById } from '@/lib/mock-data'
 import { ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
-export default function RegisterTaskPage() {
+export default async function RegisterTaskPage({ params }: { params: { id: string } }) {
+    const { id } = await params;
+
+    const task = findTaskById(id);
+
     return (
         <div className='flex flex-col gap-y-[35px] md:gap-y-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>
             {/* HeaderSection */}
@@ -24,7 +29,7 @@ export default function RegisterTaskPage() {
                     </Button>} />
 
             {/* TODO: Register Form with register mode */}
-            <TaskForm type='register' mode='view' />
+            <TaskForm type='register' mode='view' defaultValues={task} />
         </div>
     )
 }

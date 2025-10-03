@@ -3,7 +3,7 @@ import React from 'react'
 
 interface TaskStepsProps {
     type: "register" | "renew"
-    currentStep: number
+    stepUpdates: (Date | null)[]
 }
 
 const registerSteps = [
@@ -48,7 +48,15 @@ const renewSteps = [
     },
 ]
 
-export default function TaskSteps({ type, currentStep }: TaskStepsProps) {
+const getCurrentStep = (steps: (Date | null)[]) => {
+    let currentStep: number = 0;
+    for (let i: number = 0; i < steps.length; i++) {
+        if (steps[i] !== null) currentStep++;
+    }
+    return currentStep;
+}
+
+export default function TaskSteps({ type, stepUpdates }: TaskStepsProps) {
     const steps = type === "register" ? registerSteps : renewSteps;
 
     return (
@@ -62,10 +70,10 @@ export default function TaskSteps({ type, currentStep }: TaskStepsProps) {
             </div>
             <div className='flex flex-col gap-y-[18px]'>
                 {
-                    steps.map((step) => (
+                    steps.map((step, index) => (
                         <div key={step.step} className='flex flex-col gap-y-[10px]'>
                             <div className='flex flex-row items-center gap-x-3'>
-                                <div className={`${step.step === currentStep ? "bg-black text-white" : "bg-zinc-200 text-zinc-700"} w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0`}>
+                                <div className={`${stepUpdates[index] !== null  ? "bg-black text-white" : "bg-zinc-200 text-zinc-700"} w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0`}>
                                     <p className='text-white'>
                                         {step.step}
                                     </p>
@@ -73,12 +81,12 @@ export default function TaskSteps({ type, currentStep }: TaskStepsProps) {
                                 <div className='flex flex-col'>
                                     <div className='flex flex-row gap-x-[5px]'>
                                         <p className='font-normal text-zinc-700'>ขั้นตอนที่ {step.step}</p>
-                                        { currentStep === step.step ? <div className='bg-blue-200 p-[5px] rounded-md'><p className='font-light text-blue-700'>ขั้นตอนปัจจุบัน</p></div> : <></>}
+                                        { getCurrentStep(stepUpdates) === step.step ? <div className='bg-blue-200 p-[5px] rounded-md'><p className='font-light text-blue-700'>ขั้นตอนปัจจุบัน</p></div> : <></>}
                                     </div>
                                     <p className='font-light text-zinc-400'>{step.detail}</p>
                                 </div>
                             </div>
-                            {step.step !== steps.length ? (<div className='w-[1px] h-10 ml-[23px] bg-zinc-300'></div>) : <></>}
+                            {index !== steps.length - 1 ? (<div className='w-[1px] h-10 ml-[23px] bg-zinc-300'></div>) : <></>}
                         </div>
                     ))
                 }

@@ -120,7 +120,14 @@ export default function TasksPage() {
                   <TableRow
                     key={task.id}
                     className='cursor-pointer hover:bg-muted/50'
-                    onClick={() => router.push(`/tasks/${task.id}`)}
+                    onClick={
+                      () => {
+                        if (task.typeOfTask === "register")
+                          router.push(`/tasks/register/${task.id}`)
+                        else if (task.typeOfTask === "renew")
+                          router.push(`/tasks/renew/${task.id}}`)
+                      }
+                    }
                   >
                     <TableCell className='font-light px-[20px]'>
                       <Badge variant='outline' className='w-[130px] font-light'>{task.typeOfTask === "register" ? "ขึ้นทะเบียนใหม่" : "ต่ออายุใบอนุญาต"}</Badge>
@@ -131,7 +138,7 @@ export default function TasksPage() {
                     <TableCell className='font-light px-[20px]'>
                       <div className='flex flex-col'>
                         <div className='flex flex-row items-center gap-x-[8px]'>
-                          {"ขั้นตอนที่ " + (Number(getCurrentStep(task)) + 1)}
+                          {"ขั้นตอนที่ " + Number(getCurrentStep(task))}
                         </div>
                         <div className='flex flex-row items-center gap-x-[8px]'>
                           {/* TODO: วันที่? */}

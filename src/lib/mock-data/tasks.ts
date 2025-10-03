@@ -193,6 +193,9 @@ export const mockTasks: Task[] = [
 
 export const getTasks = (): Task[] => mockTasks;
 
+export const findTaskById = (id: string) =>
+  mockTasks.find((task) => task.id === id);
+
 export const countTotalTasks = (): number => getTasks().length;
 
 export const countCompletedTasks = (): number =>
