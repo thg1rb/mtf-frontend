@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback } from '../ui/avatar'
 
 const menuItems = [
     {
-        title: "นายหน้า",
+        title: "จัดการนายหน้า",
         url: "/agents",
         icon: Users,
     }

@@ -9,9 +9,9 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { findEmployerNameById } from '@/lib/mock-data'
-import { countCompletedTasks, countInProgressTasks, countTotalTasks, getMockTasks, taskTableHeaders } from '@/lib/mock-data/tasks'
-import { getCurrentPeriod, isTaskCompleted } from '@/lib/utils/task'
-import { Task, typeOfTaskMappingRecord } from '@/types/task'
+import { countCompletedTasks, countInProgressTasks, countTotalTasks, getTasks, taskTableHeaders } from '@/lib/mock-data/tasks'
+import { getCurrentStep, isTaskCompleted } from '@/lib/utils/task'
+import { Task } from '@/types/task'
 import { CircleCheck, CircleCheckBig, Edit, Files, Loader, MoreHorizontal, Plus, Search, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -41,9 +41,9 @@ const statItems = [
   },
 ]
 
-export default function DocumentsPage() {
+export default function TasksPage() {
   const router = useRouter();
-  const [tasks] = useState<Task[]>(() => getMockTasks())
+  const [tasks] = useState<Task[]>(() => getTasks())
   const [status, setStatus] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -123,7 +123,7 @@ export default function DocumentsPage() {
                     onClick={() => router.push(`/tasks/${task.id}`)}
                   >
                     <TableCell className='font-light px-[20px]'>
-                      <Badge variant='outline' className='w-[130px] font-light'>{typeOfTaskMappingRecord[task.typeOfTask]}</Badge>
+                      <Badge variant='outline' className='w-[130px] font-light'>{task.typeOfTask === "register" ? "ขึ้นทะเบียนใหม่" : "ต่ออายุใบอนุญาต"}</Badge>
                     </TableCell>
                     <TableCell className='font-light px-[20px]'>
                       {findEmployerNameById(task.employerId)}
@@ -131,7 +131,7 @@ export default function DocumentsPage() {
                     <TableCell className='font-light px-[20px]'>
                       <div className='flex flex-col'>
                         <div className='flex flex-row items-center gap-x-[8px]'>
-                          {"ขั้นตอนที่ " + (Number(getCurrentPeriod(task)) + 1)}
+                          {"ขั้นตอนที่ " + (Number(getCurrentStep(task)) + 1)}
                         </div>
                         <div className='flex flex-row items-center gap-x-[8px]'>
                           {/* TODO: วันที่? */}

@@ -16,12 +16,12 @@ const menuItems = [
         icon: Home,
     },
     {
-        title: "นายจ้าง",
+        title: "จัดการนายจ้าง",
         url: "/employers",
         icon: Building,
     },
     {
-        title: "ลูกจ้าง",
+        title: "จัดการลูกจ้าง",
         url: "/employees",
         icon: Users,
     },

@@ -1,4 +1,4 @@
-import EmploymentContactForm from '@/components/documents/EmploymentContactForm'
+import EmploymentContactForm from '@/components/document/EmploymentContactForm'
 import HeaderSection from '@/components/shared/HeaderSection'
 import { Button } from '@/components/ui/button'
 import { findEmploymentContractsByEmployeeId } from '@/lib/mock-data'

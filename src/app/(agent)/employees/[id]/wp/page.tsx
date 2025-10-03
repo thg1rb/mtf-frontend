@@ -1,4 +1,4 @@
-import WorkPermitForm from '@/components/documents/WorkPermitForm'
+import WorkPermitForm from '@/components/document/WorkPermitForm'
 import HeaderSection from '@/components/shared/HeaderSection'
 import { Button } from '@/components/ui/button'
 import { findWorkPermitsByEmployeeId } from '@/lib/mock-data'

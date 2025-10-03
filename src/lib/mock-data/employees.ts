@@ -40,6 +40,21 @@ export const employeeTableHeaders: TableHeader[] = [
   },
 ];
 
+export const selectEmployeeTableHeaders: TableHeader[] = [
+  {
+    index: "header-1",
+    headerName: "เลือกลูกจ้าง",
+  },
+  {
+    index: "header-2",
+    headerName: "ชื่อ-นามสกุล",
+  },
+  {
+    index: "header-3",
+    headerName: "ดำเนินการ",
+  },
+];
+
 export const mockEmployees: Employee[] = [
   {
     id: "EMP001",
@@ -652,6 +667,11 @@ export const constTotalEmployees = () => mockEmployees.length;
 
 export const findEmployeeById = (id: string) =>
   mockEmployees.find((employee) => employee.id === id);
+
+export const getActiveEmployeesByEmployerId = (id: string) =>
+  mockEmployees.filter(
+    (employee) => employee.employerId === id && employee.status === "active"
+  );
 
 export const countEmployeesByEmployerId = (id: string) =>
   mockEmployees.filter((employee) => employee.employerId === id).length;
