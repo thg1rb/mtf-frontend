@@ -1,6 +1,6 @@
 import { Task } from "@/types";
 
-// Helper functions for period management
+// Helper functions for step management
 export const getMaxStepsForTaskType = (taskType: "register" | "renew"): number => {
   switch (taskType) {
     case "register":
@@ -12,11 +12,11 @@ export const getMaxStepsForTaskType = (taskType: "register" | "renew"): number =
   }
 };
 
-export const getCurrentStep = (task: Task): number => {
-  const { periodUpdates } = task;
+export const getCurrentStepByTask = (task: Task): number => {
+  const { stepStartDates } = task;
 
-  for (let i: number = 0; i < periodUpdates.length; i++) {
-    if (periodUpdates[i] === null) {
+  for (let i: number = 0; i < stepStartDates.length; i++) {
+    if (stepStartDates[i] === null) {
       return i;
     }
   }
@@ -25,7 +25,7 @@ export const getCurrentStep = (task: Task): number => {
 };
 
 export const isTaskCompleted = (task: Task): boolean => {
-  const maxPeriods = getMaxStepsForTaskType(task.typeOfTask);
-  const currentPeriod = getCurrentStep(task);
-  return currentPeriod >= maxPeriods;
+  const maxSteps = getMaxStepsForTaskType(task.typeOfTask);
+  const currentStep = getCurrentStepByTask(task);
+  return currentStep >= maxSteps;
 };

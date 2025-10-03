@@ -31,9 +31,9 @@ export const mockTasks: Task[] = [
     employeeIds: ["EMP001", "EMP021"],
     typeOfTask: "register",
     startStep: 3,
-    desc: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับพนักงานครัวและบริการ",
+    description: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับพนักงานครัวและบริการ",
     createAt: "2024-09-15",
-    periodUpdates: [
+    stepStartDates: [
       new Date("2024-09-15"),
       new Date("2024-09-22"),
       new Date("2024-09-30"),
@@ -47,9 +47,9 @@ export const mockTasks: Task[] = [
     employeeIds: ["EMP002", "EMP011", "EMP022"],
     typeOfTask: "register",
     startStep: 4,
-    desc: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับพนักงานบริการและก่อสร้าง",
+    description: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับพนักงานบริการและก่อสร้าง",
     createAt: "2024-08-20",
-    periodUpdates: [
+    stepStartDates: [
       new Date("2024-08-20"),
       new Date("2024-08-28"),
       new Date("2024-09-05"),
@@ -63,9 +63,9 @@ export const mockTasks: Task[] = [
     employeeIds: ["EMP004", "EMP015", "EMP026"],
     typeOfTask: "register",
     startStep: 4,
-    desc: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับช่างเทคนิคและคนงานโรงงาน",
+    description: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับช่างเทคนิคและคนงานโรงงาน",
     createAt: "2024-07-10",
-    periodUpdates: [
+    stepStartDates: [
       new Date("2024-07-10"),
       new Date("2024-07-18"),
       new Date("2024-07-25"),
@@ -79,9 +79,9 @@ export const mockTasks: Task[] = [
     employeeIds: ["EMP005", "EMP018", "EMP029"],
     typeOfTask: "register",
     startStep: 4,
-    desc: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับคนงานเกษตรและแปรรูปอาหาร",
+    description: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับคนงานเกษตรและแปรรูปอาหาร",
     createAt: "2024-06-01",
-    periodUpdates: [
+    stepStartDates: [
       new Date("2024-06-01"),
       new Date("2024-06-08"),
       new Date("2024-06-15"),
@@ -95,9 +95,9 @@ export const mockTasks: Task[] = [
     employeeIds: ["EMP006", "EMP020"],
     typeOfTask: "register",
     startStep: 1,
-    desc: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับพนักงานฟาร์มและคลังสินค้า",
+    description: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับพนักงานฟาร์มและคลังสินค้า",
     createAt: "2024-05-15",
-    periodUpdates: [new Date("2024-05-15"), null, null, null, null],
+    stepStartDates: [new Date("2024-05-15"), null, null, null, null],
   },
   {
     id: "TSK006",
@@ -105,9 +105,9 @@ export const mockTasks: Task[] = [
     employeeIds: ["EMP007", "EMP013", "EMP024"],
     typeOfTask: "renew",
     startStep: 5,
-    desc: "ต่ออายุใบอนุญาตทำงานสำหรับพนักงานโลจิสติกส์และขนส่ง",
+    description: "ต่ออายุใบอนุญาตทำงานสำหรับพนักงานโลจิสติกส์และขนส่ง",
     createAt: "2024-04-01",
-    periodUpdates: [
+    stepStartDates: [
       new Date("2024-04-01"),
       new Date("2024-04-10"),
       new Date("2024-04-18"),
@@ -121,9 +121,9 @@ export const mockTasks: Task[] = [
     employeeIds: ["EMP008", "EMP016", "EMP027"],
     typeOfTask: "renew",
     startStep: 5,
-    desc: "ต่ออายุใบอนุญาตทำงานสำหรับช่างและคนงานประกอบชิ้นส่วน",
+    description: "ต่ออายุใบอนุญาตทำงานสำหรับช่างและคนงานประกอบชิ้นส่วน",
     createAt: "2024-03-20",
-    periodUpdates: [
+    stepStartDates: [
       new Date("2024-03-20"),
       new Date("2024-03-28"),
       new Date("2024-04-05"),
@@ -137,9 +137,9 @@ export const mockTasks: Task[] = [
     employeeIds: ["EMP009", "EMP019", "EMP030"],
     typeOfTask: "renew",
     startStep: 3,
-    desc: "ต่ออายุใบอนุญาตทำงานสำหรับพนักงานโรงงานยางและปิโตรเคมี",
+    description: "ต่ออายุใบอนุญาตทำงานสำหรับพนักงานโรงงานยางและปิโตรเคมี",
     createAt: "2024-02-15",
-    periodUpdates: [
+    stepStartDates: [
       new Date("2024-02-15"),
       new Date("2024-02-22"),
       new Date("2024-03-01"),
@@ -153,9 +153,9 @@ export const mockTasks: Task[] = [
     employeeIds: ["EMP010", "EMP014", "EMP025"],
     typeOfTask: "renew",
     startStep: 5,
-    desc: "ต่ออายุใบอนุญาตทำงานสำหรับพนักงานโรงแรมและแปรรูปอาหารทะเล",
+    description: "ต่ออายุใบอนุญาตทำงานสำหรับพนักงานโรงแรมและแปรรูปอาหารทะเล",
     createAt: "2024-01-30",
-    periodUpdates: [
+    stepStartDates: [
       new Date("2024-01-30"),
       new Date("2024-02-06"),
       new Date("2024-02-13"),
@@ -169,9 +169,9 @@ export const mockTasks: Task[] = [
     employeeIds: ["EMP003", "EMP012", "EMP023"],
     typeOfTask: "renew",
     startStep: 2,
-    desc: "ต่ออายุใบอนุญาตทำงานสำหรับพนักงานโรงแรมและบริการ",
+    description: "ต่ออายุใบอนุญาตทำงานสำหรับพนักงานโรงแรมและบริการ",
     createAt: "2024-01-10",
-    periodUpdates: [
+    stepStartDates: [
       new Date("2024-01-10"),
       new Date("2024-01-17"),
       null,
@@ -185,9 +185,9 @@ export const mockTasks: Task[] = [
     employeeIds: ["EMP017", "EMP028"],
     typeOfTask: "register",
     startStep: 1,
-    desc: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับพนักงานบริการทำความสะอาด",
+    description: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับพนักงานบริการทำความสะอาด",
     createAt: "2024-10-01",
-    periodUpdates: [new Date("2024-10-01"), null, null, null, null],
+    stepStartDates: [new Date("2024-10-01"), null, null, null, null],
   },
 ];
 

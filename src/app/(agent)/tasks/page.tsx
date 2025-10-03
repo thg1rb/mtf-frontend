@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { findEmployerNameById } from '@/lib/mock-data'
 import { countCompletedTasks, countInProgressTasks, countTotalTasks, getTasks, taskTableHeaders } from '@/lib/mock-data/tasks'
-import { getCurrentStep, isTaskCompleted } from '@/lib/utils/task'
+import { getCurrentStepByTask, isTaskCompleted } from '@/lib/utils/task'
 import { Task } from '@/types/task'
 import { CircleCheck, CircleCheckBig, Edit, Files, Loader, MoreHorizontal, Plus, Search, Trash2 } from 'lucide-react'
 import Link from 'next/link'
@@ -138,7 +138,7 @@ export default function TasksPage() {
                     <TableCell className='font-light px-[20px]'>
                       <div className='flex flex-col'>
                         <div className='flex flex-row items-center gap-x-[8px]'>
-                          {"ขั้นตอนที่ " + Number(getCurrentStep(task))}
+                          {"ขั้นตอนที่ " + Number(getCurrentStepByTask(task))}
                         </div>
                         <div className='flex flex-row items-center gap-x-[8px]'>
                           {/* TODO: วันที่? */}

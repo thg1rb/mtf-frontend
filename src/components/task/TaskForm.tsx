@@ -22,7 +22,6 @@ import Link from 'next/link'
 import { Checkbox } from '../ui/checkbox'
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
 import TaskSteps from './TaskSteps'
-import { getMaxStepsForTaskType } from '@/lib/utils/task'
 
 interface TaskFormProps {
     type: "register" | "renew"
@@ -46,7 +45,7 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
         startStep: defaultValues?.startStep ?? 1,
         desc: defaultValues?.desc ?? "",
         employeeIds: defaultValues?.employeeIds ?? [],
-        periodUpdates: defaultValues?.periodUpdates ?? [],
+        startStepDates: defaultValues?.startStepDates ?? [],
     }), [defaultValues]);
     const {
         register,
@@ -87,15 +86,9 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
     const handleFormSubmit = (data: TaskFormData) => {
         setShowValidationAlert(false);
 
-        const totalSteps = getMaxStepsForTaskType(type)
-
-        const periodUpdates = Array.from({ length: totalSteps }, (_, i) => {
-            return i < data.startStep ? new Date() : null;
-        });
-
         const payload = {
             ...data,
-            periodUpdates,
+            stepUpdates,
         };
 
         console.log("Form data:", payload);

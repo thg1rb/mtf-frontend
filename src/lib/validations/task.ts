@@ -9,7 +9,7 @@ export const taskSchema = z.object({
 
   employeeIds: z.array(z.string()).min(1, "กรุณาเลือกลูกจ้างอย่างน้อย 1 คน"),
 
-  periodUpdates: z.array(z.union([z.string(), z.date()]).nullable()).optional(),
+  startStepDates: z.array(z.union([z.string(), z.date()]).nullable()).optional(),
 });
 
 export type TaskFormData = z.infer<typeof taskSchema>;

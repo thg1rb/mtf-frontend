@@ -4,7 +4,7 @@ export interface Task {
   employeeIds: string[];
   typeOfTask: "register" | "renew";
   startStep: number;
-  desc: string;
+  description: string;
   createAt: string;
-  periodUpdates: (Date | string | null)[];
+  stepStartDates: (Date | string | null)[];
 }
