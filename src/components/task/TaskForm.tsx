@@ -98,7 +98,7 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
 
         const payload = {
             ...data,
-            stepUpdates,
+            stepStartDates: stepUpdates,
         };
 
         console.log("Form data:", payload);
@@ -111,6 +111,7 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
     // Computed values
     const isReadOnly = mode === "view";
 
+    // TODO: bugs "edit" mode
     return (
         <form onSubmit={handleSubmit(handleFormSubmit, handleFormInvalid)} className='flex flex-col gap-y-[30px]'>
             <div className='flex flex-col lg:flex-row gap-[45px]'>

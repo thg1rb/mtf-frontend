@@ -6,7 +6,7 @@ import { ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
-export default async function RegisterTaskPage({ params }: { params: { id: string } }) {
+export default async function RegisterTaskEditPage({ params }: { params: { id: string } }) {
     const { id } = await params;
 
     const task = getTaskById(id);
@@ -15,7 +15,7 @@ export default async function RegisterTaskPage({ params }: { params: { id: strin
         <div className='flex flex-col gap-y-[35px] md:gap-y-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>
             {/* HeaderSection */}
             <HeaderSection
-                topic="ข้อมูลการต่ออายุใบอนุญาตทำงาน"
+                topic="แก้ไขข้อมูลการขึ้นทะเบียนใหม่"
                 leftActionButton={
                     <Button
                         asChild
@@ -26,10 +26,11 @@ export default async function RegisterTaskPage({ params }: { params: { id: strin
                             <ChevronLeft className='size-[24px] mr-2' />
                             ย้อนกลับ
                         </Link>
-                    </Button>} />
+                    </Button>}
+            />
 
             {/* TODO: Register Form with register mode */}
-            <TaskForm type='renew' mode='view' defaultValues={task} />
+            <TaskForm type='register' mode='edit' defaultValues={task} />
         </div>
     )
 }

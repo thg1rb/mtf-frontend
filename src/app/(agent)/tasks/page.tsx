@@ -8,7 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { findEmployerNameById } from '@/lib/mock-data'
+import { getEmployerFullNameByEmployerId } from '@/lib/mock-data'
 import { countCompletedTasks, countInProgressTasks, countTotalTasks, getTasks, taskTableHeaders } from '@/lib/mock-data/tasks'
 import { getCurrentStepByTask, isTaskCompleted } from '@/lib/utils/task'
 import { Task } from '@/types/task'
@@ -133,7 +133,7 @@ export default function TasksPage() {
                       <Badge variant='outline' className='w-[130px] font-light'>{task.typeOfTask === "register" ? "ขึ้นทะเบียนใหม่" : "ต่ออายุใบอนุญาต"}</Badge>
                     </TableCell>
                     <TableCell className='font-light px-[20px]'>
-                      {findEmployerNameById(task.employerId)}
+                      {getEmployerFullNameByEmployerId(task.employerId)}
                     </TableCell>
                     <TableCell className='font-light px-[20px]'>
                       <div className='flex flex-col'>

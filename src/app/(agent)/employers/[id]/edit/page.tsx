@@ -2,7 +2,7 @@ import EmployerForm from '@/components/employer/EmployerForm'
 import HeaderSection from '@/components/shared/HeaderSection'
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { findEmployerById } from '@/lib/mock-data'
+import { getEmployerById } from '@/lib/mock-data'
 import { ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
@@ -11,7 +11,7 @@ export default async function EmployerEditPage({ params }: { params: { id: strin
   const { id } = await params;
 
   // TODO: GET method `/api/employers/${id}` to fetch existing employer details
-  const data = findEmployerById(id);
+  const data = getEmployerById(id);
 
   return (
     <div className='flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>

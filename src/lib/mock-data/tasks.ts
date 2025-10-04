@@ -193,8 +193,22 @@ export const mockTasks: Task[] = [
 
 export const getTasks = (): Task[] => mockTasks;
 
-export const findTaskById = (id: string) =>
+export const getTaskById = (id: string) =>
   mockTasks.find((task) => task.id === id);
+
+export const getCurrentStep = (stepStartDates: (Date | string | null)[]) => {
+  let i: number = 0;
+  const steps = stepStartDates.length;
+
+  for (; i < steps; i++) {
+    if (stepStartDates[i] === null) return i;
+  }
+
+  return i;
+};
+
+export const getTypeOfTaskLabel = (typeOfTask: "register" | "renew"): string =>
+  typeOfTask === "register" ? "ขึ้นทะเบียนใหม่" : "ต่อใบอนุญาตทำงาน";
 
 export const countTotalTasks = (): number => getTasks().length;
 

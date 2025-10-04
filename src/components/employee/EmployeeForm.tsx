@@ -13,7 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
 import { DatePicker } from '../shared/DatePicker'
-import { findEmployerById } from '@/lib/mock-data'
+import { getEmployerById } from '@/lib/mock-data'
 
 interface EmployeeFormProps {
     mode: "create" | "view" | "edit"
@@ -103,7 +103,7 @@ export default function EmployeeForm({ mode, defaultValues }: EmployeeFormProps)
     const handleFormSubmit = (data: EmployeeFormData) => {
         setShowValidationAlert(false);
 
-        if (!findEmployerById(data.employerId) || (findEmployerById(data.employerId)?.status === "inactive")) {
+        if (!getEmployerById(data.employerId) || (getEmployerById(data.employerId)?.status === "inactive")) {
             setInvalidEmployerId(true);
             return;
         }
