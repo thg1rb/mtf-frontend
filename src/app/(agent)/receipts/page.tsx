@@ -123,8 +123,9 @@ export default function ReceiptsPage() {
                 {receiptTableHeaders.map((tableHeader) => (
                   <TableHead
                     key={tableHeader.index}
-                    className={`font-normal px-[20px] ${tableHeader.index === "header-5" ? "text-right" : ""
-                      }`}
+                    className={`font-normal px-[20px] ${
+                      tableHeader.index === "header-5" ? "text-right" : ""
+                    }`}
                   >
                     {tableHeader.headerName}
                   </TableHead>
@@ -151,32 +152,37 @@ export default function ReceiptsPage() {
                       </TableCell>
                       <TableCell className="font-light px-[20px]">
                         <div className="flex flex-col">
-                          <p className="font-light">{getTypeOfTaskLabel(task.typeOfTask)}</p>
-                          <p className="font-light text-zinc-400">ขั้นตอนที่: {getCurrentStep(task.stepStartDates)}</p>
+                          <p className="font-light">
+                            {getTypeOfTaskLabel(task.typeOfTask)}
+                          </p>
+                          <p className="font-light text-zinc-400">
+                            ขั้นตอนที่: {getCurrentStep(task.stepStartDates)}
+                          </p>
                         </div>
                       </TableCell>
                       <TableCell className="font-light px-[20px]">
-                        ฿ {receipt.amount.toLocaleString('th-TH')}
+                        ฿ {receipt.amount.toLocaleString("th-TH")}
                       </TableCell>
                       <TableCell className="px-[20px] text-right">
                         <Badge
-                          className={`w-[100px] ${receipt.status === "paid"
-                            ? "bg-green-200 text-green-700"
-                            : "bg-yellow-100 text-red-700"
-                            } font-light`}
+                          className={`w-[100px] ${
+                            receipt.status === "paid"
+                              ? "bg-green-200 text-green-700"
+                              : "bg-yellow-100 text-red-700"
+                          } font-light`}
                         >
                           <div className="flex flex-row items-center gap-x-[5px]">
                             {receipt.status === "paid" ? (
-                              <TriangleAlert size={12} />
-                            ) : (
                               <CircleCheckBig size={12} />
+                            ) : (
+                              <TriangleAlert size={12} />
                             )}{" "}
                             {receipt.status === "paid" ? "ชำระแล้ว" : "รอชำระ"}
                           </div>
                         </Badge>
                       </TableCell>
                     </TableRow>
-                  )
+                  );
                 }
               })}
             </TableBody>
