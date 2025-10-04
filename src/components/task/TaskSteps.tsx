@@ -66,7 +66,7 @@ export default function TaskSteps({ type, stepUpdates }: TaskStepsProps) {
                     <FileText />
                     <p className='font-normal'>ขั้นตอนการดำเนินการ</p>
                 </div>
-                <p className='text-zinc-400'>ขั้นตอนทั้งหมดสำหรับการต่ออายุใบอนุญาตทำงาน</p>
+                <p className='font-light text-zinc-400'>ขั้นตอนทั้งหมดสำหรับการต่ออายุใบอนุญาตทำงาน</p>
             </div>
             <div className='flex flex-col gap-y-[18px]'>
                 {

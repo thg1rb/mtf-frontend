@@ -2,7 +2,7 @@
 
 import { TaskFormData, taskSchema } from '@/lib/validations/task'
 import { Employee, Employer } from '@/types'
-import { Check, ChevronsUpDown, Edit, Info, MoreHorizontal, Search, Trash2 } from 'lucide-react'
+import { Check, ChevronsUpDown, Edit, Eye, Info, MoreHorizontal, Search, Trash2, Users2 } from 'lucide-react'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Label } from '../ui/label'
 import { useRouter } from 'next/navigation'
@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../ui/command'
-import { getActiveEmployeesByEmployerId, getActiveEmployers, getEmployerFullName, selectEmployeeTableHeaders } from '@/lib/mock-data'
+import { getActiveEmployeesByEmployerId, getActiveEmployers, getEmployeesByEmployerId, getEmployerFullName, selectEmployeeTableHeaders } from '@/lib/mock-data'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Textarea } from '../ui/textarea'
 import { Input } from '../ui/input'
@@ -74,13 +74,23 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
     // Employee data management
     useEffect(() => {
         if (employerId) {
-            setTotalEmployees(getActiveEmployeesByEmployerId(employerId));
+            setTotalEmployees(getEmployeesByEmployerId(employerId));
         } else {
-            setTotalEmployees([]);
+            setTotalEmployees(getActiveEmployeesByEmployerId(employerId));
         }
         // Clear selected employees when employer changes
         setEmployeeIds([]);
     }, [employerId]);
+
+    const displayedEmployees = useMemo(() => {
+        if (defaultValues?.employeeIds && defaultValues.employeeIds.length > 0) {
+            // View/Edit mode → filter only selected employees
+            return totalEmployees.filter(emp => defaultValues.employeeIds?.includes(emp.id));
+        }
+        // Create mode → show all employees of employer
+        return totalEmployees;
+    }, [totalEmployees, defaultValues?.employeeIds]);
+
 
     // Form handles
     const handleFormSubmit = (data: TaskFormData) => {
@@ -251,8 +261,11 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
                     {/* TODO: filter agents by search or status */}
                     <div className='flex flex-col gap-y-[20px] p-[20px] border rounded-2xl shadow-lg'>
                         <div className='flex flex-col'>
-                            <p className='font-normal'>ค้นหาลูกจ้าง</p>
-                            <p className='font-light'>ค้นหาจากส่วนหนึ่งของชื่อหรือนามสกุล</p>
+                            <div className='flex flex-row items-center gap-x-[5px]'>
+                                <Users2 />
+                                <p className='font-normal'>ค้นหาลูกจ้าง</p>
+                            </div>
+                            <p className='font-light text-zinc-400'>ค้นหาจากส่วนหนึ่งของชื่อหรือนามสกุล</p>
                         </div>
                         <div className='flex flex-row gap-x-[14px] md:gap-x-[26px]'>
                             <div className="relative flex-1">
@@ -272,15 +285,17 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        {selectEmployeeTableHeaders.map((tableHeader) => (
-                                            <TableHead key={tableHeader.index} className={`font-normal px-[20px] ${tableHeader.index === "header-3" ? "text-right" : ""}`}>
-                                                {tableHeader.headerName}
-                                            </TableHead>
-                                        ))}
+                                        {selectEmployeeTableHeaders
+                                            .filter(tableHeader => !(isReadOnly && tableHeader.index === "header-1"))
+                                            .map((tableHeader) => (
+                                                <TableHead key={tableHeader.index} className={`font-normal px-[20px] ${tableHeader.index === "header-3" ? "text-right" : ""}`}>
+                                                    {tableHeader.headerName}
+                                                </TableHead>
+                                            ))}
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {totalEmployees.length === 0 ? (
+                                    {displayedEmployees.length === 0 ? (
                                         <TableRow>
                                             <TableCell
                                                 colSpan={selectEmployeeTableHeaders.length}
@@ -290,14 +305,12 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
                                             </TableCell>
                                         </TableRow>
                                     ) : (
-                                        totalEmployees.map((employee: Employee) => (
+                                        displayedEmployees.map((employee: Employee) => (
                                             <TableRow
                                                 key={employee.id}
                                                 className='cursor-pointer hover:bg-muted/50'
-                                                onClick={() => router.push(`/employees/${employee.id}`)}
-                                            // TODO: Move on click to the ... button
                                             >
-                                                <TableCell className='font-light px-[20px]'>
+                                                {!isReadOnly && <TableCell className='font-light px-[20px]'>
                                                     <Checkbox
                                                         disabled={isReadOnly}
                                                         checked={employeeIds.includes(employee.id)}
@@ -310,7 +323,7 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
                                                         }}
                                                         onClick={(e) => e.stopPropagation()}
                                                     />
-                                                </TableCell>
+                                                </TableCell>}
                                                 <TableCell className='font-light px-[20px]'>
                                                     {employee.firstname + " " + employee.lastname}
                                                 </TableCell>
@@ -326,6 +339,12 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
                                                             </Button>
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end">
+                                                            <DropdownMenuItem asChild className='cursor-pointer' onClick={(e) => e.stopPropagation()}>
+                                                                <Link href={`/employees/${employee.id}`}>
+                                                                    <Eye className="mr-2 h-4 w-4" />
+                                                                    ดูข้อมูล
+                                                                </Link>
+                                                            </DropdownMenuItem>
                                                             <DropdownMenuItem asChild className='cursor-pointer' onClick={(e) => e.stopPropagation()}>
                                                                 <Link href={`/employees/${employee.id}/edit`}>
                                                                     <Edit className="mr-2 h-4 w-4" />
@@ -351,7 +370,7 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
                             </span>
                         )}
                         <div className='flex flex-row justify-between items-center'>
-                            {/* TODO: insert the amount of agents and filtered agents */}
+                            {/* TODO: insert the amount of employees */}
                             <p className='font-light text-zinc-500'>เลือกแล้ว {employeeIds.length} จากทั้งหมด {totalEmployees.length} คน</p>
                             <div className='flex flex-row gap-x-[10px]'>
                                 <Button variant={"ghost"} type='button' className='font-light border cursor-pointer'>กลับ</Button>
@@ -361,7 +380,6 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
                     </div>
                 </div>
                 <div className='flex-1'>
-                    {/* TODO: If there's a defaultValues with startStepDates then use it, otherwise use stepUpdates instead  */}
                     <TaskSteps type={type} stepUpdates={defaultValues?.stepStartDates ?? stepUpdates} />
                 </div>
             </div>

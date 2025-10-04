@@ -125,7 +125,7 @@ export default function TasksPage() {
                         if (task.typeOfTask === "register")
                           router.push(`/tasks/register/${task.id}`)
                         else if (task.typeOfTask === "renew")
-                          router.push(`/tasks/renew/${task.id}}`)
+                          router.push(`/tasks/renew/${task.id}`)
                       }
                     }
                   >
@@ -139,9 +139,6 @@ export default function TasksPage() {
                       <div className='flex flex-col'>
                         <div className='flex flex-row items-center gap-x-[8px]'>
                           {"ขั้นตอนที่ " + Number(getCurrentStepByTask(task))}
-                        </div>
-                        <div className='flex flex-row items-center gap-x-[8px]'>
-                          {/* TODO: วันที่? */}
                         </div>
                       </div>
                     </TableCell>

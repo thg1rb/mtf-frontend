@@ -59,7 +59,7 @@ export const mockTasks: Task[] = [
   },
   {
     id: "TSK003",
-    employerId: "0135557654321",
+    employerId: "0305552468135",
     employeeIds: ["EMP004", "EMP015", "EMP026"],
     typeOfTask: "register",
     startStep: 4,
@@ -91,8 +91,8 @@ export const mockTasks: Task[] = [
   },
   {
     id: "TSK005",
-    employerId: "0535552244668",
-    employeeIds: ["EMP006", "EMP020"],
+    employerId: "0105556123456",
+    employeeIds: ["EMP002", "EMP011"],
     typeOfTask: "register",
     startStep: 1,
     description: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับพนักงานฟาร์มและคลังสินค้า",
@@ -101,8 +101,8 @@ export const mockTasks: Task[] = [
   },
   {
     id: "TSK006",
-    employerId: "0205551234001",
-    employeeIds: ["EMP007", "EMP013", "EMP024"],
+    employerId: "0385554433221",
+    employeeIds: ["EMP009", "EMP019", "EMP030"],
     typeOfTask: "renew",
     startStep: 5,
     description: "ต่ออายุใบอนุญาตทำงานสำหรับพนักงานโลจิสติกส์และขนส่ง",
@@ -181,8 +181,8 @@ export const mockTasks: Task[] = [
   },
   {
     id: "TSK011",
-    employerId: "0745551122334",
-    employeeIds: ["EMP017", "EMP028"],
+    employerId: "0755556677882",
+    employeeIds: ["EMP001", "EMP021"],
     typeOfTask: "register",
     startStep: 1,
     description: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับพนักงานบริการทำความสะอาด",

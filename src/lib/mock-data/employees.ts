@@ -660,7 +660,7 @@ export const mockEmployees: Employee[] = [
 
 export const getEmployees = (): Employee[] => mockEmployees;
 
-export const findEmployeesByEmployerId = (id: string): Employee[] =>
+export const getEmployeesByEmployerId = (id: string): Employee[] =>
   mockEmployees.filter((employee) => employee.employerId === id);
 
 export const constTotalEmployees = () => mockEmployees.length;
