@@ -1,4 +1,5 @@
 import HeaderSection from '@/components/shared/HeaderSection'
+import TaskForm from '@/components/task/TaskForm'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
@@ -9,7 +10,7 @@ export default function NewRenewTaskPage() {
         <div className='flex flex-col gap-y-[35px] md:gap-y-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>
             {/* HeaderSection */}
             <HeaderSection
-                topic="การขึ้นทะเบียนใหม่"
+                topic="การต่ออายุใบอนุญาตทำงาน"
                 leftActionButton={
                     <Button
                         asChild
@@ -23,7 +24,7 @@ export default function NewRenewTaskPage() {
                     </Button>} />
 
             {/* TODO: Renew Form with renew mode */}
-            
+            <TaskForm type='renew' mode='create' />
         </div>
     )
 }

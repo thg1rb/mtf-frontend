@@ -3,7 +3,7 @@ import React from 'react'
 
 interface TaskStepsProps {
     type: "register" | "renew"
-    stepUpdates: (Date | null)[]
+    stepUpdates: (Date | string | null)[]
 }
 
 const registerSteps = [
@@ -48,7 +48,7 @@ const renewSteps = [
     },
 ]
 
-const getCurrentStep = (steps: (Date | null)[]) => {
+const getCurrentStep = (steps: (Date | string | null)[]) => {
     let currentStep: number = 0;
     for (let i: number = 0; i < steps.length; i++) {
         if (steps[i] !== null) currentStep++;

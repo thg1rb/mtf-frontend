@@ -5,11 +5,11 @@ export const taskSchema = z.object({
 
   startStep: z.coerce.number("กรุณาระบุขั้นตอนเริ่มต้น").min(1).max(5),
 
-  desc: z.string().min(1, "กรุณาระบุหมายเหตุเพิ่มเติม"),
+  description: z.string().min(1, "กรุณาระบุหมายเหตุเพิ่มเติม"),
 
   employeeIds: z.array(z.string()).min(1, "กรุณาเลือกลูกจ้างอย่างน้อย 1 คน"),
 
-  startStepDates: z.array(z.union([z.string(), z.date()]).nullable()).optional(),
+  stepStartDates: z.array(z.union([z.string(), z.date()]).nullable()).optional(),
 });
 
 export type TaskFormData = z.infer<typeof taskSchema>;

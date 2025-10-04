@@ -15,7 +15,7 @@ export default async function RegisterTaskPage({ params }: { params: { id: strin
         <div className='flex flex-col gap-y-[35px] md:gap-y-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>
             {/* HeaderSection */}
             <HeaderSection
-                topic="ข้อมูลการขึ้นทะเบียนใหม่"
+                topic="ข้อมูลการต่ออายุใบอนุญาตทำงาน"
                 leftActionButton={
                     <Button
                         asChild
@@ -29,7 +29,7 @@ export default async function RegisterTaskPage({ params }: { params: { id: strin
                     </Button>} />
 
             {/* TODO: Register Form with register mode */}
-            <TaskForm type='register' mode='view' defaultValues={task} />
+            <TaskForm type='renew' mode='view' defaultValues={task} />
         </div>
     )
 }

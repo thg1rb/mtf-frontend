@@ -43,9 +43,9 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
     const cleanedDefaultValues: Partial<TaskFormData> = useMemo(() => ({
         employerId: defaultValues?.employerId ?? "",
         startStep: defaultValues?.startStep ?? 1,
-        desc: defaultValues?.desc ?? "",
+        description: defaultValues?.description ?? "",
         employeeIds: defaultValues?.employeeIds ?? [],
-        startStepDates: defaultValues?.startStepDates ?? [],
+        stepStartDates: defaultValues?.stepStartDates ?? [],
     }), [defaultValues]);
     const {
         register,
@@ -240,8 +240,8 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
                         <div className='flex flex-col gap-x-[25px] md:gap-x-[50px] gap-y-[15px]'>
                             <div className='flex flex-col gap-y-[10px]'>
                                 <Label htmlFor='desc' className='font-light text-zinc-700'>หมายเหตุ</Label>
-                                <Textarea readOnly={isReadOnly} id='desc' {...register('desc')} className='font-light hide-scrollbar' />
-                                {errors.desc && <span className='text-red-500 font-light'>{errors.desc.message}</span>}
+                                <Textarea readOnly={isReadOnly} id='desc' {...register('description')} className='font-light hide-scrollbar' />
+                                {errors.description && <span className='text-red-500 font-light'>{errors.description.message}</span>}
                             </div>
                         </div>
                     </div>
@@ -361,10 +361,11 @@ export default function TaskForm({ type, mode, defaultValues }: TaskFormProps) {
                     </div>
                 </div>
                 <div className='flex-1'>
-                    {/* TODO: If there's no defaultValues then use ...  */}
-                    <TaskSteps type={type} stepUpdates={stepUpdates} />
+                    {/* TODO: If there's a defaultValues with startStepDates then use it, otherwise use stepUpdates instead  */}
+                    <TaskSteps type={type} stepUpdates={defaultValues?.stepStartDates ?? stepUpdates} />
                 </div>
             </div>
+
             {/* SubmitAndCancelSection */}
             {mode !== 'view' && (
                 <div className='flex flex-col md:flex-row gap-x-[10px] gap-y-[10px] justify-end'>
