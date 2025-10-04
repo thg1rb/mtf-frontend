@@ -665,13 +665,22 @@ export const getEmployeesByEmployerId = (id: string): Employee[] =>
 
 export const constTotalEmployees = () => mockEmployees.length;
 
-export const findEmployeeById = (id: string) =>
+export const getEmployeeById = (id: string) =>
   mockEmployees.find((employee) => employee.id === id);
 
 export const getActiveEmployeesByEmployerId = (id: string) =>
   mockEmployees.filter(
     (employee) => employee.employerId === id && employee.status === "active"
   );
+
+export const getPassportNoById = (id: string) =>
+  mockEmployees.find((employee) => employee.id === id)?.passportNo;
+
+export const getEmployeeFullNameById = (id: string) => {
+  const employee = mockEmployees.find((employee) => employee.id === id)
+  
+  return employee?.firstname + " " + employee?.lastname;
+};
 
 export const countEmployeesByEmployerId = (id: string) =>
   mockEmployees.filter((employee) => employee.employerId === id).length;

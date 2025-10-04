@@ -13,7 +13,17 @@ import {
   getEmployerFullNameByEmployerId,
   getCurrentStep,
   getTypeOfTaskLabel,
+  getPassportNoById,
+  getEmployeeFullNameById,
 } from "@/lib/mock-data";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 interface PrintingReceiptProps {
   receipt: Receipt;
@@ -31,6 +41,7 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
 
     // Get employee names from task
     const employeeNames = task?.employeeIds.join(", ") || "-";
+    const employeeIds = task?.employeeIds;
 
     // Format dates
     const formatDate = (date: Date | string | null) => {
@@ -113,9 +124,32 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
               <p className="font-light text-zinc-400">นายจ้าง:</p>
               <p className="font-light">{employerName}</p>
             </div>
-            <div className="flex flex-row gap-x-[10px]">
+            <div className="flex flex-col gap-y-[10px]">
               <p className="font-light text-zinc-400">รายชื่อลูกจ้าง:</p>
-              <p className="font-light">{employeeNames}</p>
+              <div className="rounded-md border border-slate-300">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="px-[20px] font-normal">
+                        หมายเลขหนังสือเดินทาง
+                      </TableHead>
+                      <TableHead className="px-[20px] font-normal">
+                        ชื่อจริง-นามสกุล
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {employeeIds?.map((employeeId) => (
+                      <TableRow>
+                        <TableCell className="px-[20px] font-light">{getPassportNoById(employeeId)}</TableCell>
+                        <TableCell className="px-[20px] font-light">
+                          {getEmployeeFullNameById(employeeId)}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </div>
           </div>
         </div>

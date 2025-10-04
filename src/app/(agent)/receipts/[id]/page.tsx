@@ -80,22 +80,17 @@ export default function ReceiptPage({
                   <Printer />
                   <p className="font-light">พิมพ์ใบเสร็จ</p>
                 </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="flex flex-row justify-start cursor-pointer"
-                // TODO: onClick to download the pdf
-                >
-                  <Download />
-                  <p className="font-light">ดาวโหลดใบเสร็จ</p>
-                </Button>
-                {receipt?.status === "unpaid" ? (<Button
-                  type="button"
-                  className="flex flex-row justify-start bg-green-200 hover:bg-green-300 text-green-700 cursor-pointer"
-                >
-                  <CircleCheckBig />
-                  <p className="font-light">ชำระค่าบริการเรียบร้อย</p>
-                </Button>) : (<></>)}
+                {receipt?.status === "unpaid" ? (
+                  <Button
+                    type="button"
+                    className="flex flex-row justify-start bg-green-200 hover:bg-green-300 text-green-700 cursor-pointer"
+                  >
+                    <CircleCheckBig />
+                    <p className="font-light">ชำระค่าบริการเรียบร้อย</p>
+                  </Button>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </div>
