@@ -27,7 +27,7 @@ const menuItems = [
     },
     {
         title: "จัดการใบเสร็จ",
-        url: "receipts",
+        url: "/receipts",
         icon: ReceiptText,
     },
 ]
