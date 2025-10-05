@@ -140,7 +140,7 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
                   </TableHeader>
                   <TableBody>
                     {employeeIds?.map((employeeId) => (
-                      <TableRow>
+                      <TableRow key={employeeId}>
                         <TableCell className="px-[20px] font-light">{getPassportNoById(employeeId)}</TableCell>
                         <TableCell className="px-[20px] font-light">
                           {getEmployeeFullNameById(employeeId)}
