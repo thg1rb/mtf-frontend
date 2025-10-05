@@ -1,20 +1,12 @@
 import { getTypeOfTaskLabelAndSteps, isPaidByTaskIdAndStep } from '@/lib/mock-data'
 import { getCurrentStepByTask, isTaskCompleted } from '@/lib/utils/task'
-import { Receipt, Task } from '@/types'
+import { Task } from '@/types'
 import { FileText } from 'lucide-react'
 import React from 'react'
 
 interface TaskStepsProps {
     task: Task
     stepCompletedDates: (Date | string | null)[]
-}
-
-const getCurrentStep = (steps: (Date | string | null)[]) => {
-    let currentStep: number = 0;
-    for (let i: number = 0; i < steps.length; i++) {
-        if (steps[i] !== null) currentStep++;
-    }
-    return currentStep;
 }
 
 export default function TaskSteps({ task, stepCompletedDates }: TaskStepsProps) {

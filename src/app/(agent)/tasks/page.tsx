@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { getEmployerFullNameByEmployerId } from '@/lib/mock-data'
 import { countCompletedTasks, countInProgressTasks, countTotalTasks, getTasks, taskTableHeaders } from '@/lib/mock-data/tasks'
-import { getCurrentStepByTask, getMaxStepTypeOfTask, isTaskCompleted } from '@/lib/utils/task'
+import { getCurrentStepByTask, isTaskCompleted } from '@/lib/utils/task'
 import { Task } from '@/types/task'
 import { CircleCheck, CircleCheckBig, Edit, Files, Loader, MoreHorizontal, Plus, Search, Trash2 } from 'lucide-react'
 import Link from 'next/link'

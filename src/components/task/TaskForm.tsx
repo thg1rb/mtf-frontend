@@ -4,18 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  EmployerFormData,
-  employerSchema,
-  financialStatusYearOptions,
-} from "@/lib/validations";
-import {
   Check,
   ChevronsUpDown,
   Edit,
@@ -44,16 +32,13 @@ import { TaskFormData, taskSchema } from "@/lib/validations/task";
 import TaskSteps from "./TaskSteps";
 import { Textarea } from "../ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Employee, Employer, Receipt, Task } from "@/types";
+import { Employee, Employer, Task } from "@/types";
 import {
   getActiveEmployers,
   getCurrentStep,
-  getEmployeeFullNameById,
   getEmployeesByEmployerId,
   getEmployerById,
-  getEmployerFullName,
   getEmployerFullNameByEmployerId,
-  getReceiptsByTaskId,
   isPaidByTaskIdAndStep,
 } from "@/lib/mock-data";
 import {
@@ -97,7 +82,7 @@ export default function TaskFormNew({
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [showValidationAlert, setShowValidationAlert] = useState(false);
-  const [activeEmployers, setActiveEmployers] =
+  const [activeEmployers] =
     useState<Employer[]>(getActiveEmployers());
   const [employeesOfEmployer, setEmployeesOfEmployer] = useState<Employee[]>(
     []

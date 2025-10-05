@@ -7,7 +7,6 @@ import { getReceiptById, getTaskById } from "@/lib/mock-data";
 import {
   ChevronLeft,
   CircleCheckBig,
-  Download,
   Printer,
   Sparkles,
 } from "lucide-react";
