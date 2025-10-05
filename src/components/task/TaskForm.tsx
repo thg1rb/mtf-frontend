@@ -5,9 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Check,
+  CheckCheck,
   ChevronsUpDown,
+  Coins,
   Edit,
   Eye,
+  FileText,
   Info,
   MoreHorizontal,
   Search,
@@ -29,16 +32,16 @@ import {
   AlertDialogTitle,
 } from "../ui/alert-dialog";
 import { TaskFormData, taskSchema } from "@/lib/validations/task";
-import TaskSteps from "./TaskSteps";
 import { Textarea } from "../ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Employee, Employer, Task } from "@/types";
 import {
   getActiveEmployers,
-  getCurrentStep,
   getEmployeesByEmployerId,
   getEmployerById,
   getEmployerFullNameByEmployerId,
+  getReceiptsByTaskId,
+  getTypeOfTaskLabelAndSteps,
   isPaidByTaskIdAndStep,
 } from "@/lib/mock-data";
 import {
@@ -66,7 +69,7 @@ import {
 } from "../ui/dropdown-menu";
 import { isTaskCompleted } from "@/lib/utils/task";
 
-interface TaskFormNewProps {
+interface TaskFormProps {
   typeOfTask: "register" | "renew";
   mode: "create" | "view" | "edit";
   task?: Task;
@@ -78,16 +81,16 @@ export default function TaskFormNew({
   mode,
   task,
   defaultValues,
-}: TaskFormNewProps) {
+}: TaskFormProps) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [showValidationAlert, setShowValidationAlert] = useState(false);
-  const [activeEmployers] =
-    useState<Employer[]>(getActiveEmployers());
+  const [activeEmployers] = useState<Employer[]>(getActiveEmployers());
   const [employeesOfEmployer, setEmployeesOfEmployer] = useState<Employee[]>(
     []
   );
   const [selectedEmployeeIds, setSelectedEmployeeIds] = useState<string[]>([]);
+  const { steps } = getTypeOfTaskLabelAndSteps(task?.typeOfTask ?? typeOfTask);
 
   const cleanedDefaultValues: Partial<TaskFormData> = useMemo(
     () => ({
@@ -102,7 +105,7 @@ export default function TaskFormNew({
         null,
       ],
     }),
-    [defaultValues]
+    [defaultValues, selectedEmployeeIds]
   );
 
   const {
@@ -466,20 +469,125 @@ export default function TaskFormNew({
           </div>
         </div>
 
-        {/* Completed Step Status Bar */}
+        {/* StepCompletedSection */}
         <div className="flex-1">
-          {task && <TaskSteps
-            task={task}
-            stepCompletedDates={
-              defaultValues?.stepCompletedDates ?? [
-                null,
-                null,
-                null,
-                null,
-                null,
-              ]
-            }
-          />}
+          <div className="flex flex-col gap-y-[40px] w-full p-[27px] border border-slate-300 rounded-2xl shadow-md">
+            <div className="flex flex-col">
+              <div className="flex flex-row gap-x-[5px] items-center">
+                <FileText />
+                <p className="font-normal">ขั้นตอนการดำเนินการ</p>
+              </div>
+              <p className="font-light text-zinc-400">
+                ขั้นตอนทั้งหมดสำหรับการต่ออายุใบอนุญาตทำงาน
+              </p>
+            </div>
+            <div className="flex flex-col gap-y-[18px]">
+              {mode === "create"
+                ? steps.map((step, index) => {
+                    return (
+                      <div
+                        key={step.step}
+                        className="flex flex-col gap-y-[10px]"
+                      >
+                        <div className="flex flex-row items-center gap-x-3">
+                          <div
+                            className={`bg-zinc-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0`}
+                          >
+                            <p className="text-white">{step.step}</p>
+                          </div>
+                          <div className="flex flex-col">
+                            <div className="flex flex-row gap-x-[5px]">
+                              <p className="font-normal text-zinc-700">
+                                ขั้นตอนที่ {step.step}
+                              </p>
+                              {step.step === 1 ? (
+                                <div className="bg-blue-200 p-[5px] rounded-md">
+                                  <p className="font-light text-blue-700">
+                                    ขั้นตอนปัจจุบัน
+                                  </p>
+                                </div>
+                              ) : (
+                                <></>
+                              )}
+                            </div>
+                            <p className="font-light text-zinc-400">
+                              {step.detail}
+                            </p>
+                          </div>
+                        </div>
+                        {index !== steps.length - 1 ? (
+                          <div className="w-[1px] h-10 ml-[23px] bg-zinc-300"></div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    );
+                  })
+                : task
+                  ? steps.map((step, index) => {
+                      const currentStep =
+                        task.stepCompletedDates.filter(
+                          (stepCompleteDate) => stepCompleteDate !== null
+                        ).length + 1;
+                      const isCompleted =
+                        task.stepCompletedDates[step.step - 1] !== null;
+                      const isPaid =
+                        getReceiptsByTaskId(task.id).find(
+                          (receipt) => receipt.step === step.step
+                        )?.status === "paid";
+                      const isCurrent = step.step === currentStep;
+
+                      return (
+                        <div
+                          key={step.step}
+                          className="flex flex-col gap-y-[10px]"
+                        >
+                          <div className="flex flex-row items-center gap-x-3">
+                            <div
+                              className={`${
+                                isCompleted
+                                  ? "bg-black"
+                                  : isPaid
+                                    ? "bg-green-500"
+                                    : "bg-zinc-200"
+                              } w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0`}
+                            >
+                              <p className="text-white">{step.step}</p>
+                            </div>
+                            <div className="flex flex-col">
+                              <div className="flex flex-row gap-x-[5px]">
+                                <p className="font-normal text-zinc-700">
+                                  ขั้นตอนที่ {step.step}
+                                </p>
+                                {isCurrent && (
+                                  <div className="bg-blue-200 p-[5px] rounded-md">
+                                    <p className="font-light text-blue-700">
+                                      ขั้นตอนปัจจุบัน
+                                    </p>
+                                  </div>
+                                )}
+                                {isCompleted && (
+                                  <div className="bg-green-200 p-[5px] rounded-md">
+                                    <p className="font-light text-green-700">
+                                      เสร็จสิ้น
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
+                              <p className="font-light text-zinc-400">
+                                {step.detail}
+                              </p>
+                            </div>
+                          </div>
+                          {index !== steps.length - 1 && (
+                            <div className="w-[1px] h-10 ml-[23px] bg-zinc-300"></div>
+                          )}
+                        </div>
+                      );
+                    })
+                  : null}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -500,22 +608,57 @@ export default function TaskFormNew({
         </div>
       )}
 
-      {/* View Mode Actions */}
-      {/* TODO: ชำระเงินขั้นตอนแรกแล้ว แต่ยังแสดงปุ่ม "ชำระเงิน" */}
+      {/* CompletedAndPaidButtonSection */}
+      {/* TODO: AlertDialog to confirm the action of each button */}
       {mode === "view" && task && !isTaskCompleted(task) && (
         <div className="flex flex-col md:flex-row gap-x-[10px] gap-y-[10px] justify-end">
-          {isPaidByTaskIdAndStep(
-            task.id,
-            getCurrentStep(task.stepCompletedDates)
-          ) ? (
-            <Button type="button" className="font-light">
-              ดำเนินการเสร็จสิ้น
-            </Button>
-          ) : (
-            <Button type="button" className="font-light">
-              ชำระเงิน
-            </Button>
-          )}
+          {(() => {
+            // คำนวณ current step (ขั้นตอนถัดไปที่ยังไม่ทำ)
+            const currentStepIndex = task.stepCompletedDates.findIndex(
+              (date) => date === null
+            );
+            const currentStepNumber = currentStepIndex + 1;
+
+            // ตรวจสอบว่าขั้นตอนปัจจุบันชำระเงินแล้วหรือยัง
+            const isPaid = isPaidByTaskIdAndStep(task.id, currentStepNumber);
+
+            if (isPaid) {
+              // ถ้าชำระเงินแล้ว แสดงปุ่ม "ดำเนินการเสร็จสิ้น"
+              return (
+                <Button
+                  type="button"
+                  className="font-light"
+                  onClick={() => {
+                    // TODO: Update stepCompletedDates[currentStepIndex] = new Date()
+                    console.log(
+                      `Complete step ${currentStepNumber} for task ${task.id}`
+                    );
+                    // router.refresh() or revalidate
+                  }}
+                >
+                  <CheckCheck />
+                  ดำเนินการเสร็จสิ้น
+                </Button>
+              );
+            } else {
+              // ถ้ายังไม่ชำระเงิน แสดงปุ่ม "ชำระเงิน"
+              return (
+                <Button
+                  type="button"
+                  className="font-light"
+                  onClick={() => {
+                    // TODO: Navigate to payment page with taskId and step
+                    console.log(
+                      `Pay for step ${currentStepNumber} of task ${task.id}`
+                    );
+                  }}
+                >
+                  <Coins />
+                  ชำระเงิน
+                </Button>
+              );
+            }
+          })()}
         </div>
       )}
 

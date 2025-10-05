@@ -36,8 +36,10 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
     const employerName = task
       ? getEmployerFullNameByEmployerId(task.employerId)
       : "-";
-    const typeOfTaskLabel = task ? getTypeOfTaskLabelAndSteps(task.typeOfTask).label : "-";
-    const currentStep = task ? getCurrentStep(task.stepCompletedDates) : "-";
+    const typeOfTaskLabel = task
+      ? getTypeOfTaskLabelAndSteps(task.typeOfTask).label
+      : "-";
+    const currentStep = task ? task.stepCompletedDates.filter(stepCompletedDate => stepCompletedDate !== null).length + 1 : "-";
 
     // Get employee names from task
     const employeeIds = task?.employeeIds;
@@ -69,6 +71,15 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
         ref={ref}
         className="print-receipt w-full flex flex-col gap-y-[20px] p-[27px] border border-slate-300 rounded-2xl shadow-md bg-white"
       >
+        <style>
+          {`
+            @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@100..900&display=swap');
+            * {
+              font-family: 'Kanit', sans-serif !important;
+            }
+          `}
+        </style>
+
         <div className="flex flex-col lg:flex-row justify-between gap-y-[15px]">
           <div>
             <div className="flex flex-row items-center gap-x-[5px]">
@@ -140,7 +151,9 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
                   <TableBody>
                     {employeeIds?.map((employeeId) => (
                       <TableRow key={employeeId}>
-                        <TableCell className="px-[20px] font-light">{getPassportNoById(employeeId)}</TableCell>
+                        <TableCell className="px-[20px] font-light">
+                          {getPassportNoById(employeeId)}
+                        </TableCell>
                         <TableCell className="px-[20px] font-light">
                           {getEmployeeFullNameById(employeeId)}
                         </TableCell>
@@ -162,7 +175,7 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
           </div>
           <div className="flex flex-col p-[20px] bg-sky-50 text-sky-700 rounded-lg">
             <p className="font-normal">{typeOfTaskLabel}</p>
-            <p className="font-light">ขั้นตอนที่: {currentStep}</p>
+            <p className="font-light">ขั้นตอนที่: {receipt.step}</p>
           </div>
         </div>
 

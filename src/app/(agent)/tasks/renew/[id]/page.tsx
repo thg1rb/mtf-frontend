@@ -29,7 +29,7 @@ export default async function RegisterTaskPage({ params }: { params: { id: strin
                     </Button>} />
 
             {/* TODO: Register Form with register mode */}
-            <TaskForm type='renew' mode='view' defaultValues={task} />
+            <TaskForm typeOfTask='renew' mode='view' defaultValues={task} />
         </div>
     )
 }

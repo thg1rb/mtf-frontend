@@ -30,7 +30,7 @@ export default async function RegisterTaskEditPage({ params }: { params: { id: s
             />
 
             {/* TODO: Register Form with register mode */}
-            <TaskForm typeOfTask='register' mode='edit' defaultValues={task} />
+            <TaskForm typeOfTask='register' mode='edit' task={task} defaultValues={task} />
         </div>
     )
 }

@@ -4,7 +4,6 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --font-kanit: 'Kanit': sans-serif;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -227,22 +226,6 @@ html::-webkit-scrollbar {
     print-color-adjust: exact !important;
   }
   
-  body {
-    font-family: 'Kanit', var(--font-kanit), sans-serif !important;
-  }
-  
-  body * {
-    visibility: hidden;
-    font-family: 'Kanit', var(--font-kanit), sans-serif !important;
-  }
-  
-  /* Only show the receipt component when printing */
-  .print-receipt,
-  .print-receipt * {
-    visibility: visible !important;
-    font-family: 'Kanit', var(--font-kanit), sans-serif !important;
-  }
-  
   .print-receipt {
     position: absolute;
     left: 0;
@@ -251,19 +234,6 @@ html::-webkit-scrollbar {
     border: none !important;
     box-shadow: none !important;
     border-radius: 0 !important;
-  }
-  
-  /* Ensure all text elements use Kanit */
-  .print-receipt p,
-  .print-receipt span,
-  .print-receipt div,
-  .print-receipt h1,
-  .print-receipt h2,
-  .print-receipt h3,
-  .print-receipt h4,
-  .print-receipt h5,
-  .print-receipt h6 {
-    font-family: 'Kanit', sans-serif !important;
   }
   
   /* Hide unnecessary elements when printing */

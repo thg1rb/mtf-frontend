@@ -156,7 +156,7 @@ export default function ReceiptsPage() {
                             {getTypeOfTaskLabelAndSteps(task.typeOfTask).label}
                           </p>
                           <p className="font-light text-zinc-400">
-                            ขั้นตอนที่: {getCurrentStep(task.stepCompletedDates)}
+                            ขั้นตอนที่: {receipt.step}
                           </p>
                         </div>
                       </TableCell>
