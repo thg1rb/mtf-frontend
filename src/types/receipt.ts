@@ -1,6 +1,7 @@
 export interface Receipt {
   id: string;
   taskId: string;
+  step: number;
   amount: number;
   status: "paid" | "unpaid";
   paymentMethod: "cash" | "transfer" | "promptpay" | null;

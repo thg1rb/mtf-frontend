@@ -24,7 +24,7 @@ export default function NewRegisterTaskPage() {
                     </Button>} />
 
             {/* TODO: Register Form with register mode */}
-            <TaskForm type='register' mode='create' />
+            <TaskForm typeOfTask='register' mode='create' />
         </div>
     )
 }

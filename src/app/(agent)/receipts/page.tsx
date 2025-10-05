@@ -28,7 +28,7 @@ import {
   receiptTableHeaders,
   getTaskById,
   getCurrentStep,
-  getTypeOfTaskLabel,
+  getTypeOfTaskLabelAndSteps,
   getEmployerFullNameByEmployerId,
 } from "@/lib/mock-data";
 import { Receipt } from "@/types";
@@ -153,10 +153,10 @@ export default function ReceiptsPage() {
                       <TableCell className="font-light px-[20px]">
                         <div className="flex flex-col">
                           <p className="font-light">
-                            {getTypeOfTaskLabel(task.typeOfTask)}
+                            {getTypeOfTaskLabelAndSteps(task.typeOfTask).label}
                           </p>
                           <p className="font-light text-zinc-400">
-                            ขั้นตอนที่: {getCurrentStep(task.stepStartDates)}
+                            ขั้นตอนที่: {getCurrentStep(task.stepCompletedDates)}
                           </p>
                         </div>
                       </TableCell>

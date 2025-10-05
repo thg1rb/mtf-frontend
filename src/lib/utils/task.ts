@@ -1,7 +1,10 @@
 import { Task } from "@/types";
+import { isPaidByTaskIdAndStep } from "../mock-data";
 
 // Helper functions for step management
-export const getMaxStepsForTaskType = (taskType: "register" | "renew"): number => {
+export const getMaxStepTypeOfTask = (
+  taskType: "register" | "renew"
+): number => {
   switch (taskType) {
     case "register":
       return 4;
@@ -13,19 +16,18 @@ export const getMaxStepsForTaskType = (taskType: "register" | "renew"): number =
 };
 
 export const getCurrentStepByTask = (task: Task): number => {
-  const { stepStartDates } = task;
+  const currentStep = task.stepCompletedDates.filter(
+    (stepCompleteDate) => stepCompleteDate !== null
+  ).length + 1;
+  const maxStep = getMaxStepTypeOfTask(task.typeOfTask);
 
-  for (let i: number = 0; i < stepStartDates.length; i++) {
-    if (stepStartDates[i] === null) {
-      return i;
-    }
-  }
-
-  return getMaxStepsForTaskType(task.typeOfTask);
+  return currentStep > maxStep ? maxStep : currentStep;
 };
 
 export const isTaskCompleted = (task: Task): boolean => {
-  const maxSteps = getMaxStepsForTaskType(task.typeOfTask);
+  const maxStep = getMaxStepTypeOfTask(task.typeOfTask);
   const currentStep = getCurrentStepByTask(task);
-  return currentStep >= maxSteps;
+  return (
+    task.stepCompletedDates[maxStep - 1] !== null && isPaidByTaskIdAndStep(task.id, currentStep)
+  );
 };

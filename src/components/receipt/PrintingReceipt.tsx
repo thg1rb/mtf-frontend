@@ -12,7 +12,7 @@ import {
   getTaskById,
   getEmployerFullNameByEmployerId,
   getCurrentStep,
-  getTypeOfTaskLabel,
+  getTypeOfTaskLabelAndSteps,
   getPassportNoById,
   getEmployeeFullNameById,
 } from "@/lib/mock-data";
@@ -36,11 +36,10 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
     const employerName = task
       ? getEmployerFullNameByEmployerId(task.employerId)
       : "-";
-    const typeOfTaskLabel = task ? getTypeOfTaskLabel(task.typeOfTask) : "-";
-    const currentStep = task ? getCurrentStep(task.stepStartDates) : "-";
+    const typeOfTaskLabel = task ? getTypeOfTaskLabelAndSteps(task.typeOfTask).label : "-";
+    const currentStep = task ? getCurrentStep(task.stepCompletedDates) : "-";
 
     // Get employee names from task
-    const employeeNames = task?.employeeIds.join(", ") || "-";
     const employeeIds = task?.employeeIds;
 
     // Format dates

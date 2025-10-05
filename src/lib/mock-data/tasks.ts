@@ -24,19 +24,60 @@ export const taskTableHeaders: TableHeader[] = [
   },
 ];
 
+const registerSteps = [
+  {
+    step: 1,
+    detail: "รวบรวมเอกสารเพิ่มเติม",
+  },
+  {
+    step: 2,
+    detail: "ตรวจสอบโรคและซื้อประกันสุขภาพ",
+  },
+  {
+    step: 3,
+    detail: "ทำบัตรประจำตัวคนซึ่งไม่มีสัญชาติไทย (เล่มชมพู)",
+  },
+  {
+    step: 4,
+    detail: "ทำเอกสารรับรองบุคคลเข้าออกระหว่างประเทศ (เล่ม CI)",
+  },
+];
+
+const renewSteps = [
+  {
+    step: 1,
+    detail: "รวบรวมเอกสารเพิ่มเติม",
+  },
+  {
+    step: 2,
+    detail: "ตรวจสอบโรคและซื้อประกันสุขภาพ",
+  },
+  {
+    step: 3,
+    detail: "ยื่น Calling Visa กับกรมแรงงาน",
+  },
+  {
+    step: 4,
+    detail: "ซื้อใบอนุญาตทำงานกับกรมแรงงาน",
+  },
+  {
+    step: 5,
+    detail: "ตีวีซ่าตรวจคนเข้าเมือง",
+  },
+];
+
 export const mockTasks: Task[] = [
   {
     id: "TSK001",
     employerId: "0755556677882",
     employeeIds: ["EMP001", "EMP021"],
     typeOfTask: "register",
-    startStep: 3,
     description: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับพนักงานครัวและบริการ",
-    createAt: "2024-09-15",
-    stepStartDates: [
+    createdAt: "2024-09-15",
+    stepCompletedDates: [
       new Date("2024-09-15"),
       new Date("2024-09-22"),
-      new Date("2024-09-30"),
+      new Date("2024-09-22"),
       null,
       null,
     ],
@@ -46,10 +87,9 @@ export const mockTasks: Task[] = [
     employerId: "0105556123456",
     employeeIds: ["EMP002", "EMP011", "EMP022"],
     typeOfTask: "register",
-    startStep: 4,
     description: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับพนักงานบริการและก่อสร้าง",
-    createAt: "2024-08-20",
-    stepStartDates: [
+    createdAt: "2024-08-20",
+    stepCompletedDates: [
       new Date("2024-08-20"),
       new Date("2024-08-28"),
       new Date("2024-09-05"),
@@ -60,12 +100,11 @@ export const mockTasks: Task[] = [
   {
     id: "TSK003",
     employerId: "0305552468135",
-    employeeIds: ["EMP004", "EMP015", "EMP026"],
+    employeeIds: ["EMP008", "EMP016"],
     typeOfTask: "register",
-    startStep: 4,
     description: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับช่างเทคนิคและคนงานโรงงาน",
-    createAt: "2024-07-10",
-    stepStartDates: [
+    createdAt: "2024-07-10",
+    stepCompletedDates: [
       new Date("2024-07-10"),
       new Date("2024-07-18"),
       new Date("2024-07-25"),
@@ -78,10 +117,9 @@ export const mockTasks: Task[] = [
     employerId: "0435559988776",
     employeeIds: ["EMP005", "EMP018", "EMP029"],
     typeOfTask: "register",
-    startStep: 4,
     description: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับคนงานเกษตรและแปรรูปอาหาร",
-    createAt: "2024-06-01",
-    stepStartDates: [
+    createdAt: "2024-06-01",
+    stepCompletedDates: [
       new Date("2024-06-01"),
       new Date("2024-06-08"),
       new Date("2024-06-15"),
@@ -94,20 +132,18 @@ export const mockTasks: Task[] = [
     employerId: "0105556123456",
     employeeIds: ["EMP002", "EMP011"],
     typeOfTask: "register",
-    startStep: 1,
     description: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับพนักงานฟาร์มและคลังสินค้า",
-    createAt: "2024-05-15",
-    stepStartDates: [new Date("2024-05-15"), null, null, null, null],
+    createdAt: "2024-05-15",
+    stepCompletedDates: [new Date("2024-05-15"), null, null, null, null],
   },
   {
     id: "TSK006",
     employerId: "0385554433221",
     employeeIds: ["EMP009", "EMP019", "EMP030"],
     typeOfTask: "renew",
-    startStep: 5,
     description: "ต่ออายุใบอนุญาตทำงานสำหรับพนักงานโลจิสติกส์และขนส่ง",
-    createAt: "2024-04-01",
-    stepStartDates: [
+    createdAt: "2024-04-01",
+    stepCompletedDates: [
       new Date("2024-04-01"),
       new Date("2024-04-10"),
       new Date("2024-04-18"),
@@ -120,10 +156,9 @@ export const mockTasks: Task[] = [
     employerId: "0305552468135",
     employeeIds: ["EMP008", "EMP016", "EMP027"],
     typeOfTask: "renew",
-    startStep: 5,
     description: "ต่ออายุใบอนุญาตทำงานสำหรับช่างและคนงานประกอบชิ้นส่วน",
-    createAt: "2024-03-20",
-    stepStartDates: [
+    createdAt: "2024-03-20",
+    stepCompletedDates: [
       new Date("2024-03-20"),
       new Date("2024-03-28"),
       new Date("2024-04-05"),
@@ -136,10 +171,9 @@ export const mockTasks: Task[] = [
     employerId: "0385554433221",
     employeeIds: ["EMP009", "EMP019", "EMP030"],
     typeOfTask: "renew",
-    startStep: 3,
     description: "ต่ออายุใบอนุญาตทำงานสำหรับพนักงานโรงงานยางและปิโตรเคมี",
-    createAt: "2024-02-15",
-    stepStartDates: [
+    createdAt: "2024-02-15",
+    stepCompletedDates: [
       new Date("2024-02-15"),
       new Date("2024-02-22"),
       new Date("2024-03-01"),
@@ -152,10 +186,9 @@ export const mockTasks: Task[] = [
     employerId: "0835557654321",
     employeeIds: ["EMP010", "EMP014", "EMP025"],
     typeOfTask: "renew",
-    startStep: 5,
     description: "ต่ออายุใบอนุญาตทำงานสำหรับพนักงานโรงแรมและแปรรูปอาหารทะเล",
-    createAt: "2024-01-30",
-    stepStartDates: [
+    createdAt: "2024-01-30",
+    stepCompletedDates: [
       new Date("2024-01-30"),
       new Date("2024-02-06"),
       new Date("2024-02-13"),
@@ -168,10 +201,9 @@ export const mockTasks: Task[] = [
     employerId: "0505559876543",
     employeeIds: ["EMP003", "EMP012", "EMP023"],
     typeOfTask: "renew",
-    startStep: 2,
     description: "ต่ออายุใบอนุญาตทำงานสำหรับพนักงานโรงแรมและบริการ",
-    createAt: "2024-01-10",
-    stepStartDates: [
+    createdAt: "2024-01-10",
+    stepCompletedDates: [
       new Date("2024-01-10"),
       new Date("2024-01-17"),
       null,
@@ -184,10 +216,9 @@ export const mockTasks: Task[] = [
     employerId: "0755556677882",
     employeeIds: ["EMP001", "EMP021"],
     typeOfTask: "register",
-    startStep: 1,
     description: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับพนักงานบริการทำความสะอาด",
-    createAt: "2024-10-01",
-    stepStartDates: [new Date("2024-10-01"), null, null, null, null],
+    createdAt: "2024-10-01",
+    stepCompletedDates: [null, null, null, null, null],
   },
 ];
 
@@ -207,8 +238,10 @@ export const getCurrentStep = (stepStartDates: (Date | string | null)[]) => {
   return i;
 };
 
-export const getTypeOfTaskLabel = (typeOfTask: "register" | "renew"): string =>
-  typeOfTask === "register" ? "ขึ้นทะเบียนใหม่" : "ต่อใบอนุญาตทำงาน";
+export const getTypeOfTaskLabelAndSteps = (typeOfTask: "register" | "renew") =>
+  typeOfTask === "register"
+    ? { label: "ขึ้นทะเบียนใหม่", steps: registerSteps }
+    : { label: "ต่อใบอนุญาตทำงาน", steps: renewSteps };
 
 export const countTotalTasks = (): number => getTasks().length;
 

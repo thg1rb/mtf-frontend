@@ -677,8 +677,8 @@ export const getPassportNoById = (id: string) =>
   mockEmployees.find((employee) => employee.id === id)?.passportNo;
 
 export const getEmployeeFullNameById = (id: string) => {
-  const employee = mockEmployees.find((employee) => employee.id === id)
-  
+  const employee = mockEmployees.find((employee) => employee.id === id);
+
   return employee?.firstname + " " + employee?.lastname;
 };
 
