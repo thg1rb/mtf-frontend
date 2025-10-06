@@ -16,17 +16,7 @@ export default async function RenewTaskEditPage({ params }: { params: { id: stri
             {/* HeaderSection */}
             <HeaderSection
                 topic="แก้ไขข้อมูลการขึ้นทะเบียนใหม่"
-                leftActionButton={
-                    <Button
-                        asChild
-                        variant="ghost"
-                        className='flex flex-row font-normal px-[17px] py-[5px] w-full md:w-auto border border-zinc-300 cursor-pointer'
-                    >
-                        <Link href='/tasks'>
-                            <ChevronLeft className='size-[24px] mr-2' />
-                            ย้อนกลับ
-                        </Link>
-                    </Button>}
+                hasBackButton={true}
             />
 
             {/* Register Form with register mode */}

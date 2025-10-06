@@ -1,67 +1,89 @@
-import EmployeeForm from '@/components/employee/EmployeeForm'
-import HeaderSection from '@/components/shared/HeaderSection'
-import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
-import { Button } from '@/components/ui/button'
-import { getEmployeeById } from '@/lib/mock-data'
-import { ChevronLeft, File, Files, SquarePen } from 'lucide-react'
-import Link from 'next/link'
-import React from 'react'
+import EmployeeForm from "@/components/employee/EmployeeForm";
+import HeaderSection from "@/components/shared/HeaderSection";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { getEmployeeById } from "@/lib/mock-data";
+import { ChevronLeft, File, Files, SquarePen } from "lucide-react";
+import Link from "next/link";
+import React from "react";
 
-export default async function EmployeePage({ params }: { params: { id: string } }) {
+export default async function EmployeePage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const { id } = await params;
 
   // TODO: GET method `/api/employees/${id}` to fetch existing employer details
   const data = getEmployeeById(id);
 
   return (
-    <div className='flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>
+    <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
       {/* HeaderSection */}
       <HeaderSection
         topic="ข้อมูลของลูกจ้าง"
-        leftActionButton={
-          <Button asChild variant="ghost" className='flex flex-row font-normal px-[17px] py-[5px] w-full md:w-auto border border-zinc-300 cursor-pointer'>
-            <Link href='/employees'>
-              <ChevronLeft className='size-[24px] mr-2' />
-              ย้อนกลับ
-            </Link>
-          </Button>}
+        hasBackButton={true}
         rightActionButtons={[
-          (<Button asChild key='แก้ไขข้อมูล' className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
+          <Button
+            asChild
+            key="แก้ไขข้อมูล"
+            className="font-normal px-[17px] py-[5px] w-full md:w-auto"
+          >
             <Link href={`/employees/${id}/edit`}>
-              <SquarePen className='size-[24px] mr-2' />
+              <SquarePen className="size-[24px] mr-2" />
               แก้ไขข้อมูล
             </Link>
-          </Button>),
-        ]} />
+          </Button>,
+        ]}
+      />
 
-      <div className='flex flex-col lg:flex-row gap-x-[53px] gap-y-[51px]'>
-
+      <div className="flex flex-col lg:flex-row gap-x-[53px] gap-y-[51px]">
         {/* FormSection */}
-        <div className='flex-2'>
-          <EmployeeForm mode='view' defaultValues={data} />
+        <div className="flex-2">
+          <EmployeeForm mode="view" defaultValues={data} />
         </div>
 
-        <div className='flex-1 flex flex-col gap-y-[25px] p-[27px] h-min border border-slate-300 rounded-2xl shadow-md'>
-          <div className='flex flex-row gap-x-[5px] items-center'>
+        <div className="flex-1 flex flex-col gap-y-[25px] p-[27px] h-min border border-slate-300 rounded-2xl shadow-md">
+          <div className="flex flex-row gap-x-[5px] items-center">
             <Files />
-            <p className='font-normal'>เอกสารที่เกี่ยวข้อง</p>
+            <p className="font-normal">เอกสารที่เกี่ยวข้อง</p>
           </div>
-          <div className='flex flex-col gap-y-[25px] '>
-            <div className='flex flex-col gap-y-[18px]'>
-              <Button asChild variant='outline' className='flex flex-row justify-start cursor-pointer'>
+          <div className="flex flex-col gap-y-[25px] ">
+            <div className="flex flex-col gap-y-[18px]">
+              <Button
+                asChild
+                variant="outline"
+                className="flex flex-row justify-start cursor-pointer"
+              >
                 <Link href={`/employees/${id}/wp`}>
                   <File />
                   <p className="font-light">หนังสือรับรองการจ้าง (บต. 46)</p>
                 </Link>
               </Button>
-              <Button asChild variant='outline' className='flex flex-row justify-start cursor-pointer'>
+              <Button
+                asChild
+                variant="outline"
+                className="flex flex-row justify-start cursor-pointer"
+              >
                 <Link href={`/employees/${id}/contract`}>
                   <File />
                   <p className="font-light">สัญญาจ้าง 3 ภาษา</p>
                 </Link>
               </Button>
-              <Button asChild variant='outline' className='flex flex-row justify-start cursor-pointer'>
-                <Link href='/'>
+              <Button
+                asChild
+                variant="outline"
+                className="flex flex-row justify-start cursor-pointer"
+              >
+                <Link href="/">
                   <File />
                   <p className="font-light">หนังสือมอบอำนาจ</p>
                 </Link>
@@ -71,24 +93,26 @@ export default async function EmployeePage({ params }: { params: { id: string } 
         </div>
 
         {/* EmployerNotFoundSection */}
-        {!data && <AlertDialog open={true}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle className='font-medium'>ไม่พบข้อมูลลูกจ้าง</AlertDialogTitle>
-              <AlertDialogDescription className='font-light'>
-                ตรวจสอบหมายเลขประจำตัวลูกจ้างว่าอยู่ในระบบหรือไม่
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogAction className='font-light'>
-                <Link href='/employees'>ย้อนกลับ</Link>
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>}
+        {!data && (
+          <AlertDialog open={true}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="font-medium">
+                  ไม่พบข้อมูลลูกจ้าง
+                </AlertDialogTitle>
+                <AlertDialogDescription className="font-light">
+                  ตรวจสอบหมายเลขประจำตัวลูกจ้างว่าอยู่ในระบบหรือไม่
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogAction className="font-light">
+                  <Link href="/employees">ย้อนกลับ</Link>
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        )}
       </div>
-
-
-    </div >
-  )
+    </div>
+  );
 }

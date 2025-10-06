@@ -17,13 +17,7 @@ export default async function WorkPermitPage({ params }: { params: { id: string 
       {/* HeaderSection */}
       <HeaderSection
         topic="เอกสาร บต.46"
-        hasBackButton={
-          <Button asChild variant="ghost" className='flex flex-row font-normal px-[17px] py-[5px] w-full md:w-auto border border-zinc-300 cursor-pointer'>
-            <Link href={`/employees/${id}`}>
-              <ChevronLeft className='size-[24px] mr-2' />
-              ย้อนกลับ
-            </Link>
-          </Button>} />
+        hasBackButton={true} />
 
       {/* FormSection */}
       <WorkPermitForm id={id} workPermits={data}/>

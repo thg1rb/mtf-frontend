@@ -75,7 +75,11 @@ export default function ReceiptsPage() {
   return (
     <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
       {/* HeaderSection */}
-      <HeaderSection topic="จัดการใบเสร็จ" desc="ข้อมูลใบเสร็จทั้งหมดในระบบ" />
+      <HeaderSection
+        topic="จัดการใบเสร็จ"
+        desc="ข้อมูลใบเสร็จทั้งหมดในระบบ"
+        hasBackButton={false}
+      />
 
       {/* StatGrid */}
       <StatGrid statItems={statItems} />

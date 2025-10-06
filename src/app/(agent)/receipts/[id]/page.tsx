@@ -4,12 +4,7 @@ import HeaderSection from "@/components/shared/HeaderSection";
 import PrintingReceipt from "@/components/receipt/PrintingReceipt";
 import { Button } from "@/components/ui/button";
 import { getReceiptById, getTaskById } from "@/lib/mock-data";
-import {
-  ChevronLeft,
-  CircleCheckBig,
-  Printer,
-  Sparkles,
-} from "lucide-react";
+import { ChevronLeft, CircleCheckBig, Printer, Sparkles } from "lucide-react";
 import Link from "next/link";
 import React, { use, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
@@ -37,21 +32,7 @@ export default function ReceiptPage({
         {!receipt || !task ? (
           <>NotFound</>
         ) : (
-          <HeaderSection
-            topic={receipt.id}
-            hasBackButton={
-              <Button
-                asChild
-                variant="ghost"
-                className="flex flex-row font-normal px-[17px] py-[5px] w-full md:w-auto border border-zinc-300 cursor-pointer"
-              >
-                <Link href="/receipts">
-                  <ChevronLeft className="size-[24px] mr-2" />
-                  ย้อนกลับ
-                </Link>
-              </Button>
-            }
-          />
+          <HeaderSection topic={receipt.id} hasBackButton={true} />
         )}
       </div>
 

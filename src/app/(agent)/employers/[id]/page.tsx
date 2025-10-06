@@ -32,18 +32,7 @@ export default async function EmployerPage({
       {/* HeaderSection */}
       <HeaderSection
         topic="ข้อมูลของนายจ้าง"
-        leftActionButton={
-          <Button
-            asChild
-            variant="ghost"
-            className="flex flex-row font-normal px-[17px] py-[5px] w-full md:w-auto border border-zinc-300 cursor-pointer"
-          >
-            <Link href="/employers">
-              <ChevronLeft className="size-[24px] mr-2" />
-              ย้อนกลับ
-            </Link>
-          </Button>
-        }
+        hasBackButton={true}
         rightActionButtons={[
           <Button
             asChild
