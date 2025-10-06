@@ -3,7 +3,7 @@ import HeaderSection from '@/components/shared/HeaderSection'
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { findMockAgentById } from '@/lib/mock-data'
-import { ChevronLeft, SquarePen } from 'lucide-react'
+import { SquarePen } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -18,13 +18,7 @@ export default async function AgentPage({ params }: { params: { id: string } }) 
             {/* HeaderSection */}
             <HeaderSection
                 topic="ข้อมูลของนายหน้า"
-                hasBackButton={
-                    <Button asChild variant="ghost" className='flex flex-row font-normal px-[17px] py-[5px] w-full md:w-auto border border-zinc-300 cursor-pointer'>
-                        <Link href='/agents'>
-                            <ChevronLeft className='size-[24px] mr-2' />
-                            ย้อนกลับ
-                        </Link>
-                    </Button>}
+                hasBackButton={true}
                 rightActionButtons={[
                     (<Button asChild key='แก้ไขข้อมูล' className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
                         <Link href={`/agents/${id}/edit`}>

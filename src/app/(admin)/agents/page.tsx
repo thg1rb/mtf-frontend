@@ -51,6 +51,7 @@ export default function AgentsPage() {
       <HeaderSection
         topic='จัดการนายหน้า'
         desc='รายชื่อนายหน้าทั้งหมดในระบบ'
+        hasBackButton={false}
         rightActionButtons={[
           (<Button asChild key='เพิ่มนายหน้าใหม่' className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
             <Link href='/agents/new'>
