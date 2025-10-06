@@ -11,11 +11,6 @@ const menuItems = [
         icon: Files,
     },
     {
-        title: "แดชบอร์ด",
-        url: "/dashboard",
-        icon: Home,
-    },
-    {
         title: "จัดการนายจ้าง",
         url: "/employers",
         icon: Building,
