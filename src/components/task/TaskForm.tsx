@@ -92,22 +92,6 @@ export default function TaskFormNew({
   const [selectedEmployeeIds, setSelectedEmployeeIds] = useState<string[]>([]);
   const { steps } = getTypeOfTaskLabelAndSteps(task?.typeOfTask ?? typeOfTask);
 
-  const cleanedDefaultValues: Partial<TaskFormData> = useMemo(
-    () => ({
-      employerId: defaultValues?.employerId ?? "",
-      description: defaultValues?.description ?? "",
-      employeeIds: defaultValues?.employeeIds ?? selectedEmployeeIds,
-      stepStartDates: defaultValues?.stepCompletedDates ?? [
-        null,
-        null,
-        null,
-        null,
-        null,
-      ],
-    }),
-    [defaultValues, selectedEmployeeIds]
-  );
-
   const {
     register,
     handleSubmit,
@@ -117,13 +101,14 @@ export default function TaskFormNew({
     formState: { errors },
   } = useForm<TaskFormData>({
     resolver: zodResolver(taskSchema) as Resolver<TaskFormData>,
-    defaultValues: cleanedDefaultValues,
+    defaultValues: {
+      employerId: defaultValues?.employerId ?? "",
+      description: defaultValues?.description ?? "",
+      employeeIds: defaultValues?.employeeIds ?? [],
+      stepCompletedDates: defaultValues?.stepCompletedDates ?? [null, null, null, null, null],
+    },
     mode: "onChange",
   });
-
-  useEffect(() => {
-    reset(cleanedDefaultValues);
-  }, [cleanedDefaultValues, reset]);
 
   // Load employees when component mounts (for view/edit mode)
   useEffect(() => {
