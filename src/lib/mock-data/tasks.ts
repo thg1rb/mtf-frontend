@@ -71,7 +71,7 @@ export const mockTasks: Task[] = [
     id: "TSK001",
     employerId: "0755556677882",
     employeeIds: ["EMP001", "EMP021"],
-    typeOfTask: "register",
+    typeOfTask: "renew",
     description: "ขึ้นทะเบียนใบอนุญาตทำงานใหม่สำหรับพนักงานครัวและบริการ",
     createdAt: "2024-09-15",
     stepCompletedDates: [

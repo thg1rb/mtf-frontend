@@ -6,7 +6,7 @@ import { ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
-export default async function RegisterTaskEditPage({ params }: { params: { id: string } }) {
+export default async function RenewTaskEditPage({ params }: { params: { id: string } }) {
     const { id } = await params;
 
     const task = getTaskById(id);
@@ -30,7 +30,7 @@ export default async function RegisterTaskEditPage({ params }: { params: { id: s
             />
 
             {/* Register Form with register mode */}
-            <TaskForm typeOfTask='register' mode='edit' task={task} defaultValues={task} />
+            <TaskForm typeOfTask='renew' mode='edit' task={task} defaultValues={task} />
         </div>
     )
 }
