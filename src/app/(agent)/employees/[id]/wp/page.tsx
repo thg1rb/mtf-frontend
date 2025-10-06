@@ -1,9 +1,6 @@
 import WorkPermitForm from '@/components/document/WorkPermitForm'
 import HeaderSection from '@/components/shared/HeaderSection'
-import { Button } from '@/components/ui/button'
 import { findWorkPermitsByEmployeeId } from '@/lib/mock-data'
-import { ChevronLeft } from 'lucide-react'
-import Link from 'next/link'
 import React from 'react'
 
 export default async function WorkPermitPage({ params }: { params: { id: string } }) {

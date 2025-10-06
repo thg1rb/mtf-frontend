@@ -4,8 +4,7 @@ import HeaderSection from "@/components/shared/HeaderSection";
 import PrintingReceipt from "@/components/receipt/PrintingReceipt";
 import { Button } from "@/components/ui/button";
 import { getReceiptById, getTaskById } from "@/lib/mock-data";
-import { ChevronLeft, CircleCheckBig, Printer, Sparkles } from "lucide-react";
-import Link from "next/link";
+import { CircleCheckBig, Printer, Sparkles } from "lucide-react";
 import React, { use, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 

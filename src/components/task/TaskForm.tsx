@@ -18,7 +18,7 @@ import {
   Users2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, type Resolver, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -95,7 +95,6 @@ export default function TaskFormNew({
   const {
     register,
     handleSubmit,
-    reset,
     control,
     setValue,
     formState: { errors },

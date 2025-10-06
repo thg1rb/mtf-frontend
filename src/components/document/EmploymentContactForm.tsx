@@ -124,18 +124,6 @@ export default function EmploymentContactForm({ id, employmentContracts }: { id:
                             />
                             {errors.payIncomeDate && <span className='text-red-500 font-light'>{errors.payIncomeDate.message}</span>}
                         </div>
-
-                        <div className='flex flex-col gap-y-[10px]'>
-                            <Label htmlFor='periodOfEmployment' className='font-light text-zinc-700'>ระยะเวลาจ้าง (เดือน)</Label>
-                            <Input
-                                id='periodOfEmployment'
-                                {...register('periodOfEmployment', { valueAsNumber: true })}
-                                type='number'
-                                min={0}
-                            />
-                            {errors.periodOfEmployment && <span className='text-red-500 font-light'>{errors.periodOfEmployment.message}</span>}
-                        </div>
-
                     </div>
                 </div>
 

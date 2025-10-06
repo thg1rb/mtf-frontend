@@ -9,9 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 import { getEmployerById } from "@/lib/mock-data";
-import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 

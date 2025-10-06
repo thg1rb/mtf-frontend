@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { getEmployeesByEmployerId, getEmployerById } from "@/lib/mock-data";
-import { ChevronLeft, SquarePen } from "lucide-react";
+import { SquarePen } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 

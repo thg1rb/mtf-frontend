@@ -2,7 +2,7 @@ import HeaderSection from "@/components/shared/HeaderSection";
 import TaskForm from "@/components/task/TaskForm";
 import { Button } from "@/components/ui/button";
 import { getTaskById } from "@/lib/mock-data";
-import { ChevronLeft, SquarePen } from "lucide-react";
+import { SquarePen } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 

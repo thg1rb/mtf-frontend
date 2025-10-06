@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { getEmployeeById } from "@/lib/mock-data";
-import { ChevronLeft, File, Files, SquarePen } from "lucide-react";
+import { File, Files, SquarePen } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 

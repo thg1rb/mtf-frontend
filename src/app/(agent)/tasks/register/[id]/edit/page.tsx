@@ -1,9 +1,6 @@
 import HeaderSection from '@/components/shared/HeaderSection'
 import TaskForm from '@/components/task/TaskForm'
-import { Button } from '@/components/ui/button'
 import { getTaskById } from '@/lib/mock-data'
-import { ChevronLeft } from 'lucide-react'
-import Link from 'next/link'
 import React from 'react'
 
 export default async function RegisterTaskEditPage({ params }: { params: { id: string } }) {
