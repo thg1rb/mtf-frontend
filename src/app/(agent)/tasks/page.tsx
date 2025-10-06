@@ -54,6 +54,7 @@ export default function TasksPage() {
       <HeaderSection
         topic='จัดการงาน'
         desc='ติดตามขั้นตอนการดำเนินการของแรงงานต่างด้าวทั้งหมดในระบบ'
+        hasBackButton={false}
         rightActionButtons={[
           (<Button asChild key="ขึ้นทะเบียนใหม่" className='font-normal px-[17px] py-[5px] w-full md:w-auto'>
             <Link href='/tasks/register/new'>
@@ -167,7 +168,7 @@ export default function TasksPage() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem asChild className='cursor-pointer' onClick={(e) => e.stopPropagation()}>
-                            <Link href={`/tasks/${task.id}/edit`}>
+                            <Link href={`/tasks/${task.typeOfTask}/${task.id}/edit`}>
                               <Edit className="mr-2 h-4 w-4" />
                               แก้ไข
                             </Link>
