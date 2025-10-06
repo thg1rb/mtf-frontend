@@ -27,7 +27,6 @@ import {
   getReceipts,
   receiptTableHeaders,
   getTaskById,
-  getCurrentStep,
   getTypeOfTaskLabelAndSteps,
   getEmployerFullNameByEmployerId,
 } from "@/lib/mock-data";

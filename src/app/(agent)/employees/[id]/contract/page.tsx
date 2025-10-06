@@ -17,7 +17,7 @@ export default async function WorkPermitPage({ params }: { params: { id: string 
       {/* HeaderSection */}
       <HeaderSection
         topic="เอกสาร สัญญาจ้าง 3 ภาษา"
-        leftActionButton={
+        hasBackButton={
           <Button asChild variant="ghost" className='flex flex-row font-normal px-[17px] py-[5px] w-full md:w-auto border border-zinc-300 cursor-pointer'>
             <Link href={`/employees/${id}`}>
               <ChevronLeft className='size-[24px] mr-2' />

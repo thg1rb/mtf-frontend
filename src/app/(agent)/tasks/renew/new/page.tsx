@@ -24,7 +24,7 @@ export default function NewRenewTaskPage() {
                     </Button>} />
 
             {/* TODO: Renew Form with renew mode */}
-            <TaskForm type='renew' mode='create' />
+            <TaskForm typeOfTask='renew' mode='create' />
         </div>
     )
 }

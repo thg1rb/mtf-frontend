@@ -18,7 +18,7 @@ export default async function AgentPage({ params }: { params: { id: string } }) 
             {/* HeaderSection */}
             <HeaderSection
                 topic="ข้อมูลของนายหน้า"
-                leftActionButton={
+                hasBackButton={
                     <Button asChild variant="ghost" className='flex flex-row font-normal px-[17px] py-[5px] w-full md:w-auto border border-zinc-300 cursor-pointer'>
                         <Link href='/agents'>
                             <ChevronLeft className='size-[24px] mr-2' />

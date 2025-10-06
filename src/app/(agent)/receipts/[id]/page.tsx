@@ -39,7 +39,7 @@ export default function ReceiptPage({
         ) : (
           <HeaderSection
             topic={receipt.id}
-            leftActionButton={
+            hasBackButton={
               <Button
                 asChild
                 variant="ghost"

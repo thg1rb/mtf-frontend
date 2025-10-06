@@ -15,7 +15,7 @@ export default function NewAgentPage() {
       <HeaderSection
         topic="เพิ่มนายหน้าใหม่"
         desc="กรอกข้อมูลนายหน้า"
-        leftActionButton={
+        hasBackButton={
           <Button
             asChild
             variant="ghost"

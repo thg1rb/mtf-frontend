@@ -12,7 +12,7 @@ export default function NewEmployeePage() {
       <HeaderSection
         topic="เพิ่มลูกจ้างใหม่"
         desc="กรอกข้อมูลลูกจ้าง"
-        leftActionButton={
+        hasBackButton={
           <Button
             asChild
             variant="ghost"

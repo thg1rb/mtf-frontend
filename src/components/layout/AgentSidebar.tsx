@@ -1,5 +1,5 @@
 import React from 'react'
-import { Home, Building, Users, Files, ReceiptText, ChevronUp, User, LogOut } from 'lucide-react'
+import { Building, Users, Files, ReceiptText, ChevronUp, User, LogOut } from 'lucide-react'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../ui/sidebar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
 import { Avatar, AvatarFallback } from '../ui/avatar'

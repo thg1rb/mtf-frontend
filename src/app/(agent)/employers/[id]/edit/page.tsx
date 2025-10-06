@@ -18,7 +18,7 @@ export default async function EmployerEditPage({ params }: { params: { id: strin
       {/* HeaderSection */}
       <HeaderSection
         topic="แก้ไขข้อมูลของนายจ้าง"
-        leftActionButton={
+        hasBackButton={
           <Button asChild variant="ghost" className='flex flex-row font-normal px-[17px] py-[5px] w-full md:w-auto border border-zinc-300 cursor-pointer'>
             <Link href={`/employers/${id}`}>
               <ChevronLeft className='size-[24px] mr-2' />

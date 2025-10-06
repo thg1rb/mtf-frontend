@@ -11,7 +11,6 @@ import { Receipt } from "@/types";
 import {
   getTaskById,
   getEmployerFullNameByEmployerId,
-  getCurrentStep,
   getTypeOfTaskLabelAndSteps,
   getPassportNoById,
   getEmployeeFullNameById,
@@ -39,7 +38,6 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
     const typeOfTaskLabel = task
       ? getTypeOfTaskLabelAndSteps(task.typeOfTask).label
       : "-";
-    const currentStep = task ? task.stepCompletedDates.filter(stepCompletedDate => stepCompletedDate !== null).length + 1 : "-";
 
     // Get employee names from task
     const employeeIds = task?.employeeIds;
