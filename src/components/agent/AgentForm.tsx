@@ -27,7 +27,7 @@ export default function AgentForm({ mode, defaultValues }: AgentFormProps) {
         email: defaultValues?.email ?? "",
         firstname: defaultValues?.firstname ?? "",
         lastname: defaultValues?.lastname ?? "",
-        status: defaultValues?.status ?? "active",
+        status: defaultValues?.status ?? "ACTIVE",
         addressDetails: defaultValues?.addressDetails ?? "",
         subDistrict: defaultValues?.subDistrict ?? "",
         district: defaultValues?.district ?? "",
@@ -121,8 +121,8 @@ export default function AgentForm({ mode, defaultValues }: AgentFormProps) {
                                         <SelectValue placeholder="สถานะ" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="active" className="cursor-pointer">ใช้งาน</SelectItem>
-                                        <SelectItem value="inactive" className="cursor-pointer">ไม่ใช้งาน</SelectItem>
+                                        <SelectItem value="ACTIVE" className="cursor-pointer">ใช้งาน</SelectItem>
+                                        <SelectItem value="INACTIVE" className="cursor-pointer">ไม่ใช้งาน</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 {errors.status && <span className="text-red-500 font-light">{errors.status.message}</span>}

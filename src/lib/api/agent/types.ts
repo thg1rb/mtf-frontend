@@ -53,6 +53,20 @@ export interface GetAgentStatsResponse {
   inactiveAgents: number;
 }
 
+export interface GetAgentResponse {
+  firstname: string;
+  lastname: string;
+  email: string;
+  status: "ACTIVE" | "INACTIVE";
+  address: {
+    addrDetailTh: string;
+    districtTh: string;
+    subDistrictTh: string;
+    provinceTh: string;
+    postelCode: string;
+  };
+}
+
 export interface GetAgentsResponse {
   content: {
     id: string;

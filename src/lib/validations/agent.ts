@@ -17,7 +17,7 @@ export const agentSchema = z.object({
     .string()
     .min(1, "กรุณาระบุนามสกุล"),
 
-  status: z.enum(["active", "inactive"], "กรุณาระบุสถานะ"),
+  status: z.enum(["ACTIVE", "INACTIVE"], "กรุณาระบุสถานะ"),
 
   addressDetails: z.string().min(1, "กรุณาระบุที่อยู่"),
 

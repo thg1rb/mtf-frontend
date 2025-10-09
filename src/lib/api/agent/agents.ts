@@ -11,6 +11,7 @@ import type {
   GetAgentsResponse,
   GetAgentStatsResponse,
   DeleteAgentResponse,
+  GetAgentResponse,
 } from "./types";
 
 // ============================================
@@ -58,8 +59,8 @@ const getAgents = async (
 };
 
 // GET: Single Agent by ID
-const getAgent = async (id: string): Promise<Agent> => {
-  return apiClient.get<Agent>(ENDPOINTS.agents.detail(id));
+const getAgent = async (id: string): Promise<GetAgentResponse> => {
+  return apiClient.get<GetAgentResponse>(ENDPOINTS.agents.detail(id));
 };
 
 // POST: Create Agent
