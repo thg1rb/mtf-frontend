@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import StatGrid from "@/components/shared/StatGrid";
 import HeaderSection from "@/components/shared/HeaderSection";
+import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import {
   Table,
   TableBody,
@@ -38,41 +39,41 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  mockAgents,
-  agentTableHeaders,
-} from "@/lib/mock-data";
+import { mockAgents, agentTableHeaders } from "@/lib/mock-data";
 import { Agent } from "@/types";
 import StatusBadge from "@/components/shared/StatusBadge";
 import { useQuery } from "@tanstack/react-query";
-import { getAgentStatsQueryOption } from "@/lib/api";
+import { getAgentStatsQueryOption, getAgentsQueryOption } from "@/lib/api";
 
 export default function AgentsPage() {
   const router = useRouter();
-  const [agents] = useState<Agent[]>(mockAgents); // TODO: search and filter agents
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchFullName, setSearchFullName] = useState<string>("");
   const [status, setStatus] = useState<string>("");
 
-  const { data } = useQuery(getAgentStatsQueryOption());
+  const { data: agentStats } = useQuery(getAgentStatsQueryOption());
+  const { data: agentsData, isLoading: isLoadingAgents } = useQuery(
+    getAgentsQueryOption()
+  );
+
   const statItems = [
     {
       id: "stat-1",
       title: "นายหน้าทั้งหมด (คน)",
-      amount: data?.totalAgents ?? 0,
+      amount: agentStats?.totalAgents ?? 0,
       amountTextColor: "text-black",
       icon: Building,
     },
     {
       id: "stat-2",
       title: "นายหน้าที่ใช้งานได้ (คน)",
-      amount: data?.activeAgents ?? 0,
+      amount: agentStats?.activeAgents ?? 0,
       amountTextColor: "text-green-500",
       icon: CircleCheck,
     },
     {
       id: "stat-3",
       title: "นายหน้าที่ไม่ใช้งาน (คน)",
-      amount:  data?.inactiveAgents ?? 0, // TODO: GET method `/api/agents/inactive`,
+      amount: agentStats?.inactiveAgents ?? 0, // TODO: GET method `/api/agents/inactive`,
       amountTextColor: "text-red-500",
       icon: CircleX,
     },
@@ -116,9 +117,9 @@ export default function AgentsPage() {
             <Input
               className="pl-10"
               placeholder="ค้นหานายจ้างที่ต้องการ..."
-              value={searchTerm}
+              value={searchFullName}
               onChange={(e) => {
-                setSearchTerm(e.target.value);
+                setSearchFullName(e.target.value);
               }}
             />
           </div>
@@ -137,76 +138,112 @@ export default function AgentsPage() {
           </Select>
           <Button className="font-light cursor-pointer">ค้นหา</Button>
         </div>
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {agentTableHeaders.map((tableHeader) => (
-                  <TableHead
-                    key={tableHeader.index}
-                    className={`font-normal px-[20px] ${tableHeader.index === "header-4" ? "text-right" : ""}`}
-                  >
-                    {tableHeader.headerName}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {agents.map((agent) => (
-                <TableRow
-                  key={agent.citizenId}
-                  className="cursor-pointer hover:bg-muted/50"
-                  onClick={() => router.push(`/agents/${agent.citizenId}`)}
-                >
-                  <TableCell className="font-light px-[20px]">
-                    {agent.email}
-                  </TableCell>
-                  <TableCell className="font-light px-[20px]">
-                    {agent.firstname + " " + agent.lastname}
-                  </TableCell>
-                  <TableCell className="px-[20px]">
-                    {<StatusBadge status={agent.status} />}
-                  </TableCell>
-                  <TableCell className="text-right px-[20px]">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild className="cursor-pointer">
-                        <Button
-                          variant="ghost"
-                          className="h-8 w-8 p-0"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          asChild
-                          className="cursor-pointer"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <Link href={`/agents/${agent.citizenId}/edit`}>
-                            <Edit className="mr-2 h-4 w-4" />
-                            แก้ไข
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="text-destructive cursor-pointer"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          ลบ
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+        {isLoadingAgents ? (
+          <TableSkeleton rows={5} columns={4} />
+        ) : !agentsData?.content?.length ? (
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  {agentTableHeaders.map((tableHeader) => (
+                    <TableHead
+                      key={tableHeader.index}
+                      className={`font-normal px-[20px] ${tableHeader.index === "header-4" ? "text-right" : ""}`}
+                    >
+                      {tableHeader.headerName}
+                    </TableHead>
+                  ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+              </TableHeader>
+              <TableBody>
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell colSpan={4} className="text-center py-10">
+                      {index === 2 && (
+                        <p className="text-muted-foreground">
+                          ไม่พบข้อมูลนายหน้า
+                        </p>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        ) : (
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  {agentTableHeaders.map((tableHeader) => (
+                    <TableHead
+                      key={tableHeader.index}
+                      className={`font-normal px-[20px] ${tableHeader.index === "header-3" ? "text-center" : tableHeader.index === "header-4" ? "text-right" : ""}`}
+                    >
+                      {tableHeader.headerName}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {agentsData.content.map((agent) => (
+                  <TableRow
+                    key={agent.id}
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => router.push(`/agents/${agent.id}`)}
+                  >
+                    <TableCell className="font-light px-[20px]">
+                      {agent.email}
+                    </TableCell>
+                    <TableCell className="font-light px-[20px]">
+                      {agent.fullName}
+                    </TableCell>
+                    <TableCell className="px-[20px] text-center">
+                      <StatusBadge status={agent.status} />
+                    </TableCell>
+                    <TableCell className="text-right px-[20px]">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild className="cursor-pointer">
+                          <Button
+                            variant="ghost"
+                            className="h-8 w-8 p-0"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            asChild
+                            className="cursor-pointer"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Link href={`/agents/${agent.id}/edit`}>
+                              <Edit className="mr-2 h-4 w-4" />
+                              แก้ไข
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="text-destructive cursor-pointer"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            ลบ
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
         <div className="flex flex-row justify-between items-center">
-          {/* TODO: insert the amount of agents and filtered agents */}
-          <p className="font-light text-zinc-500">... จากทั้งหมด ... คน</p>
+          <p className="font-light text-zinc-500">
+            {agentsData?.content?.length ?? 0} จากทั้งหมด{" "}
+            {agentsData?.totalElements ?? 0} คน
+          </p>
           <div className="flex flex-row gap-x-[10px]">
             <Button
               variant={"ghost"}

@@ -56,10 +56,16 @@ export interface GetAgentStatsResponse {
 }
 
 export interface GetAgentsResponse {
-  data: Agent[];
-  total: number;
-  page: number;
-  limit: number;
+  content: {
+    id: string;
+    fullName: string;
+    email: string;
+    status: "ACTIVE" | "INACTIVE";
+  }[];
+  totalElements: number;
+  totalPages: number;
+  currentPage: number;
+  pageSize: number;
 }
 
 export interface CreateAgentResponse extends Agent {
