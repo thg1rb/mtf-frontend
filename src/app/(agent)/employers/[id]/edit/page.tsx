@@ -1,4 +1,7 @@
+'use client'
+
 import EmployerForm from "@/components/employer/EmployerForm";
+import EmployerFormSkeleton from "@/components/employer/EmployerFormSkeleton";
 import HeaderSection from "@/components/shared/HeaderSection";
 import {
   AlertDialog,
@@ -9,19 +12,34 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { getEmployerById } from "@/lib/mock-data";
+import { getEmployerQueryOption } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import React from "react";
+import React, { use } from "react";
 
-export default async function EmployerEditPage({
+export default function EmployerEditPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id } = use(params);
 
-  // TODO: GET method `/api/employers/${id}` to fetch existing employer details
-  const data = getEmployerById(id);
+  const { data: employerData, isLoading } = useQuery(
+    getEmployerQueryOption(id)
+  );
+
+  if (!id || isLoading) {
+    return (
+      <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
+        <HeaderSection
+          topic="ข้อมูลของนายจ้าง"
+          hasBackButton={true}
+          rightActionButtons={[]}
+        />
+        <EmployerFormSkeleton />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
@@ -29,10 +47,10 @@ export default async function EmployerEditPage({
       <HeaderSection topic="แก้ไขข้อมูลของนายจ้าง" hasBackButton={true} />
 
       {/* FormSection */}
-      <EmployerForm mode="edit" defaultValues={data} />
+      <EmployerForm mode="edit" defaultValues={employerData} />
 
       {/* EmployerNotFoundSection */}
-      {!data && (
+      {!employerData && (
         <AlertDialog open={true}>
           <AlertDialogContent>
             <AlertDialogHeader>

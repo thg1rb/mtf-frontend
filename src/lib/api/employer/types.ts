@@ -10,52 +10,56 @@ import { Employer } from "@/types";
 // ============================================
 
 export interface CreateEmployerRequest {
-  taxId: string;
-  firstname: string;
-  lastname: string;
-  companyName: string;
-  businessType: string;
-  phoneNumber: string;
+  id: string;
+  firstName: string;
+  lastName: string;
   email: string;
+  phoneNumber: string;
+  businessType: string;
+  companyName: string;
+  status: "ACTIVE" | "INACTIVE";
   financialStatusYear: number;
   financialStatusIncome: number;
   financialStatusTax: number;
   currentIncome: number;
-  currentIncomeDuration: number;
-  addressDetailsTh: string;
-  addressDetailsEn: string;
-  districtTh: string;
-  districtEn: string;
-  subDistrictTh: string;
-  subDistrictEn: string;
-  provinceTh: string;
-  provinceEn: string;
-  postalCode: string;
-  // Note: status is set by backend, not in create request
+  incomeDuration: number;
+  address: {
+    addrDetailTh: string;
+    addrDetailEn: string;
+    districtTh: string;
+    districtEn: string;
+    subDistrictTh: string;
+    subDistrictEn: string;
+    provinceTh: string;
+    provinceEn: string;
+    postalCode: string;
+  };
 }
 
 export interface UpdateEmployerRequest {
-  firstname?: string;
-  lastname?: string;
+  firstName?: string;
+  lastName?: string;
   companyName?: string;
   businessType?: string;
   phoneNumber?: string;
   email?: string;
+  status?: "ACTIVE" | "INACTIVE";
   financialStatusYear?: number;
   financialStatusIncome?: number;
   financialStatusTax?: number;
   currentIncome?: number;
-  currentIncomeDuration?: number;
-  addressDetailsTh?: string;
-  addressDetailsEn?: string;
-  districtTh?: string;
-  districtEn?: string;
-  subDistrictTh?: string;
-  subDistrictEn?: string;
-  provinceTh?: string;
-  provinceEn?: string;
-  postalCode?: string;
-  status?: "ACTIVE" | "INACTIVE";
+  incomeDuration?: number;
+  address: {
+    addrDetailTh?: string;
+    addrDetailEn?: string;
+    districtTh?: string;
+    districtEn?: string;
+    subDistrictTh?: string;
+    subDistrictEn?: string;
+    provinceTh?: string;
+    provinceEn?: string;
+    postalCode?: string;
+  };
   // Note: All fields optional for partial updates
 }
 
@@ -92,7 +96,7 @@ export interface GetEmployerResponse {
   currentIncome: number;
   incomeDuration: number;
   address: {
-    id: string
+    id: string;
     addrDetailTh: string;
     addrDetailEn: string;
     districtTh: string;
@@ -120,14 +124,15 @@ export interface GetEmployersResponse {
   pageSize: number;
 }
 
-export interface CreateEmployerResponse extends Employer {
-  // Can extend if API returns additional fields on creation
+export interface CreateEmployerResponse {
+  message: string;
+  employerId: string;
 }
 
-export interface UpdateEmployerResponse extends Employer {
-  // Can extend if API returns additional fields on update
+export interface UpdateEmployerResponse {
+  message: string;
+  employerId: string;
 }
-
 export interface DeleteEmployerResponse {
   success: boolean;
   message: string;
