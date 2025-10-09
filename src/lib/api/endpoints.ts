@@ -1,0 +1,77 @@
+/**
+ * API Endpoints
+ * Centralized endpoint definitions for the entire application
+ */
+
+export const ENDPOINTS = {
+  // Agent endpoints
+  agents: {
+    base: '/agents',
+    statistics: '/agents/statistics',
+    detail: (id: string | number) => `/agents/${id}`,
+    create: '/agents',
+    update: (id: string | number) => `/agents/${id}`,
+    delete: (id: string | number) => `/agents/${id}`,
+  },
+
+  // Employer endpoints
+  employers: {
+    base: '/employers',
+    statistics: '/employers/statistics',
+    detail: (id: string | number) => `/employers/${id}`,
+    create: '/employers',
+    update: (id: string | number) => `/employers/${id}`,
+    delete: (id: string | number) => `/employers/${id}`,
+  },
+
+  // Employee endpoints
+  employees: {
+    base: '/employees',
+    statistics: '/employees/statistics',
+    detail: (id: string | number) => `/employees/${id}`,
+    create: '/employees',
+    update: (id: string | number) => `/employees/${id}`,
+    delete: (id: string | number) => `/employees/${id}`,
+    // Nested resources
+    contract: (id: string | number) => `/employees/${id}/contract`,
+    workPermit: (id: string | number) => `/employees/${id}/work-permit`,
+  },
+
+  // Employment Contract endpoints
+  employmentContracts: {
+    base: '/employment-contracts',
+    detail: (id: string | number) => `/employment-contracts/${id}`,
+    create: '/employment-contracts',
+    update: (id: string | number) => `/employment-contracts/${id}`,
+    delete: (id: string | number) => `/employment-contracts/${id}`,
+  },
+
+  // Work Permit endpoints
+  workPermits: {
+    base: '/work-permits',
+    detail: (id: string | number) => `/work-permits/${id}`,
+    create: '/work-permits',
+    update: (id: string | number) => `/work-permits/${id}`,
+    delete: (id: string | number) => `/work-permits/${id}`,
+  },
+
+  // Receipt endpoints
+  receipts: {
+    base: '/receipts',
+    detail: (id: string | number) => `/receipts/${id}`,
+    create: '/receipts',
+    update: (id: string | number) => `/receipts/${id}`,
+    delete: (id: string | number) => `/receipts/${id}`,
+  },
+
+  // Task endpoints
+  tasks: {
+    base: '/tasks',
+    detail: (id: string | number) => `/tasks/${id}`,
+    create: '/tasks',
+    update: (id: string | number) => `/tasks/${id}`,
+    delete: (id: string | number) => `/tasks/${id}`,
+    register: '/tasks/register',
+    renew: '/tasks/renew',
+  },
+} as const;

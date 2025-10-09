@@ -4,12 +4,13 @@ import "./globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { ConditionalSidebar } from "@/components/layout/ConditionalSidebar";
 import { cookies } from "next/headers";
+import QueryProvider from "@/providers/query-provider";
 
 const kanit = Kanit({
   variable: "--font-kanit",
   subsets: ["thai", "latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]
-})
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
   title: "MTF Manpower",
@@ -26,14 +27,12 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body
-        className={`${kanit.variable} antialiased`}
-      >
-        <SidebarProvider defaultOpen={defaultOpen}>
-          <ConditionalSidebar>
-            {children}
-          </ConditionalSidebar>
-        </SidebarProvider>
+      <body className={`${kanit.variable} antialiased`}>
+        <QueryProvider>
+          <SidebarProvider defaultOpen={defaultOpen}>
+            <ConditionalSidebar>{children}</ConditionalSidebar>
+          </SidebarProvider>
+        </QueryProvider>
       </body>
     </html>
   );
