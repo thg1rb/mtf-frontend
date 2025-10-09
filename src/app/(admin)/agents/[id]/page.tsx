@@ -31,6 +31,7 @@ export default function AgentPage({
     params.then((p) => setId(p.id));
   }, [params]);
 
+  // TODO: test this api again
   const { data, isLoading } = useQuery({
     ...getAgentQueryOption(id!),
     enabled: !!id, // Only fetch when id is available

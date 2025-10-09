@@ -50,7 +50,7 @@ export default function AgentsPage() {
 
   // Input states (what user types)
   const [searchInput, setSearchInput] = useState<string>("");
-  const [statusInput, setStatusInput] = useState<string>("");
+  const [statusInput, setStatusInput] = useState<string>(" ");
 
   // Filter states (applied on search button click)
   const [searchFullName, setSearchFullName] = useState<string>("");
@@ -63,7 +63,10 @@ export default function AgentsPage() {
       page,
       size: 5,
       fullName: searchFullName || undefined,
-      status: filterStatus as "ACTIVE" | "INACTIVE" | undefined,
+      status:
+        filterStatus && filterStatus.trim() !== ""
+          ? (filterStatus as "ACTIVE" | "INACTIVE")
+          : undefined,
     })
   );
 
@@ -263,8 +266,10 @@ export default function AgentsPage() {
         )}
         <div className="flex flex-row justify-between items-center">
           <p className="font-light text-zinc-500">
-            หน้า {(agentsData?.currentPage ?? 0) + 1} จาก {" "} {agentsData?.totalPages ?? 1} 
-            {" "} (นายหน้า {agentsData?.content?.length ?? 0}{" "} จากทั้งหมด {agentsData?.totalElements ?? 0} คน)
+            หน้า {(agentsData?.currentPage ?? 0) + 1} จาก{" "}
+            {agentsData?.totalPages ?? 1} (นายหน้า{" "}
+            {agentsData?.content?.length ?? 0} จากทั้งหมด{" "}
+            {agentsData?.totalElements ?? 0} คน)
           </p>
           <div className="flex flex-row gap-x-[10px]">
             <Button
