@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getEmployerStatsQueryOption } from "@/lib/api/employer/employers";
+import { getEmployerStatsQueryOption } from "@/lib/api/employer/employer";
 
 export default function Test() {
   const { data } = useQuery(getEmployerStatsQueryOption());

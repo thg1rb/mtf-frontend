@@ -3,8 +3,6 @@
  * These types are specifically for API communication
  */
 
-import { Employer } from "@/types";
-
 // ============================================
 // Request Types (Payloads sent to API)
 // ============================================
