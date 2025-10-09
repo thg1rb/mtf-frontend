@@ -17,31 +17,17 @@ import { getAgentQueryOption } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { SquarePen } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { use } from "react";
 
 export default function AgentPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const [id, setId] = React.useState<string | null>(null);
-
-  // Unwrap params in useEffect
-  React.useEffect(() => {
-    params.then((p) => setId(p.id));
-  }, [params]);
+  const { id } = use(params);
 
   // TODO: test this api again
-  const { data, isLoading } = useQuery({
-    ...getAgentQueryOption(id!),
-    enabled: !!id, // Only fetch when id is available
-  });
-
-  // Transform API response to form format (lowercase status)
-  const formData = React.useMemo(() => {
-    if (!data) return undefined;
-    return data;
-  }, [data]);
+  const { data: agentData, isLoading } = useQuery(getAgentQueryOption(id!));
 
   if (!id || isLoading) {
     return (
@@ -76,9 +62,9 @@ export default function AgentPage({
         ]}
       />
 
-      <AgentForm mode="view" defaultValues={formData} />
+      <AgentForm mode="view" defaultValues={agentData} />
 
-      {!data && (
+      {!agentData && (
         <AlertDialog open={true}>
           <AlertDialogContent>
             <AlertDialogHeader>

@@ -23,28 +23,30 @@ export default function EmployerForm({ mode, defaultValues }: EmployerFormProps)
     const [showValidationAlert, setShowValidationAlert] = useState(false);
 
     const cleanedDefaultValues: Partial<EmployerFormData> = useMemo(() => ({
-        taxId: defaultValues?.taxId ?? "",
+        id: defaultValues?.id ?? "",
         firstname: defaultValues?.firstname ?? "",
         lastname: defaultValues?.lastname ?? "",
         companyName: defaultValues?.companyName ?? "",
         businessType: defaultValues?.businessType ?? "",
         phoneNumber: defaultValues?.phoneNumber ?? "",
         email: defaultValues?.email ?? "",
-        status: defaultValues?.status ?? "active",
+        status: defaultValues?.status ?? "ACTIVE",
         financialStatusYear: defaultValues?.financialStatusYear ?? financialStatusYearOptions[0],
         financialStatusIncome: defaultValues?.financialStatusIncome,
         financialStatusTax: defaultValues?.financialStatusTax,
         currentIncome: defaultValues?.currentIncome,
-        currentIncomeDuration: defaultValues?.currentIncomeDuration,
-        addressDetailsTh: defaultValues?.addressDetailsTh ?? "",
-        districtTh: defaultValues?.districtTh ?? "",
-        subDistrictTh: defaultValues?.subDistrictTh ?? "",
-        provinceTh: defaultValues?.provinceTh ?? "",
-        addressDetailsEn: defaultValues?.addressDetailsEn ?? "",
-        districtEn: defaultValues?.districtEn ?? "",
-        subDistrictEn: defaultValues?.subDistrictEn ?? "",
-        provinceEn: defaultValues?.provinceEn ?? "",
-        postalCode: defaultValues?.postalCode ?? "",
+        incomeDuration: defaultValues?.incomeDuration,
+        address: {
+            addrDetailTh: defaultValues?.address?.addrDetailTh ?? "",
+            districtTh: defaultValues?.address?.districtTh ?? "",
+            subDistrictTh: defaultValues?.address?.subDistrictTh ?? "",
+            provinceTh: defaultValues?.address?.provinceTh ?? "",
+            addrDetailEn: defaultValues?.address?.addrDetailEn ?? "",
+            districtEn: defaultValues?.address?.districtEn ?? "",
+            subDistrictEn: defaultValues?.address?.subDistrictEn ?? "",
+            provinceEn: defaultValues?.address?.provinceEn ?? "",
+            postalCode: defaultValues?.address?.postalCode ?? "",
+        }
     }), [defaultValues]);
 
     const {
@@ -96,16 +98,16 @@ export default function EmployerForm({ mode, defaultValues }: EmployerFormProps)
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-x-[25px] md:gap-x-[50px] gap-y-[15px]'>
                     <div className='flex flex-col gap-y-[10px]'>
-                        <Label htmlFor='taxId' className='font-light text-zinc-700'>เลขประจำตัวผู้เสียภาษี (13 หลัก)</Label>
+                        <Label htmlFor='id' className='font-light text-zinc-700'>เลขประจำตัวผู้เสียภาษี (13 หลัก)</Label>
                         <Input
                             readOnly={isReadOnly}
                             maxLength={13}
                             inputMode='numeric'
-                            id='taxId'
-                            {...register('taxId')}
+                            id='id'
+                            {...register('id')}
                             className={`${isReadOnly ? 'text-zinc-500' : ''}`}
                         />
-                        {errors.taxId && <span className='text-red-500 font-light'>{errors.taxId.message}</span>}
+                        {errors.id && <span className='text-red-500 font-light'>{errors.id.message}</span>}
                     </div>
 
                     <Controller
@@ -116,15 +118,15 @@ export default function EmployerForm({ mode, defaultValues }: EmployerFormProps)
                                 <Label htmlFor='status' className='font-light text-zinc-700'>สถานะ</Label>
                                 <Select
                                     disabled={isReadOnly}
-                                    value={field.value ?? 'active'}
+                                    value={field.value ?? 'ACTIVE'}
                                     onValueChange={field.onChange}
                                 >
                                     <SelectTrigger className='w-full font-light cursor-pointer'>
                                         <SelectValue placeholder='สถานะ' />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value='active' className='cursor-pointer'>ใช้งาน</SelectItem>
-                                        <SelectItem value='inactive' className='cursor-pointer'>ไม่ใช้งาน</SelectItem>
+                                        <SelectItem value='ACTIVE' className='cursor-pointer'>ใช้งาน</SelectItem>
+                                        <SelectItem value='INACTIVE' className='cursor-pointer'>ไม่ใช้งาน</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 {errors.status && <span className='text-red-500 font-light'>{errors.status.message}</span>}
@@ -259,17 +261,17 @@ export default function EmployerForm({ mode, defaultValues }: EmployerFormProps)
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
-                        <Label htmlFor='currentIncomeDuration' className='font-light text-zinc-700'>ในช่วงระยะเวลา (เดือน)</Label>
+                        <Label htmlFor='incomeDuration' className='font-light text-zinc-700'>ในช่วงระยะเวลา (เดือน)</Label>
                         <Input
                             readOnly={isReadOnly}
                             type='number'
                             inputMode='numeric'
                             min={1}
-                            id='currentIncomeDuration'
-                            {...register('currentIncomeDuration', { valueAsNumber: true })}
+                            id='incomeDuration'
+                            {...register('incomeDuration', { valueAsNumber: true })}
                             className={`${isReadOnly ? 'text-zinc-500' : ''}`}
                         />
-                        {errors.currentIncomeDuration && <span className='text-red-500 font-light'>{errors.currentIncomeDuration.message}</span>}
+                        {errors.incomeDuration && <span className='text-red-500 font-light'>{errors.incomeDuration.message}</span>}
                     </div>
                 </div>
             </div>
@@ -282,51 +284,51 @@ export default function EmployerForm({ mode, defaultValues }: EmployerFormProps)
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-x-[25px] md:gap-x-[50px] gap-y-[15px]'>
                     <div className='flex flex-col gap-y-[10px]'>
-                        <Label htmlFor='addressDetailsTh' className='font-light text-zinc-700'>บ้านเลขที่, หมู่, ซอย, ถนน [ภาษาไทย]</Label>
-                        <Input readOnly={isReadOnly} id='addressDetailsTh' {...register('addressDetailsTh')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
-                        {errors.addressDetailsTh && <span className='text-red-500 font-light'>{errors.addressDetailsTh.message}</span>}
+                        <Label htmlFor='addrDetailTh' className='font-light text-zinc-700'>บ้านเลขที่, หมู่, ซอย, ถนน [ภาษาไทย]</Label>
+                        <Input readOnly={isReadOnly} id='addrDetailTh' {...register('address.addrDetailTh')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
+                        {errors.address?.addrDetailTh && <span className='text-red-500 font-light'>{errors.address?.addrDetailTh.message}</span>}
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
-                        <Label htmlFor='addressDetailsEn' className='font-light text-zinc-700'>บ้านเลขที่, หมู่, ซอย, ถนน [ภาษาอังกฤษ]</Label>
-                        <Input readOnly={isReadOnly} id='addressDetailsEn' {...register('addressDetailsEn')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
-                        {errors.addressDetailsEn && <span className='text-red-500 font-light'>{errors.addressDetailsEn.message}</span>}
+                        <Label htmlFor='addrDetailEn' className='font-light text-zinc-700'>บ้านเลขที่, หมู่, ซอย, ถนน [ภาษาอังกฤษ]</Label>
+                        <Input readOnly={isReadOnly} id='addrDetailEn' {...register('address.addrDetailEn')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
+                        {errors.address?.addrDetailEn && <span className='text-red-500 font-light'>{errors.address?.addrDetailEn.message}</span>}
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
                         <Label htmlFor='districtTh' className='font-light text-zinc-700'>เขต/อำเภอ [ภาษาไทย]</Label>
-                        <Input readOnly={isReadOnly} id='districtTh' {...register('districtTh')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
-                        {errors.districtTh && <span className='text-red-500 font-light'>{errors.districtTh.message}</span>}
+                        <Input readOnly={isReadOnly} id='districtTh' {...register('address.districtTh')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
+                        {errors.address?.districtTh && <span className='text-red-500 font-light'>{errors.address?.districtTh.message}</span>}
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
                         <Label htmlFor='districtEn' className='font-light text-zinc-700'>เขต/อำเภอ [ภาษาอังกฤษ]</Label>
-                        <Input readOnly={isReadOnly} id='districtEn' {...register('districtEn')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
-                        {errors.districtEn && <span className='text-red-500 font-light'>{errors.districtEn.message}</span>}
+                        <Input readOnly={isReadOnly} id='districtEn' {...register('address.districtEn')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
+                        {errors.address?.districtEn && <span className='text-red-500 font-light'>{errors.address?.districtEn.message}</span>}
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
                         <Label htmlFor='subDistrictTh' className='font-light text-zinc-700'>แขวง/ตำบล [ภาษาไทย]</Label>
-                        <Input readOnly={isReadOnly} id='subDistrictTh' {...register('subDistrictTh')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
-                        {errors.subDistrictTh && <span className='text-red-500 font-light'>{errors.subDistrictTh.message}</span>}
+                        <Input readOnly={isReadOnly} id='subDistrictTh' {...register('address.subDistrictTh')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
+                        {errors.address?.subDistrictTh && <span className='text-red-500 font-light'>{errors.address?.subDistrictTh.message}</span>}
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
                         <Label htmlFor='subDistrictEn' className='font-light text-zinc-700'>แขวง/ตำบล [ภาษาอังกฤษ]</Label>
-                        <Input readOnly={isReadOnly} id='subDistrictEn' {...register('subDistrictEn')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
-                        {errors.subDistrictEn && <span className='text-red-500 font-light'>{errors.subDistrictEn.message}</span>}
+                        <Input readOnly={isReadOnly} id='subDistrictEn' {...register('address.subDistrictEn')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
+                        {errors.address?.subDistrictEn && <span className='text-red-500 font-light'>{errors.address?.subDistrictEn.message}</span>}
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
                         <Label htmlFor='provinceTh' className='font-light text-zinc-700'>จังหวัด [ภาษาไทย]</Label>
-                        <Input readOnly={isReadOnly} id='provinceTh' {...register('provinceTh')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
-                        {errors.provinceTh && <span className='text-red-500 font-light'>{errors.provinceTh.message}</span>}
+                        <Input readOnly={isReadOnly} id='provinceTh' {...register('address.provinceTh')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
+                        {errors.address?.provinceTh && <span className='text-red-500 font-light'>{errors.address?.provinceTh.message}</span>}
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
                         <Label htmlFor='provinceEn' className='font-light text-zinc-700'>จังหวัด [ภาษาอังกฤษ]</Label>
-                        <Input readOnly={isReadOnly} id='provinceEn' {...register('provinceEn')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
-                        {errors.provinceEn && <span className='text-red-500 font-light'>{errors.provinceEn.message}</span>}
+                        <Input readOnly={isReadOnly} id='provinceEn' {...register('address.provinceEn')} className={`${isReadOnly ? 'text-zinc-500' : ''}`} />
+                        {errors.address?.provinceEn && <span className='text-red-500 font-light'>{errors.address?.provinceEn.message}</span>}
                     </div>
 
                     <div className='flex flex-col gap-y-[10px]'>
@@ -336,10 +338,10 @@ export default function EmployerForm({ mode, defaultValues }: EmployerFormProps)
                             maxLength={5}
                             inputMode='numeric'
                             id='postalCode'
-                            {...register('postalCode')}
+                            {...register('address.postalCode')}
                             className={`${isReadOnly ? 'text-zinc-500' : ''}`}
                         />
-                        {errors.postalCode && <span className='text-red-500 font-light'>{errors.postalCode.message}</span>}
+                        {errors.address?.postalCode && <span className='text-red-500 font-light'>{errors.address?.postalCode.message}</span>}
                     </div>
                 </div>
             </div>

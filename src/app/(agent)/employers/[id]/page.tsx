@@ -1,5 +1,8 @@
+"use client";
+
 import EmployeeTable from "@/components/employee/EmployeeTable";
 import EmployerForm from "@/components/employer/EmployerForm";
+import EmployerFormSkeleton from "@/components/employer/EmployerFormSkeleton";
 import HeaderSection from "@/components/shared/HeaderSection";
 import {
   AlertDialog,
@@ -11,21 +14,37 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { getEmployeesByEmployerId, getEmployerById } from "@/lib/mock-data";
+import { getEmployerQueryOption } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
 import { SquarePen } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { use } from "react";
 
-export default async function EmployerPage({
+export default function EmployerPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id } = use(params);
 
-  // TODO: GET method `/api/employers/${id}` to fetch existing employer details
-  const data = getEmployerById(id);
-  const employees = getEmployeesByEmployerId(id);
+  const { data: employerData, isLoading } = useQuery(
+    getEmployerQueryOption(id)
+  );
+  
+  // TODO: const { data: employeesData, isLoading } = useQuery()
+
+  if (!id || isLoading) {
+    return (
+      <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
+        <HeaderSection
+          topic="ข้อมูลของนายจ้าง"
+          hasBackButton={true}
+          rightActionButtons={[]}
+        />
+        <EmployerFormSkeleton />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
@@ -48,13 +67,13 @@ export default async function EmployerPage({
       />
 
       {/* FormSection */}
-      <EmployerForm mode="view" defaultValues={data} />
+      <EmployerForm mode="view" defaultValues={employerData} />
 
       {/* TODO: EmployeeTableSection */}
-      <EmployeeTable employees={employees} />
+      {/* <EmployeeTable employees={employees} /> */}
 
       {/* EmployerNotFoundSection */}
-      {!data && (
+      {!employerData && (
         <AlertDialog open={true}>
           <AlertDialogContent>
             <AlertDialogHeader>

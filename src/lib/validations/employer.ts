@@ -8,7 +8,7 @@ export const financialStatusYearOptions = Array.from(
 );
 
 export const employerSchema = z.object({
-  taxId: z
+  id: z
     .string()
     .min(1, "กรุณาระบุเลขประจำตัวผู้เสียภาษี")
     .length(13, "เลขประจำตัวผู้เสียภาษีต้องมี 13 หลัก")
@@ -50,33 +50,35 @@ export const employerSchema = z.object({
     .number("กรุณาระบุรายได้ปัจจุบัน")
     .min(0, "รายได้ปัจจุบันต้องมากกว่าหรือเท่ากับ 0"),
 
-  currentIncomeDuration: z.coerce
+  incomeDuration: z.coerce
     .number("กรุณาระบุช่วงระยะเวลาของรายได้ปัจจุบัน")
     .min(1, "ช่วงระยะเวลาของรายได้ปัจจุบันต้องมากกว่า 0"),
 
-  addressDetailsTh: z.string().min(1, "กรุณาระบุที่อยู่เป็นภาษาไทย"),
+  address: z.object({
+    addrDetailTh: z.string().min(1, "กรุณาระบุที่อยู่เป็นภาษาไทย"),
 
-  addressDetailsEn: z.string().min(1, "กรุณาระบุที่อยู่เป็นภาษาอังกฤษ"),
+    addrDetailEn: z.string().min(1, "กรุณาระบุที่อยู่เป็นภาษาอังกฤษ"),
 
-  districtTh: z.string().min(1, "กรุณาระบุเขตหรืออำเภอเป็นภาษาไทย"),
+    districtTh: z.string().min(1, "กรุณาระบุเขตหรืออำเภอเป็นภาษาไทย"),
 
-  districtEn: z.string().min(1, "กรุณาระบุเขตหรืออำเภอเป็นภาษาอังกฤษ"),
+    districtEn: z.string().min(1, "กรุณาระบุเขตหรืออำเภอเป็นภาษาอังกฤษ"),
 
-  subDistrictTh: z.string().min(1, "กรุณาระบุแขวงหรือตำบลเป็นภาษาไทย"),
+    subDistrictTh: z.string().min(1, "กรุณาระบุแขวงหรือตำบลเป็นภาษาไทย"),
 
-  subDistrictEn: z.string().min(1, "กรุณาระบุแขวงหรือตำบลเป็นภาษาอังกฤษ"),
+    subDistrictEn: z.string().min(1, "กรุณาระบุแขวงหรือตำบลเป็นภาษาอังกฤษ"),
 
-  provinceTh: z.string().min(1, "กรุณาระบุจังหวัดเป็นภาษาไทย"),
+    provinceTh: z.string().min(1, "กรุณาระบุจังหวัดเป็นภาษาไทย"),
 
-  provinceEn: z.string().min(1, "กรุณาระบุจังหวัดเป็นภาษาอังกฤษ"),
+    provinceEn: z.string().min(1, "กรุณาระบุจังหวัดเป็นภาษาอังกฤษ"),
 
-  postalCode: z
-    .string()
-    .min(1, "กรุณาระบุรหัสไปรษณีย์")
-    .length(5, "รหัสไปรษณีย์ต้องมี 5 หลัก")
-    .regex(/^[0-9]{5}$/, "รหัสไปรษณีย์ต้องเป็นตัวเลขเท่านั้น"),
+    postalCode: z
+      .string()
+      .min(1, "กรุณาระบุรหัสไปรษณีย์")
+      .length(5, "รหัสไปรษณีย์ต้องมี 5 หลัก")
+      .regex(/^[0-9]{5}$/, "รหัสไปรษณีย์ต้องเป็นตัวเลขเท่านั้น"),
+  }),
 
-  status: z.enum(["active", "inactive"]),
+  status: z.enum(["ACTIVE", "INACTIVE"]),
 });
 export type EmployerFormData = z.infer<typeof employerSchema>;
 

@@ -78,20 +78,21 @@ export interface GetEmployerStatsResponse {
 }
 
 export interface GetEmployerResponse {
-  taxId: string;
+  id: string;
   firstname: string;
   lastname: string;
-  companyName: string;
-  businessType: string;
-  phoneNumber: string;
   email: string;
+  phoneNumber: string;
+  businessType: string;
+  companyName: string;
+  status: "ACTIVE" | "INACTIVE";
   financialStatusYear: number;
   financialStatusIncome: number;
   financialStatusTax: number;
   currentIncome: number;
-  currentIncomeDuration: number;
-  status: "ACTIVE" | "INACTIVE";
+  incomeDuration: number;
   address: {
+    id: string
     addrDetailTh: string;
     addrDetailEn: string;
     districtTh: string;
