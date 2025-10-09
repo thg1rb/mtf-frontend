@@ -36,12 +36,10 @@ export interface UpdateAgentRequest {
 }
 
 export interface GetAgentsRequest {
-  search?: string;
-  status?: "active" | "inactive";
   page?: number;
-  limit?: number;
-  sortBy?: "firstname" | "lastname" | "email" | "status";
-  sortOrder?: "asc" | "desc";
+  size?: number;
+  fullName?: string;
+  status?: "ACTIVE" | "INACTIVE";
   [key: string]: string | number | undefined; // Index signature for query params
 }
 

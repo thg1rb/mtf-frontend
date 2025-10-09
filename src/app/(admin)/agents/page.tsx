@@ -47,13 +47,39 @@ import { getAgentStatsQueryOption, getAgentsQueryOption } from "@/lib/api";
 
 export default function AgentsPage() {
   const router = useRouter();
+  const [page, setPage] = useState<number>(0); // Start with 0
+
+  // Input states (what user types)
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [statusInput, setStatusInput] = useState<string>("");
+
+  // Filter states (applied on search button click)
   const [searchFullName, setSearchFullName] = useState<string>("");
-  const [status, setStatus] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState<string>("");
 
   const { data: agentStats } = useQuery(getAgentStatsQueryOption());
   const { data: agentsData, isLoading: isLoadingAgents } = useQuery(
-    getAgentsQueryOption()
+    getAgentsQueryOption({
+      page,
+      size: 5,
+      fullName: searchFullName || undefined,
+      status: filterStatus as "ACTIVE" | "INACTIVE" | undefined,
+    })
   );
+
+  // Handle search button click
+  const handleSearch = () => {
+    setSearchFullName(searchInput);
+    setFilterStatus(statusInput);
+    setPage(0); // Reset to first page on new search
+  };
+
+  // Handle Enter key in search input
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   const statItems = [
     {
@@ -116,27 +142,31 @@ export default function AgentsPage() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               className="pl-10"
-              placeholder="ค้นหานายจ้างที่ต้องการ..."
-              value={searchFullName}
-              onChange={(e) => {
-                setSearchFullName(e.target.value);
-              }}
+              placeholder="ค้นหานายหน้าที่ต้องการ..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={handleKeyPress}
             />
           </div>
-          <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger className="font-light cursor-pointer">
+          <Select value={statusInput} onValueChange={setStatusInput}>
+            <SelectTrigger className="font-light cursor-pointer w-[150px]">
               <SelectValue placeholder="สถานะ" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="active" className="cursor-pointer">
+              <SelectItem value=" " className="cursor-pointer">
+                ทั้งหมด
+              </SelectItem>
+              <SelectItem value="ACTIVE" className="cursor-pointer">
                 ใช้งาน
               </SelectItem>
-              <SelectItem value="inactive" className="cursor-pointer">
+              <SelectItem value="INACTIVE" className="cursor-pointer">
                 ไม่ใช้งาน
               </SelectItem>
             </SelectContent>
           </Select>
-          <Button className="font-light cursor-pointer">ค้นหา</Button>
+          <Button className="font-light cursor-pointer" onClick={handleSearch}>
+            ค้นหา
+          </Button>
         </div>
         {isLoadingAgents ? (
           <TableSkeleton rows={5} columns={4} />
@@ -156,17 +186,11 @@ export default function AgentsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <TableRow key={index}>
-                    <TableCell colSpan={4} className="text-center py-10">
-                      {index === 2 && (
-                        <p className="text-muted-foreground">
-                          ไม่พบข้อมูลนายหน้า
-                        </p>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center py-20">
+                    <p className="text-muted-foreground">ไม่พบข้อมูลนายหน้า</p>
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </div>
@@ -241,19 +265,25 @@ export default function AgentsPage() {
         )}
         <div className="flex flex-row justify-between items-center">
           <p className="font-light text-zinc-500">
-            {agentsData?.content?.length ?? 0} จากทั้งหมด{" "}
-            {agentsData?.totalElements ?? 0} คน
+            หน้า {(agentsData?.currentPage ?? 0) + 1} จาก {" "} {agentsData?.totalPages ?? 1} 
+            {" "} (นายหน้า {agentsData?.content?.length ?? 0}{" "} จากทั้งหมด {agentsData?.totalElements ?? 0} คน)
           </p>
           <div className="flex flex-row gap-x-[10px]">
             <Button
               variant={"ghost"}
               className="font-light border cursor-pointer"
+              onClick={() => setPage((prev) => Math.max(0, prev - 1))}
+              disabled={page === 0 || isLoadingAgents}
             >
               กลับ
             </Button>
             <Button
               variant={"ghost"}
               className="font-light border cursor-pointer"
+              onClick={() => setPage((prev) => prev + 1)}
+              disabled={
+                page >= (agentsData?.totalPages ?? 1) - 1 || isLoadingAgents
+              }
             >
               ถัดไป
             </Button>
