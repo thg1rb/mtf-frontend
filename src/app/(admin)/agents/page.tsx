@@ -39,8 +39,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { mockAgents, agentTableHeaders } from "@/lib/mock-data";
-import { Agent } from "@/types";
+import { agentTableHeaders } from "@/lib/mock-data";
 import StatusBadge from "@/components/shared/StatusBadge";
 import { useQuery } from "@tanstack/react-query";
 import { getAgentStatsQueryOption, getAgentsQueryOption } from "@/lib/api";
@@ -57,6 +56,7 @@ export default function AgentsPage() {
   const [searchFullName, setSearchFullName] = useState<string>("");
   const [filterStatus, setFilterStatus] = useState<string>("");
 
+  // Query data
   const { data: agentStats } = useQuery(getAgentStatsQueryOption());
   const { data: agentsData, isLoading: isLoadingAgents } = useQuery(
     getAgentsQueryOption({
@@ -130,8 +130,6 @@ export default function AgentsPage() {
       <StatGrid statItems={statItems} />
 
       {/* TableSection */}
-      {/* TODO: Pagination */}
-      {/* TODO: filter agents by search or status */}
       <div className="flex flex-col gap-y-[20px] p-[20px] border rounded-2xl shadow-lg">
         <div className="flex flex-col">
           <p className="font-normal">ค้นหานายหน้า</p>
