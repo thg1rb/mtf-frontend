@@ -1,6 +1,7 @@
 'use client'
 
 import EmployeeForm from "@/components/employee/EmployeeForm";
+import EmployeeFormSkeleton from "@/components/employee/EmployeeFormSkeleton";
 import HeaderSection from "@/components/shared/HeaderSection";
 import {
   AlertDialog,
@@ -13,7 +14,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { getEmployeeQueryOption } from "@/lib/api";
-import { getEmployeeById } from "@/lib/mock-data";
 import { useQuery } from "@tanstack/react-query";
 import { File, Files, SquarePen } from "lucide-react";
 import Link from "next/link";
@@ -47,12 +47,11 @@ export default function EmployeePage({
     return (
       <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
         <HeaderSection
-          topic="ข้อมูลของนายจ้าง"
+          topic="ข้อมูลของลูกจ้าง"
           hasBackButton={true}
           rightActionButtons={[]}
         />
-        {/* TODO: EmployeeSkeleton */}
-        {/* <EmployerFormSkeleton /> */}
+        <EmployeeFormSkeleton />
       </div>
     );
   }

@@ -1,6 +1,7 @@
 'use client'
 
 import EmployeeForm from "@/components/employee/EmployeeForm";
+import EmployeeFormSkeleton from "@/components/employee/EmployeeFormSkeleton";
 import HeaderSection from "@/components/shared/HeaderSection";
 import {
   AlertDialog,
@@ -46,12 +47,11 @@ export default function EmployeeEditPage({
     return (
       <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
         <HeaderSection
-          topic="ข้อมูลของนายจ้าง"
+          topic="แก้ไขข้อมูลของลูกจ้าง"
           hasBackButton={true}
           rightActionButtons={[]}
         />
-        {/* TODO: EmployeeSkeleton */}
-        {/* <EmployerFormSkeleton /> */}
+        <EmployeeFormSkeleton />
       </div>
     );
   }
