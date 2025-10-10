@@ -23,13 +23,9 @@ export interface CreateEmployerRequest {
   incomeDuration: number;
   address: {
     addrDetailTh: string;
-    addrDetailEn: string;
     districtTh: string;
-    districtEn: string;
     subDistrictTh: string;
-    subDistrictEn: string;
     provinceTh: string;
-    provinceEn: string;
     postalCode: string;
   };
 }
@@ -49,13 +45,9 @@ export interface UpdateEmployerRequest {
   incomeDuration?: number;
   address: {
     addrDetailTh?: string;
-    addrDetailEn?: string;
     districtTh?: string;
-    districtEn?: string;
     subDistrictTh?: string;
-    subDistrictEn?: string;
     provinceTh?: string;
-    provinceEn?: string;
     postalCode?: string;
   };
   // Note: All fields optional for partial updates

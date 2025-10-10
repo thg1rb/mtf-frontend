@@ -4,7 +4,6 @@ export const employeeSchema = z.object({
   passportNumber: z
     .string()
     .min(1, "กรุณาระบุหมายเลขหนังสือเดินทาง")
-    .nullable()
     .optional(),
 
   employerId: z

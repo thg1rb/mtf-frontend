@@ -15,6 +15,47 @@ export interface GetEmployeesRequest {
   [key: string]: string | number | undefined; // Index signature for query params
 }
 
+export interface CreateEmployeeRequest {
+  passportNo: string;
+  employerId: string;
+  firstName: string;
+  lastName: string;
+  status: "ACTIVE" | "INACTIVE";
+  nationality: "เมียนมา" | "กัมพูชา" | "ลาว";
+  bloodType: "A" | "B" | "AB" | "O";
+  address: {
+    addrDetailTh: string;
+    subDistrictTh: string;
+    districtTh: string;
+    provinceTh: string;
+    postalCode: string;
+  };
+  documents: {
+    type: string;
+    expiryDate: string;
+  }[];
+}
+
+export interface UpdateEmployeeRequest {
+  employerId: string;
+  firstName: string;
+  lastName: string;
+  status: "ACTIVE" | "INACTIVE";
+  nationality: "เมียนมา" | "กัมพูชา" | "ลาว";
+  bloodType: "A" | "B" | "AB" | "O";
+  address: {
+    addrDetailTh: string;
+    subDistrictTh: string;
+    districtTh: string;
+    provinceTh: string;
+    postalCode: string;
+  };
+  documents: {
+    type: string;
+    expiryDate: string;
+  }[];
+}
+
 // ============================================
 // Response Types (Data received from API)
 // ============================================
@@ -71,4 +112,14 @@ export interface GetEmployeeResponse {
     fullName: string;
     companyName: string;
   };
+}
+
+export interface CreateEmployeeResponse {
+  employeeId: string;
+  message: string;
+}
+
+export interface UpdateEmployeeResponse {
+  employeeId: string;
+  message: string;
 }

@@ -27,7 +27,9 @@ import {
   AlertDialogTitle,
 } from "../ui/alert-dialog";
 import { DatePicker } from "../shared/DatePicker";
-import { getEmployerById } from "@/lib/mock-data";
+import { useMutation } from "@tanstack/react-query";
+import { createEmployee, updateEmployee } from "@/lib/api";
+import { CreateEmployeeRequest, UpdateEmployeeRequest } from "@/lib/api/employee/types";
 
 interface EmployeeFormProps {
   mode: "create" | "view" | "edit";
@@ -80,6 +82,29 @@ export default function EmployeeForm({
     useState<boolean>(false);
   const [showInvalidEmployerId, setInvalidEmployerId] =
     useState<boolean>(false);
+
+  // Define mutations at component level (not inside handlers)
+  const createMutation = useMutation({
+    mutationFn: (data: CreateEmployeeRequest) => createEmployee(data),
+    onSuccess: () => {
+      router.push("/employees");
+    },
+    onError: (error) => {
+      console.error("Create failed:", error);
+    },
+  });
+
+  // TODO: updateMutation
+  const updateMutation = useMutation({
+    mutationFn: (data: { id: string; payload: UpdateEmployeeRequest }) =>
+      updateEmployee(data.id, data.payload),
+    onSuccess: () => {
+      router.push("/employees");
+    },
+    onError: (error) => {
+      console.error("Update failed:", error);
+    },
+  });
 
   const cleanedDefaultValues: EmployeeFormData = useMemo(() => {
     // Helper to find document expiry date by type from array
@@ -147,27 +172,110 @@ export default function EmployeeForm({
     reset(cleanedDefaultValues);
   }, [cleanedDefaultValues, reset]);
 
+  // Transform form data to API request format for CREATE
+  const transformToCreateRequest = (
+    data: EmployeeFormData
+  ): CreateEmployeeRequest => {
+    const documents: { type: string; expiryDate: string }[] = [];
+
+    // Document type mapping (form field name -> Thai document type)
+    const documentTypeMapping: Record<string, string> = {
+      healthCheckExpiryDate: "ใบรับรองแพทย์",
+      insuranceExpiryDate: "ประกันสุขภาพ",
+      workPermitExpiryDate: "ใบอนุญาตทำงาน",
+      certificateOfIdentityExpiryDate: "เอกสาร CI",
+      nonThaiIdentificationExpiryDate: "บัตรชมพู",
+    };
+
+    // Only add documents that have expiry dates
+    Object.entries(data.documents).forEach(([key, value]) => {
+      if (value) {
+        // value is ISO string, convert to YYYY-MM-DD format
+        const dateOnly = value.split("T")[0];
+        const thaiType = documentTypeMapping[key];
+        documents.push({
+          type: thaiType,
+          expiryDate: dateOnly,
+        });
+      }
+    });
+
+    return {
+      passportNo: data.passportNumber || "",
+      employerId: data.employerId,
+      firstName: data.firstname,
+      lastName: data.lastname,
+      status: data.status,
+      nationality: data.nationality,
+      bloodType: data.bloodType,
+      address: {
+        addrDetailTh: data.address.addrDetailTh,
+        subDistrictTh: data.address.subDistrictTh,
+        districtTh: data.address.districtTh,
+        provinceTh: data.address.provinceTh,
+        postalCode: data.address.postalCode,
+      },
+      documents: documents,
+    };
+  };
+
+  // Transform form data to API request format for UPDATE
+  const transformToUpdateRequest = (
+    data: EmployeeFormData
+  ): UpdateEmployeeRequest => {
+    const documents: { type: string; expiryDate: string }[] = [];
+
+    // Document type mapping (form field name -> Thai document type)
+    const documentTypeMapping: Record<string, string> = {
+      healthCheckExpiryDate: "ใบรับรองแพทย์",
+      insuranceExpiryDate: "ประกันสุขภาพ",
+      workPermitExpiryDate: "ใบอนุญาตทำงาน",
+      certificateOfIdentityExpiryDate: "เอกสาร CI",
+      nonThaiIdentificationExpiryDate: "บัตรชมพู",
+    };
+
+    // Only add documents that have expiry dates
+    Object.entries(data.documents).forEach(([key, value]) => {
+      if (value) {
+        // value is ISO string, convert to YYYY-MM-DD format
+        const dateOnly = value.split("T")[0];
+        const thaiType = documentTypeMapping[key];
+        documents.push({
+          type: thaiType,
+          expiryDate: dateOnly,
+        });
+      }
+    });
+
+    return {
+      employerId: data.employerId,
+      firstName: data.firstname,
+      lastName: data.lastname,
+      status: data.status,
+      nationality: data.nationality,
+      bloodType: data.bloodType,
+      address: {
+        addrDetailTh: data.address.addrDetailTh,
+        subDistrictTh: data.address.subDistrictTh,
+        districtTh: data.address.districtTh,
+        provinceTh: data.address.provinceTh,
+        postalCode: data.address.postalCode,
+      },
+      documents: documents,
+    };
+  };
+
   // Form submit successfully (There is no invalid input)
   const handleFormSubmit = (data: EmployeeFormData) => {
     setShowValidationAlert(false);
 
-    if (
-      !getEmployerById(data.employerId) ||
-      getEmployerById(data.employerId)?.status === "inactive"
-    ) {
-      setInvalidEmployerId(true);
-      return;
-    }
-
     if (mode === "create") {
-      // TODO: POST method `api/employees`
-    } else if (mode === "edit") {
-      // TODO: PUT method `api/employees/{id}`
+      const payload = transformToCreateRequest(data);
+      createMutation.mutate(payload);
+    } else if (mode === "edit" && defaultValues?.passportNumber) {
+      const payload = transformToUpdateRequest(data);
+      updateMutation.mutate({ id: defaultValues.passportNumber, payload });
     }
-
-    console.log("Form data:", data);
-
-    router.push("/employees");
   };
 
   // Form submit failed (There are invalid input )

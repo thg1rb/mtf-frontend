@@ -32,7 +32,7 @@ import {
 } from "../ui/alert-dialog";
 import { useMutation } from "@tanstack/react-query";
 import { createEmployer, updateEmployer } from "@/lib/api";
-import type { CreateEmployerRequest, UpdateEmployerRequest } from "@/lib/api/employer/types";
+import { CreateEmployerRequest, UpdateEmployerRequest } from "@/lib/api/employer/types";
 
 interface EmployerFormProps {
   mode: "create" | "view" | "edit";
@@ -139,13 +139,9 @@ export default function EmployerForm({
         incomeDuration: data.incomeDuration ?? 0,
         address: {
           addrDetailTh: data.address.addrDetailTh,
-          addrDetailEn: data.address.addrDetailEn,
           districtTh: data.address.districtTh,
-          districtEn: data.address.districtEn,
           subDistrictTh: data.address.subDistrictTh,
-          subDistrictEn: data.address.subDistrictEn,
           provinceTh: data.address.provinceTh,
-          provinceEn: data.address.provinceEn,
           postalCode: data.address.postalCode,
         },
       };
@@ -168,13 +164,9 @@ export default function EmployerForm({
         incomeDuration: data.incomeDuration,
         address: {
           addrDetailTh: data.address.addrDetailTh,
-          addrDetailEn: data.address.addrDetailEn,
           districtTh: data.address.districtTh,
-          districtEn: data.address.districtEn,
           subDistrictTh: data.address.subDistrictTh,
-          subDistrictEn: data.address.subDistrictEn,
           provinceTh: data.address.provinceTh,
-          provinceEn: data.address.provinceEn,
           postalCode: data.address.postalCode,
         },
       };
