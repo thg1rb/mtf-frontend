@@ -179,7 +179,7 @@ export default function AgentsPage() {
                   {agentTableHeaders.map((tableHeader) => (
                     <TableHead
                       key={tableHeader.index}
-                      className={`font-normal px-[20px] ${tableHeader.index === "header-4" ? "text-right" : ""}`}
+                      className={`font-normal ${tableHeader.className} px-[20px]`}
                     >
                       {tableHeader.headerName}
                     </TableHead>
@@ -203,7 +203,7 @@ export default function AgentsPage() {
                   {agentTableHeaders.map((tableHeader) => (
                     <TableHead
                       key={tableHeader.index}
-                      className={`font-normal px-[20px] ${tableHeader.index === "header-3" ? "text-center" : tableHeader.index === "header-4" ? "text-right" : ""}`}
+                      className={`font-normal ${tableHeader.className} px-[20px]`}
                     >
                       {tableHeader.headerName}
                     </TableHead>

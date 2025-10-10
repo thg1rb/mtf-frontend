@@ -191,7 +191,7 @@ export default function EmployersPage() {
                   {employerTableHeaders.map((tableHeader) => (
                     <TableHead
                       key={tableHeader.index}
-                      className={`font-normal px-[20px] ${tableHeader.index === "header-4" ? "text-center" : tableHeader.index === "header-5" ? "text-right" : ""}`}
+                      className={`font-normal ${tableHeader.className} px-[20px]`}
                     >
                       {tableHeader.headerName}
                     </TableHead>
@@ -215,7 +215,7 @@ export default function EmployersPage() {
                   {employerTableHeaders.map((tableHeader) => (
                     <TableHead
                       key={tableHeader.index}
-                      className={`font-normal px-[20px] ${tableHeader.index === "header-3" || tableHeader.index === "header-4" ? "text-center" : tableHeader.index === "header-5" ? "text-right" : ""}`}
+                      className={`font-normal ${tableHeader.className} px-[20px]`}
                     >
                       {tableHeader.headerName}
                     </TableHead>

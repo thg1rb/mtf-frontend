@@ -132,7 +132,7 @@ export default function EmployeeTable({ employees }: EmployeeTableProps) {
                 {employeeTableHeaders.map((tableHeader) => (
                   <TableHead
                     key={tableHeader.index}
-                    className={`font-normal px-[20px] ${tableHeader.index === "header-4" ? "text-center" : tableHeader.index === "header-5" ? "text-right" : ""}`}
+                    className={`font-normal ${tableHeader.className} px-[20px]`}
                   >
                     {tableHeader.headerName}
                   </TableHead>
@@ -156,7 +156,7 @@ export default function EmployeeTable({ employees }: EmployeeTableProps) {
                 {employeeTableHeaders.map((tableHeader) => (
                   <TableHead
                     key={tableHeader.index}
-                    className={`font-normal px-[20px] ${tableHeader.index === "header-9" ? "text-right" : ""}`}
+                    className={`font-normal px-[20px] ${tableHeader.className}`}
                   >
                     {tableHeader.headerName}
                   </TableHead>
@@ -178,35 +178,35 @@ export default function EmployeeTable({ employees }: EmployeeTableProps) {
                   <TableCell className="font-light px-[20px]">
                     {employee.currentEmployer.split("-")[1].trim()}
                   </TableCell>
-                  <TableCell className="font-light px-[20px]">
+                  <TableCell className="font-light text-center px-[20px]">
                     {
                       <DocumentExpiryBadge
                         status={employee.documentStatuses["ใบรับรองแพทย์"]}
                       />
                     }
                   </TableCell>
-                  <TableCell className="font-light px-[20px]">
-                    {
-                      <DocumentExpiryBadge
-                        status={employee.documentStatuses["ใบอนุญาตทำงาน"]}
-                      />
-                    }
-                  </TableCell>
-                  <TableCell className="font-light px-[20px]">
+                  <TableCell className="font-light text-center px-[20px]">
                     {
                       <DocumentExpiryBadge
                         status={employee.documentStatuses["ประกันสุขภาพ"]}
                       />
                     }
                   </TableCell>
-                  <TableCell className="font-light px-[20px]">
+                  <TableCell className="font-light text-center px-[20px]">
+                    {
+                      <DocumentExpiryBadge
+                        status={employee.documentStatuses["ใบอนุญาตทำงาน"]}
+                      />
+                    }
+                  </TableCell>
+                  <TableCell className="font-light text-center px-[20px]">
                     {
                       <DocumentExpiryBadge
                         status={employee.documentStatuses["เอกสาร CI"]}
                       />
                     }
                   </TableCell>
-                  <TableCell className="font-light px-[20px]">
+                  <TableCell className="font-light text-center px-[20px]">
                     {
                       <DocumentExpiryBadge
                         status={employee.documentStatuses["บัตรชมพู"]}

@@ -9,4 +9,5 @@ export * from "./receipt";
 export interface TableHeader {
   index: string;
   headerName: string;
+  className: string;
 }
