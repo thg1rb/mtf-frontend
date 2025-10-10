@@ -1,7 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import { apiClient } from "../client";
 import { ENDPOINTS } from "../endpoints";
-import { GetEmployeesRequest, GetEmployeesResponse, GetEmployeeStatsResponse } from "./types";
+import { GetEmployeeResponse, GetEmployeesRequest, GetEmployeesResponse, GetEmployeeStatsResponse } from "./types";
 
 // ============================================
 // Query Options (for React Query)
@@ -23,6 +23,14 @@ export const getEmployeesQueryOption = (params?: GetEmployeesRequest) => {
   });
 };
 
+// GET: Single Employee
+export const getEmployeeQueryOption = (passportNumber: string) => {
+  return queryOptions({
+    queryKey: ["employees", passportNumber],
+    queryFn: () => getEmployee(passportNumber),
+  });
+};
+
 // ============================================
 // API Functions
 // ============================================
@@ -39,4 +47,9 @@ const getEmployees = async (
   params?: GetEmployeesRequest
 ): Promise<GetEmployeesResponse> => {
   return apiClient.get<GetEmployeesResponse>(ENDPOINTS.employees.base, params);
+};
+
+// GET: Single Employee By ID
+const getEmployee = async (passportNumber: string): Promise<GetEmployeeResponse> => {
+  return apiClient.get<GetEmployeeResponse>(ENDPOINTS.employees.detail(passportNumber));
 };

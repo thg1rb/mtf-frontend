@@ -1,3 +1,5 @@
+'use client'
+
 import EmployeeForm from "@/components/employee/EmployeeForm";
 import HeaderSection from "@/components/shared/HeaderSection";
 import {
@@ -10,20 +12,50 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { getEmployeeQueryOption } from "@/lib/api";
 import { getEmployeeById } from "@/lib/mock-data";
+import { useQuery } from "@tanstack/react-query";
 import { File, Files, SquarePen } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { use } from "react";
 
-export default async function EmployeePage({
+export default function EmployeePage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id } = use(params);
 
-  // TODO: GET method `/api/employees/${id}` to fetch existing employer details
-  const data = getEmployeeById(id);
+  const { data: employeeData, isLoading } = useQuery(
+    getEmployeeQueryOption(id)
+  );
+
+  // Transform API response to form props
+  const employeeFormProps = employeeData ? {
+    passportNumber: employeeData.passportNumber,
+    employerId: employeeData.currentEmployer?.employerId || "",
+    firstname: employeeData.firstname,
+    lastname: employeeData.lastname,
+    nationality: employeeData.nationality,
+    bloodType: employeeData.bloodType,
+    status: employeeData.status,
+    address: employeeData.address,
+    documents: employeeData.documents as any, // Documents array will be transformed by EmployeeForm
+  } : undefined;
+
+  if (!id || isLoading) {
+    return (
+      <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
+        <HeaderSection
+          topic="ข้อมูลของนายจ้าง"
+          hasBackButton={true}
+          rightActionButtons={[]}
+        />
+        {/* TODO: EmployeeSkeleton */}
+        {/* <EmployerFormSkeleton /> */}
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
@@ -48,7 +80,7 @@ export default async function EmployeePage({
       <div className="flex flex-col lg:flex-row gap-x-[53px] gap-y-[51px]">
         {/* FormSection */}
         <div className="flex-2">
-          <EmployeeForm mode="view" defaultValues={data} />
+          <EmployeeForm mode="view" defaultValues={employeeFormProps} />
         </div>
 
         <div className="flex-1 flex flex-col gap-y-[25px] p-[27px] h-min border border-slate-300 rounded-2xl shadow-md">
@@ -93,7 +125,7 @@ export default async function EmployeePage({
         </div>
 
         {/* EmployerNotFoundSection */}
-        {!data && (
+        {!employeeData && (
           <AlertDialog open={true}>
             <AlertDialogContent>
               <AlertDialogHeader>

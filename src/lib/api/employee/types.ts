@@ -45,3 +45,30 @@ export interface GetEmployeesResponse {
   currentPage: number;
   pageSize: number;
 }
+
+export interface GetEmployeeResponse {
+  passportNumber: string;
+  firstname: string;
+  lastname: string;
+  nationality: "เมียนมา" | "ลาว" | "กัมพูชา";
+  bloodType: "A" | "B" | "AB" | "O";
+  status: "ACTIVE" | "INACTIVE";
+  address: {
+    id: string;
+    addrDetailTh: string;
+    subDistrictTh: string;
+    districtTh: string;
+    provinceTh: string;
+    postalCode: string;
+  };
+  documents: {
+    id: string;
+    type: string;
+    expiryDate: string;
+  }[];
+  currentEmployer: {
+    employerId: string;
+    fullName: string;
+    companyName: string;
+  };
+}

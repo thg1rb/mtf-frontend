@@ -28,7 +28,7 @@ export const ENDPOINTS = {
   employees: {
     base: '/employees',
     statistics: '/employees/statistics',
-    detail: (id: string | number) => `/employees/${id}`,
+    detail: (passportNumber: string | number) => `/employees/${passportNumber}`,
     create: '/employees',
     update: (id: string | number) => `/employees/${id}`,
     delete: (id: string | number) => `/employees/${id}`,

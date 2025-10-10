@@ -23,7 +23,7 @@ interface DatePickerProps {
 export function DatePicker({
   value,
   onChange,
-  placeholder = "เลือกวันที่",
+  placeholder = "ยังไม่ได้เลือกวันที่",
   disabled = false,
   clearable = true,
 }: DatePickerProps) {
