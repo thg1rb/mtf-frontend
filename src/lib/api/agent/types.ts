@@ -3,8 +3,6 @@
  * These types are specifically for API communication
  */
 
-import { Agent } from "@/types";
-
 // ============================================
 // Request Types (Payloads sent to API)
 // ============================================
@@ -78,14 +76,6 @@ export interface GetAgentsResponse {
   totalPages: number;
   currentPage: number;
   pageSize: number;
-}
-
-export interface CreateAgentResponse extends Agent {
-  // Can extend if API returns additional fields on creation
-}
-
-export interface UpdateAgentResponse extends Agent {
-  // Can extend if API returns additional fields on update
 }
 
 export interface DeleteAgentResponse {

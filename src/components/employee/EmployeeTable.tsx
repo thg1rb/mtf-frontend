@@ -29,7 +29,6 @@ import Link from "next/link";
 import {
   employeeTableHeaders,
 } from "@/lib/mock-data";
-import { Employee } from "@/types";
 import { useRouter } from "next/navigation";
 import StatusBadge from "../shared/StatusBadge";
 import DocumentExpiryBadge from "./DocumentExpiryBadge";
@@ -37,11 +36,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getEmployeesQueryOption } from "@/lib/api";
 import { TableSkeleton } from "../shared/TableSkeleton";
 
-interface EmployeeTableProps {
-  employees: Employee[];
-}
-
-export default function EmployeeTable({ employees }: EmployeeTableProps) {
+export default function EmployeeTable() {
   const router = useRouter();
   const [page, setPage] = useState<number>(0); // Start with 0
 

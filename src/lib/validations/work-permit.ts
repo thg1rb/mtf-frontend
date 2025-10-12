@@ -1,8 +1,6 @@
-import { HighestEducation } from "@/types";
 import { z } from "zod";
 
 export const workPermitSchema = z.object({
-
   typeOfWork: z.string().min(1, "กรุณาระบุประเภทงาน"),
 
   natureOfWork: z.string().min(1, "กรุณาระบุลักษณะงาน"),
@@ -21,7 +19,7 @@ export const workPermitSchema = z.object({
     .min(0, "จำนวนวันต้องไม่น้อยกว่า 0")
     .max(31, "จำนวนวันต้องไม่เกิน 31"),
 
-  employmentValidUntil: z.coerce.date("กรุณาระบุวันที่สิ้นสุดสัญญาจ้าง"),
+  employmentValidUntil: z.string().min(1, "กรุณาระบุวันที่สิ้นสุดสัญญาจ้าง"),
 
   incomePerDay: z.coerce
     .number("กรุณาระบุค่าจ้างต่อวัน")
@@ -31,7 +29,10 @@ export const workPermitSchema = z.object({
     .number("กรุณาระบุค่าผลประโยชน์ต่อวัน")
     .min(0, "สวัสดิการต่อวันต้องไม่น้อยกว่า 0"),
 
-  highestEducation: z.enum(HighestEducation, "กรุณาระบุระดับการศึกษาสูงสุด"),
+  highestEducation: z.enum(
+    ["ประถมศึกษา", "มัธยมศึกษา", "ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก"],
+    "กรุณาระบุระดับการศึกษาสูงสุด"
+  ),
 
   workExperiences: z.coerce
     .number("กรุณาระบุประสบการณ์ทำงาน")

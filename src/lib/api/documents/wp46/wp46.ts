@@ -1,7 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import { apiClient } from "../../client";
 import { ENDPOINTS } from "../../endpoints";
-import { CreateWorkPermit46Request, CreateWorkPermit46Response, GetWorkPermit46HistoryRequest, GetWorkPermit46HistoryResponse } from "./types";
+import { CreateWorkPermit46Request, CreateWorkPermit46Response, GetWorkPermit46HistoryRequest, GetWorkPermit46HistoryResponse, GetWorkPermit46Response } from "./types";
 
 // ============================================
 // Query Options (for React Query)
@@ -15,6 +15,15 @@ export const getWorkPermit46HistoryQueryOption = (params?: GetWorkPermit46Histor
   });
 };
 
+// GET: Single Work Permit 46
+export const getWorkPermit46QueryOption = (id: string) => {
+  return queryOptions({
+    queryKey: ["wp46", id],
+    queryFn: () => getWorkPermit46(id),
+    enabled: !!id,
+  });
+};
+
 // ============================================
 // API Functions
 // ============================================
@@ -24,6 +33,11 @@ const getWorkPermit46History = async (
   params?: GetWorkPermit46HistoryRequest
 ): Promise<GetWorkPermit46HistoryResponse> => {
   return apiClient.get<GetWorkPermit46HistoryResponse>(ENDPOINTS.workPermits46.history, params);
+};
+
+// GET: Single Work Permit 46 By Work Permit Id
+const getWorkPermit46 = async (id: string): Promise<GetWorkPermit46Response> => {
+  return apiClient.get<GetWorkPermit46Response>(ENDPOINTS.workPermits46.detail(id));
 };
 
 // POST: Create Work Permit 46

@@ -40,6 +40,9 @@ import {
 import { Textarea } from "../ui/textarea";
 import { DatePicker } from "../shared/DatePicker";
 import { GetWorkPermit46HistoryResponse } from "@/lib/api/documents/wp46/types";
+import { getWorkPermit46QueryOption } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 const toDateOrNull = (value: string | Date | null | undefined): Date | null => {
   if (!value) return null;
@@ -59,6 +62,13 @@ export default function WorkPermitForm({
 }) {
   const router = useRouter();
   const [showValidationAlert, setShowValidationAlert] = useState(false);
+  const [selectedPermitId, setSelectedPermitId] = useState<string | null>(null);
+
+  // Fetch work permit details when a permit is selected
+  const { data: workPermitData } = useQuery({
+    ...getWorkPermit46QueryOption(selectedPermitId || ""),
+    enabled: !!selectedPermitId,
+  });
 
   const {
     register,
@@ -71,23 +81,28 @@ export default function WorkPermitForm({
     mode: "onChange",
   });
 
-  // Handler to populate form with selected work permit data
-  const handleLoadWorkPermit = (permit: WorkPermit) => {
-    setValue("typeOfWork", permit.typeOfWork);
-    setValue("natureOfWork", permit.natureOfWork);
-    setValue("periodOfEmploymentYear", permit.periodOfEmploymentYear);
-    setValue("periodOfEmploymentMonth", permit.periodOfEmploymentMonth);
-    setValue("periodOfEmploymentDay", permit.periodOfEmploymentDay);
-    setValue("employmentValidUntil", permit.employmentValidUntil);
-    setValue("incomePerDay", permit.incomePerDay);
-    setValue("benefitPerDay", permit.benefitPerDay);
-    setValue("highestEducation", permit.highestEducation);
-    setValue("workExperiences", permit.workExperiences);
-    setValue(
-      "reasonOfNotEmployingThaiPerson",
-      permit.reasonOfNotEmployingThaiPerson
-    );
-  };
+  // Populate form when workPermitData is loaded
+  useEffect(() => {
+    if (workPermitData) {
+      setValue("typeOfWork", workPermitData.typeOfWork);
+      setValue("natureOfWork", workPermitData.natureOfWork);
+      setValue("periodOfEmploymentYear", workPermitData.periodOfEmploymentYear);
+      setValue(
+        "periodOfEmploymentMonth",
+        workPermitData.periodOfEmploymentMonth
+      );
+      setValue("periodOfEmploymentDay", workPermitData.periodOfEmploymentDay);
+      setValue("employmentValidUntil", workPermitData.employmentValidUntil);
+      setValue("incomePerDay", workPermitData.incomePerDay);
+      setValue("benefitPerDay", workPermitData.benefitPerDay);
+      setValue("highestEducation", workPermitData.highestEducation);
+      setValue("workExperiences", workPermitData.workExperience);
+      setValue(
+        "reasonOfNotEmployingThaiPerson",
+        workPermitData.reasonForNotEmployingThaiPerson
+      );
+    }
+  }, [workPermitData, setValue]);
 
   // Form submit successfully (There is no invalid input)
   const handleFormSubmit = (data: WorkPermitFormData) => {
@@ -289,11 +304,11 @@ export default function WorkPermitForm({
                       <SelectValue placeholder="เลือกระดับการศึกษา" />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.values(HighestEducation).map((educationLevel) => (
-                        <SelectItem key={educationLevel} value={educationLevel}>
-                          {highestEducationMappingRecord[educationLevel]}
-                        </SelectItem>
-                      ))}
+                      <SelectItem value="ประถมศึกษา">ประถมศึกษา</SelectItem>
+                      <SelectItem value="มัธยมศึกษา">มัธยมศึกษา</SelectItem>
+                      <SelectItem value="ปริญญาตรี">ปริญญาตรี</SelectItem>
+                      <SelectItem value="ปริญญาโท">ปริญญาโท</SelectItem>
+                      <SelectItem value="ปริญญาเอก">ปริญญาเอก</SelectItem>
                     </SelectContent>
                   </Select>
                   {errors.highestEducation && (
@@ -372,11 +387,7 @@ export default function WorkPermitForm({
                 type="button"
                 variant="outline"
                 className="flex flex-row justify-start font-light cursor-pointer"
-                onClick={() => {
-                  // TODO: fetch exact work permit
-                  // TODO: set Work Permit Value
-                  // handleLoadWorkPermit(history)
-                }}
+                onClick={() => setSelectedPermitId(history.id)}
               >
                 <History />
                 {new Date(history.createdAt).toLocaleDateString("th-TH", {
@@ -389,6 +400,7 @@ export default function WorkPermitForm({
             <Button
               type="submit"
               className="flex flex-row justify-start cursor-pointer"
+              //   TODO: On click to create new work permit 46
             >
               <Save />
               <p className="font-light">บันทึกข้อมูลล่าสุด</p>

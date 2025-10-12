@@ -51,7 +51,7 @@ export interface GetWorkPermit46Response {
   employmentValidUntil: string;
   incomePerDay: number;
   benefitPerDay: number;
-  highestEducation: string;
+  highestEducation: "ประถมศึกษา" | "มัธยมศึกษา" | "ปริญญาตรี" | "ปริญญาโท" | "ปริญญาเอก";
   workExperience: number;
   reasonForNotEmployingThaiPerson: string;
   createdAt: string;

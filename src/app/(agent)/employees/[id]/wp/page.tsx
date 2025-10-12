@@ -48,7 +48,7 @@ export default function WorkPermitPage({
       {/* HeaderSection */}
       <HeaderSection topic="เอกสาร บต.46" hasBackButton={true} />
 
-      {/* FormSection */}
+      {/* WorkPermitFormSection */}
       <WorkPermitForm id={id} workPermitHistory={workPermitHistory ?? []} />
 
       {/* EmployerNotFoundSection */}
