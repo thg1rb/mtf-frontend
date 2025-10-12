@@ -7,3 +7,5 @@ export { ENDPOINTS } from "./endpoints";
 export * from "./agent/agent";
 export * from "./employer/employer";
 export * from "./employee/employee";
+export * from "./documents/wp46/wp46";
+// export * from "./documents/employment-contract";

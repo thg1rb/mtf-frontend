@@ -28,7 +28,10 @@ import {
 } from "../ui/alert-dialog";
 import { DatePicker } from "../shared/DatePicker";
 import { useMutation } from "@tanstack/react-query";
-import { createEmployee, updateEmployee } from "@/lib/api";
+import {
+  createEmployeeMutationOptions,
+  updateEmployeeMutationOptions,
+} from "@/lib/api";
 import { CreateEmployeeRequest, UpdateEmployeeRequest } from "@/lib/api/employee/types";
 
 interface EmployeeFormProps {
@@ -85,7 +88,7 @@ export default function EmployeeForm({
 
   // Define mutations at component level (not inside handlers)
   const createMutation = useMutation({
-    mutationFn: (data: CreateEmployeeRequest) => createEmployee(data),
+    ...createEmployeeMutationOptions,
     onSuccess: () => {
       router.push("/employees");
     },
@@ -95,8 +98,7 @@ export default function EmployeeForm({
   });
 
   const updateMutation = useMutation({
-    mutationFn: (data: { id: string; payload: UpdateEmployeeRequest }) =>
-      updateEmployee(data.id, data.payload),
+    ...updateEmployeeMutationOptions,
     onSuccess: () => {
       router.push("/employees");
     },
@@ -316,6 +318,7 @@ export default function EmployeeForm({
             )}
           </div>
 
+          {/* TODO: Selection Controller */}
           <div className="flex flex-col gap-y-[10px]">
             <Label htmlFor="employerId" className="font-light text-zinc-700">
               เลขประจำตัวผู้เสียภาษีนายจ้าง (13 หลัก)

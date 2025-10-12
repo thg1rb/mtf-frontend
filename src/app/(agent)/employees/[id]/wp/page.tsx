@@ -1,23 +1,55 @@
-import WorkPermitForm from '@/components/document/WorkPermitForm'
-import HeaderSection from '@/components/shared/HeaderSection'
-import { findWorkPermitsByEmployeeId } from '@/lib/mock-data'
-import React from 'react'
+'use client'
 
-export default async function WorkPermitPage({ params }: { params: { id: string } }) {
-  const { id } = await params;
+import WorkPermitForm from "@/components/document/WorkPermitForm";
+import HeaderSection from "@/components/shared/HeaderSection";
+import { getEmployeeQueryOption, getWorkPermit46HistoryQueryOption } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
+import React, { use } from "react";
 
-  // TODO: GET method `/api/employers/${id}` to fetch existing employer details
-  const data = findWorkPermitsByEmployeeId(id);
+export default function WorkPermitPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+
+  const {data: employeeData, isLoading: isLoadingEmployee} = useQuery(
+    getEmployeeQueryOption(id)
+  );
+
+  const { data: workPermitHistory, isLoading: isLoadingWorkPermits } = useQuery({
+    ...getWorkPermit46HistoryQueryOption({
+      passportNo: id,
+      employerId: employeeData?.currentEmployer?.employerId ?? "",
+      limit: 5
+    }),
+    enabled: !!employeeData?.currentEmployer?.employerId, // Only fetch when employerId is available
+  });
+
+  // // TODO: GET method `/api/employers/${id}` to fetch existing employer details
+  // const data = findWorkPermitsByEmployeeId(id);
+
+    if (!id || isLoadingEmployee || isLoadingWorkPermits) {
+    return (
+      <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
+        <HeaderSection
+          topic="แก้ไขข้อมูลของลูกจ้าง"
+          hasBackButton={true}
+          rightActionButtons={[]}
+        />
+        {/* TODO: WorkPermitFormSkeleton */}
+        {/* <EmployeeFormSkeleton /> */}
+      </div>
+    );
+  }
 
   return (
-    <div className='flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]'>
+    <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
       {/* HeaderSection */}
-      <HeaderSection
-        topic="เอกสาร บต.46"
-        hasBackButton={true} />
+      <HeaderSection topic="เอกสาร บต.46" hasBackButton={true} />
 
       {/* FormSection */}
-      <WorkPermitForm id={id} workPermits={data}/>
+      <WorkPermitForm id={id} workPermitHistory={workPermitHistory ?? []} />
 
       {/* EmployerNotFoundSection */}
       {/* {!data && <AlertDialog open={true}>
@@ -36,5 +68,5 @@ export default async function WorkPermitPage({ params }: { params: { id: string 
         </AlertDialogContent>
       </AlertDialog>} */}
     </div>
-  )
+  );
 }

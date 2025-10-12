@@ -6,30 +6,30 @@
 export const ENDPOINTS = {
   // Agent endpoints
   agents: {
-    base: '/agents',
-    statistics: '/agents/statistics',
+    base: "/agents",
+    statistics: "/agents/statistics",
     detail: (id: string | number) => `/agents/${id}`,
-    create: '/agents',
+    create: "/agents",
     update: (id: string | number) => `/agents/${id}`,
     delete: (id: string | number) => `/agents/${id}`,
   },
 
   // Employer endpoints
   employers: {
-    base: '/employers',
-    statistics: '/employers/statistics',
+    base: "/employers",
+    statistics: "/employers/statistics",
     detail: (id: string | number) => `/employers/${id}`,
-    create: '/employers',
+    create: "/employers",
     update: (id: string | number) => `/employers/${id}`,
     delete: (id: string | number) => `/employers/${id}`,
   },
 
   // Employee endpoints
   employees: {
-    base: '/employees',
-    statistics: '/employees/statistics',
+    base: "/employees",
+    statistics: "/employees/statistics",
     detail: (passportNumber: string | number) => `/employees/${passportNumber}`,
-    create: '/employees',
+    create: "/employees",
     update: (id: string | number) => `/employees/${id}`,
     delete: (id: string | number) => `/employees/${id}`,
     // Nested resources
@@ -39,39 +39,38 @@ export const ENDPOINTS = {
 
   // Employment Contract endpoints
   employmentContracts: {
-    base: '/employment-contracts',
+    base: "/employment-contracts",
     detail: (id: string | number) => `/employment-contracts/${id}`,
-    create: '/employment-contracts',
+    create: "/employment-contracts",
     update: (id: string | number) => `/employment-contracts/${id}`,
     delete: (id: string | number) => `/employment-contracts/${id}`,
   },
 
   // Work Permit endpoints
-  workPermits: {
-    base: '/work-permits',
-    detail: (id: string | number) => `/work-permits/${id}`,
-    create: '/work-permits',
-    update: (id: string | number) => `/work-permits/${id}`,
-    delete: (id: string | number) => `/work-permits/${id}`,
+  workPermits46: {
+    base: "/wp46",
+    history: "/wp46/history",
+    detail: (id: string | number) => `/wp46/${id}`,
+    create: "/documents/wp46",
   },
 
   // Receipt endpoints
   receipts: {
-    base: '/receipts',
+    base: "/receipts",
     detail: (id: string | number) => `/receipts/${id}`,
-    create: '/receipts',
+    create: "/receipts",
     update: (id: string | number) => `/receipts/${id}`,
     delete: (id: string | number) => `/receipts/${id}`,
   },
 
   // Task endpoints
   tasks: {
-    base: '/tasks',
+    base: "/tasks",
     detail: (id: string | number) => `/tasks/${id}`,
-    create: '/tasks',
+    create: "/tasks",
     update: (id: string | number) => `/tasks/${id}`,
     delete: (id: string | number) => `/tasks/${id}`,
-    register: '/tasks/register',
-    renew: '/tasks/renew',
+    register: "/tasks/register",
+    renew: "/tasks/renew",
   },
 } as const;

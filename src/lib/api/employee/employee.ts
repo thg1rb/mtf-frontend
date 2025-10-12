@@ -31,7 +31,20 @@ export const getEmployeeQueryOption = (passportNumber: string) => {
   });
 };
 
-// 
+// ============================================
+// Mutation Options (for React Query)
+// ============================================
+
+// Create Employee Mutation
+export const createEmployeeMutationOptions = {
+  mutationFn: (data: CreateEmployeeRequest) => createEmployee(data),
+};
+
+// Update Employee Mutation
+export const updateEmployeeMutationOptions = {
+  mutationFn: (data: { id: string; payload: UpdateEmployeeRequest }) =>
+    updateEmployee(data.id, data.payload),
+};
 
 // ============================================
 // API Functions
