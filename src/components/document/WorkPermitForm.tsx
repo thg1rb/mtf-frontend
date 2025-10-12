@@ -40,9 +40,13 @@ import {
 import { Textarea } from "../ui/textarea";
 import { DatePicker } from "../shared/DatePicker";
 import { GetWorkPermit46HistoryResponse } from "@/lib/api/documents/wp46/types";
-import { getWorkPermit46QueryOption } from "@/lib/api";
-import { useQuery } from "@tanstack/react-query";
+import {
+  createWorkPermit46MutationOptions,
+  getWorkPermit46QueryOption,
+} from "@/lib/api";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { CreateWorkPermit46Request } from "@/lib/api/documents/wp46/types";
 
 const toDateOrNull = (value: string | Date | null | undefined): Date | null => {
   if (!value) return null;
@@ -68,6 +72,17 @@ export default function WorkPermitForm({
   const { data: workPermitData } = useQuery({
     ...getWorkPermit46QueryOption(selectedPermitId || ""),
     enabled: !!selectedPermitId,
+  });
+
+  // Define mutations at component level (not inside handlers)
+  const createMutation = useMutation({
+    ...createWorkPermit46MutationOptions,
+    onSuccess: () => {
+      router.push("/employees");
+    },
+    onError: (error) => {
+      console.error("Create failed:", error);
+    },
   });
 
   const {
@@ -104,15 +119,36 @@ export default function WorkPermitForm({
     }
   }, [workPermitData, setValue]);
 
+  // Transform form data to API request format
+  const transformToCreateRequest = (
+    data: WorkPermitFormData
+  ): CreateWorkPermit46Request => {
+    // Convert employmentValidUntil to YYYY-MM-DD format
+    const dateOnly = data.employmentValidUntil.split("T")[0];
+
+    return {
+      passportNo: id, // Employee's passport number
+      employerId: workPermitData?.employerSnapshot?.id || "", // Get from loaded work permit data
+      typeOfWork: data.typeOfWork,
+      natureOfWork: data.natureOfWork,
+      periodOfEmploymentYear: data.periodOfEmploymentYear,
+      periodOfEmploymentMonth: data.periodOfEmploymentMonth,
+      periodOfEmploymentDay: data.periodOfEmploymentDay,
+      employmentValidUntil: dateOnly,
+      incomePerDay: data.incomePerDay,
+      benefitPerDay: data.benefitPerDay,
+      highestEducation: data.highestEducation,
+      workExperience: data.workExperiences,
+      reasonForNotEmployingThaiPerson: data.reasonOfNotEmployingThaiPerson,
+    };
+  };
+
   // Form submit successfully (There is no invalid input)
   const handleFormSubmit = (data: WorkPermitFormData) => {
     setShowValidationAlert(false);
 
-    // POST method `/api/wp`
-
-    console.log("Form data:", data);
-
-    router.push(`/employees/${id}`);
+    const payload = transformToCreateRequest(data);
+    createMutation.mutate(payload);
   };
 
   // Form submit failed (There are invalid input )
@@ -400,7 +436,6 @@ export default function WorkPermitForm({
             <Button
               type="submit"
               className="flex flex-row justify-start cursor-pointer"
-              //   TODO: On click to create new work permit 46
             >
               <Save />
               <p className="font-light">บันทึกข้อมูลล่าสุด</p>

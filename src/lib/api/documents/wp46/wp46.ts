@@ -25,6 +25,15 @@ export const getWorkPermit46QueryOption = (id: string) => {
 };
 
 // ============================================
+// Mutation Options (for React Query)
+// ============================================
+
+// POST: Create Employee Mutation
+export const createWorkPermit46MutationOptions = {
+  mutationFn: (data: CreateWorkPermit46Request) => createWorkPermit46(data),
+};
+
+// ============================================
 // API Functions
 // ============================================
 

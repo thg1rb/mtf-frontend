@@ -51,7 +51,7 @@ export const ENDPOINTS = {
     base: "/wp46",
     history: "/wp46/history",
     detail: (id: string | number) => `/wp46/${id}`,
-    create: "/documents/wp46",
+    create: "/wp46",
   },
 
   // Receipt endpoints

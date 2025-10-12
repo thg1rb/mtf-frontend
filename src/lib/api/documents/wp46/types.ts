@@ -17,19 +17,17 @@ export interface GetWorkPermit46HistoryRequest {
 export interface CreateWorkPermit46Request {
   passportNo: string;
   employerId: string;
-  documentInput: {
-    typeOfWork: string;
-    natureOfWork: string;
-    empYear: number;
-    empMonth: number;
-    empDay: number;
-    empValidUntil: string;
-    incomePerDay: number;
-    benefitPerDay: number;
-    highestEdu: string;
-    workExp: number;
-    reasonNotEmpTh: string;
-  };
+  typeOfWork: string;
+  natureOfWork: string;
+  periodOfEmploymentYear: number;
+  periodOfEmploymentMonth: number;
+  periodOfEmploymentDay: number;
+  employmentValidUntil: string;
+  incomePerDay: number;
+  benefitPerDay: number;
+  highestEducation: string;
+  workExperience: number;
+  reasonForNotEmployingThaiPerson: string;
 }
 
 // ============================================
