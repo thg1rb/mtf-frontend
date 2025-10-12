@@ -32,11 +32,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../ui/alert-dialog";
-import {
-  HighestEducation,
-  highestEducationMappingRecord,
-  WorkPermit,
-} from "@/types";
 import { Textarea } from "../ui/textarea";
 import { DatePicker } from "../shared/DatePicker";
 import { GetWorkPermit46HistoryResponse } from "@/lib/api/documents/wp46/types";
@@ -57,11 +52,20 @@ const toDateOrNull = (value: string | Date | null | undefined): Date | null => {
   return isNaN(parsed.getTime()) ? null : parsed;
 };
 
+const formatDateToYYYYMMDD = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export default function WorkPermitForm({
-  id,
+  employeeId,
+  employerId,
   workPermitHistory,
 }: {
-  id: string;
+  employeeId: string;
+  employerId: string;
   workPermitHistory: GetWorkPermit46HistoryResponse;
 }) {
   const router = useRouter();
@@ -123,18 +127,15 @@ export default function WorkPermitForm({
   const transformToCreateRequest = (
     data: WorkPermitFormData
   ): CreateWorkPermit46Request => {
-    // Convert employmentValidUntil to YYYY-MM-DD format
-    const dateOnly = data.employmentValidUntil.split("T")[0];
-
     return {
-      passportNo: id, // Employee's passport number
-      employerId: workPermitData?.employerSnapshot?.id || "", // Get from loaded work permit data
+      passportNo: employeeId, // Employee's passport number
+      employerId: employerId, // Get from loaded work permit data
       typeOfWork: data.typeOfWork,
       natureOfWork: data.natureOfWork,
       periodOfEmploymentYear: data.periodOfEmploymentYear,
       periodOfEmploymentMonth: data.periodOfEmploymentMonth,
       periodOfEmploymentDay: data.periodOfEmploymentDay,
-      employmentValidUntil: dateOnly,
+      employmentValidUntil: data.employmentValidUntil, // Already in YYYY-MM-DD format
       incomePerDay: data.incomePerDay,
       benefitPerDay: data.benefitPerDay,
       highestEducation: data.highestEducation,
@@ -148,6 +149,7 @@ export default function WorkPermitForm({
     setShowValidationAlert(false);
 
     const payload = transformToCreateRequest(data);
+    console.log(payload)
     createMutation.mutate(payload);
   };
 
@@ -273,7 +275,14 @@ export default function WorkPermitForm({
                   </Label>
                   <DatePicker
                     value={toDateOrNull(field.value)}
-                    onChange={(date) => field.onChange(date)}
+                    onChange={(date) => {
+                      if (date) {
+                        field.onChange(formatDateToYYYYMMDD(date));
+                      } else {
+                        field.onChange("");
+                      }
+                    }}
+                    clearable={false}
                   />
                   {errors.employmentValidUntil && (
                     <span className="text-red-500 font-light">

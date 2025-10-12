@@ -19,7 +19,7 @@ export const workPermitSchema = z.object({
     .min(0, "จำนวนวันต้องไม่น้อยกว่า 0")
     .max(31, "จำนวนวันต้องไม่เกิน 31"),
 
-  employmentValidUntil: z.string().min(1, "กรุณาระบุวันที่สิ้นสุดสัญญาจ้าง"),
+  employmentValidUntil: z.string("กรุณาระบุเหตุผลในการไม่จ้างแรงงานไทย"),
 
   incomePerDay: z.coerce
     .number("กรุณาระบุค่าจ้างต่อวัน")

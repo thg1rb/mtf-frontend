@@ -1,25 +1,47 @@
+'use client'
+
 import EmploymentContactForm from "@/components/document/EmploymentContactForm";
 import HeaderSection from "@/components/shared/HeaderSection";
+import { getEmployeeQueryOption, getEmploymentContractHistoryQueryOption } from "@/lib/api";
 import { findEmploymentContractsByEmployeeId } from "@/lib/mock-data";
-import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import React, { use } from "react";
 
-export default async function WorkPermitPage({
+export default function WorkPermitPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id } = use(params);
 
-  // TODO: GET method `/api/employers/${id}` to fetch existing employer details
-  const data = findEmploymentContractsByEmployeeId(id);
+  const { data: employeeData, isLoading: isLoadingEmployee } = useQuery(
+    getEmployeeQueryOption(id)
+  );
 
-  return (
+  const { data: employmentContractHistory, isLoading: isLoadingContracts } = useQuery({
+    ...getEmploymentContractHistoryQueryOption({
+      passportNo: id,
+      employerId: employeeData?.currentEmployer?.employerId ?? "",
+      limit: 5
+    }),
+    enabled: !!employeeData?.currentEmployer?.employerId, // Only fetch when employerId is available
+  });
+
+  if (isLoadingEmployee || isLoadingContracts) {
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  }
+
+  if (!employmentContractHistory) {
+    return <div className="flex justify-center items-center h-screen">No contract history found</div>;
+  }
+
+  return(
     <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
       {/* HeaderSection */}
-      <HeaderSection topic="เอกสาร สัญญาจ้าง 3 ภาษา" hasBackButton={true} />
+      <HeaderSection topic="เอกสาร บต.46" hasBackButton={true} />
 
-      {/* FormSection */}
-      <EmploymentContactForm id={id} employmentContracts={data} />
+      {/* WorkPermitFormSection */}
+      <EmploymentContactForm employeeId={id} employerId={employeeData?.currentEmployer.employerId ?? ""} employmentContractHistory={employmentContractHistory ?? []} />
 
       {/* EmployerNotFoundSection */}
       {/* {!data && <AlertDialog open={true}>

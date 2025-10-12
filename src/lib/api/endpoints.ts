@@ -40,10 +40,9 @@ export const ENDPOINTS = {
   // Employment Contract endpoints
   employmentContracts: {
     base: "/employment-contracts",
+    history: "/employment-contracts/history",
     detail: (id: string | number) => `/employment-contracts/${id}`,
     create: "/employment-contracts",
-    update: (id: string | number) => `/employment-contracts/${id}`,
-    delete: (id: string | number) => `/employment-contracts/${id}`,
   },
 
   // Work Permit endpoints

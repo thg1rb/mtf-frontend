@@ -49,7 +49,7 @@ export default function WorkPermitPage({
       <HeaderSection topic="เอกสาร บต.46" hasBackButton={true} />
 
       {/* WorkPermitFormSection */}
-      <WorkPermitForm id={id} workPermitHistory={workPermitHistory ?? []} />
+      <WorkPermitForm employeeId={id} employerId={employeeData?.currentEmployer.employerId ?? ""}  workPermitHistory={workPermitHistory ?? []} />
 
       {/* EmployerNotFoundSection */}
       {/* {!data && <AlertDialog open={true}>
