@@ -117,7 +117,6 @@ export default function TaskFormNew({
       description: defaultValues?.description ?? "",
       employeeIds: defaultValues?.employeeIds ?? [],
       currentStepIndex: defaultValues?.currentStepIndex ?? 1,
-      currentStep: defaultValues?.currentStep ?? "รวบรวมเอกสารเพิ่มเติม",
     },
     mode: "onChange",
   });
@@ -187,14 +186,14 @@ export default function TaskFormNew({
     if (mode === "create") {
       // Transform form data to match API request format
       const payload: CreateWorkRequest = {
-        agentId: "1111111111111", // TODO: Get from auth context
+        agentId: "1234567890126", // TODO: Get from auth context
         employerId: data.employerId, // Use the selected employer ID from form
         workType:
           typeOfTask === "register"
             ? "ขึ้นทะเบียนใหม่"
             : "ต่ออายุใบอนุญาตทำงาน",
         currentStepIndex: 1, // Get the current step number
-        currentStep: "รวบรวมเอกสารเพิ่มเติม",
+        // currentStep: "รวบรวมเอกสารเพิ่มเติม",
         detail: data.description,
         employeeIds: data.employeeIds,
       };

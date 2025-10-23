@@ -109,6 +109,22 @@ export default function TasksPage() {
     },
   ];
 
+  const mappingCurrentStepIndex: Record<string, Record<string, number>> = {
+    register: {
+      รวบรวมเอกสารเพิ่มเติม: 1,
+      ตรวจสอบโรคและซื้อประกันสุขภาพ: 2,
+      "ทำบัตรประจำตัวคนซึ่งไม่มีสัญชาติไทย (เล่มชมพู)": 3,
+      "ทำเอกสารรับรองบุคคลเข้าออกระหว่างประเทศ (เล่ม CI)": 4,
+    },
+    renew: {
+      รวบรวมเอกสารเพิ่มเติม: 1,
+      ตรวจสอบโรคและซื้อประกันสุขภาพ: 2,
+      "ยื่น Calling Visa กับกรมแรงงาน": 3,
+      ซื้อใบอนุญาตการทำงานกับกรมแรงงาน: 4,
+      ตีซ่าตรวจคนเข้าเมือง: 5,
+    },
+  };
+
   return (
     <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
       {/* HeaderSection */}
@@ -168,15 +184,20 @@ export default function TasksPage() {
               <SelectValue placeholder="สถานะ" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="active" className="cursor-pointer">
-                ใช้งาน
+              <SelectItem value=" " className="cursor-pointer">
+                ทั้งหมด
               </SelectItem>
-              <SelectItem value="inactive" className="cursor-pointer">
-                ไม่ใช้งาน
+              <SelectItem value="FINISHED" className="cursor-pointer">
+                เสร็จสิ้น
+              </SelectItem>
+              <SelectItem value="NOT_FINISHED" className="cursor-pointer">
+                กำลังดำเนินการ
               </SelectItem>
             </SelectContent>
           </Select>
-          <Button className="font-light cursor-pointer">ค้นหา</Button>
+          <Button className="font-light cursor-pointer" onClick={handleSearch}>
+            ค้นหา
+          </Button>
         </div>
 
         {isLoadingWorks ? (
@@ -240,13 +261,18 @@ export default function TasksPage() {
                       </Badge>
                     </TableCell>
                     <TableCell className="font-light px-[20px]">
-                      employerName
+                      {work.employerName}
                     </TableCell>
                     <TableCell className="font-light px-[20px]">
                       <div className="flex flex-col">
                         <div className="flex flex-row items-center gap-x-[8px]">
                           {/* TODO: The current Step Number */}
-                          {"ขั้นตอนที่ "}
+                          {"ขั้นตอนที่ " +
+                            mappingCurrentStepIndex[
+                              work.workType === "ขึ้นทะเบียนใหม่"
+                                ? "register"
+                                : "renew"
+                            ][work.currentStep]}
                         </div>
                       </div>
                     </TableCell>
