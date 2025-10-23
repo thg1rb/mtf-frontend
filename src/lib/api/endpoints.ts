@@ -62,14 +62,15 @@ export const ENDPOINTS = {
     delete: (id: string | number) => `/receipts/${id}`,
   },
 
-  // Task endpoints
-  tasks: {
-    base: "/tasks",
-    detail: (id: string | number) => `/tasks/${id}`,
-    create: "/tasks",
-    update: (id: string | number) => `/tasks/${id}`,
-    delete: (id: string | number) => `/tasks/${id}`,
-    register: "/tasks/register",
-    renew: "/tasks/renew",
+  // Work endpoints
+  works: {
+    base: "/works",
+    statistics: "/works/statistics",
+    detail: (id: string | number) => `/works/${id}`,
+    create: "/works",
+    update: (id: string | number) => `/works/${id}`,
+    delete: (id: string | number) => `/works/${id}`,
+    register: "/works/register",
+    renew: "/works/renew",
   },
 } as const;

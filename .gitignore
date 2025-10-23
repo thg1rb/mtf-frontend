@@ -114,4 +114,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Claude Code
+CLAUDE.md
+PROMPT.md
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,macos,windows,nextjs

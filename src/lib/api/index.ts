@@ -9,3 +9,4 @@ export * from "./employer/employer";
 export * from "./employee/employee";
 export * from "./documents/wp46/wp46";
 export * from "./documents/employment-contract/employment-contract";
+export * from "./work/work";
