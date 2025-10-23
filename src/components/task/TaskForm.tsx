@@ -36,12 +36,9 @@ import { Textarea } from "../ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Employee, Employer, Task } from "@/types";
 import {
-  getActiveEmployers,
   getEmployeesByEmployerId,
   getEmployerById,
   getEmployerFullNameByEmployerId,
-  getReceiptsByTaskId,
-  getTypeOfTaskLabelAndSteps,
   isPaidByTaskIdAndStep,
 } from "@/lib/mock-data";
 import {
@@ -68,6 +65,12 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { isTaskCompleted } from "@/lib/utils/task";
+import {
+  createWorkMutationOptions,
+  getEmployerSelectsQueryOption,
+} from "@/lib/api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { CreateWorkRequest } from "@/lib/api/work/types";
 
 interface TaskFormProps {
   typeOfTask: "register" | "renew";
@@ -85,12 +88,10 @@ export default function TaskFormNew({
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [showValidationAlert, setShowValidationAlert] = useState(false);
-  const [activeEmployers] = useState<Employer[]>(getActiveEmployers());
   const [employeesOfEmployer, setEmployeesOfEmployer] = useState<Employee[]>(
-    []
+    [],
   );
   const [selectedEmployeeIds, setSelectedEmployeeIds] = useState<string[]>([]);
-  const { steps } = getTypeOfTaskLabelAndSteps(task?.typeOfTask ?? typeOfTask);
 
   const {
     register,
@@ -104,16 +105,34 @@ export default function TaskFormNew({
       employerId: defaultValues?.employerId ?? "",
       description: defaultValues?.description ?? "",
       employeeIds: defaultValues?.employeeIds ?? [],
-      stepCompletedDates: defaultValues?.stepCompletedDates ?? [null, null, null, null, null],
+      currentStepIndex: defaultValues?.currentStepIndex ?? 1,
+      currentStep: defaultValues?.currentStep ?? "รวบรวมเอกสารเพิ่มเติม",
     },
     mode: "onChange",
+  });
+
+  // TODO: Get Employer (ID, FULLNAME)
+  const { data: employerSelects, isLoading: isLoadingEmployerSelects } =
+    useQuery(getEmployerSelectsQueryOption());
+
+  // TODO: Get Employee By EmployerId
+
+  // Define mutations at component level (not inside handlers)
+  const createMutation = useMutation({
+    ...createWorkMutationOptions,
+    onSuccess: () => {
+      router.push("/tasks");
+    },
+    onError: (error) => {
+      console.error("Create failed:", error);
+    },
   });
 
   // Load employees when component mounts (for view/edit mode)
   useEffect(() => {
     if (defaultValues?.employerId) {
       setEmployeesOfEmployer(
-        getEmployeesByEmployerId(defaultValues.employerId)
+        getEmployeesByEmployerId(defaultValues.employerId),
       );
     }
     if (defaultValues?.employeeIds) {
@@ -130,14 +149,25 @@ export default function TaskFormNew({
   const handleFormSubmit = (data: TaskFormData) => {
     setShowValidationAlert(false);
     if (mode === "create") {
-      // TODO: POST method `api/employers`
+      // Transform form data to match API request format
+      const payload: CreateWorkRequest = {
+        agentId: "1111111111111", // TODO: Get from auth context
+        employerId: "1102003456781", // TODO: Get the employerId
+        workType:
+          typeOfTask === "register"
+            ? "ขึ้นทะเบียนใหม่"
+            : "ต่ออายุใบอนุญาตทำงาน",
+        currentStepIndex: 1, // Get the current step number
+        currentStep: "รวบรวมเอกสารเพิ่มเติม",
+        detail: data.description,
+        employeeIds: data.employeeIds,
+      };
+
+      createMutation.mutate(payload);
     } else if (mode === "edit") {
       // TODO: PUT method `api/employers/{id}`
+      router.push("/tasks");
     }
-
-    console.log("Form data:", data);
-
-    router.push("/tasks");
   };
 
   // Form submit failed (There are invalid input )
@@ -146,6 +176,36 @@ export default function TaskFormNew({
   };
 
   const isReadOnly = mode === "view";
+
+  const totalSteps = typeOfTask === "register" ? 4 : 5;
+
+  const MappingSequenceOfStepLabels = {
+    register: [
+      "รวบรวมเอกสารเพิ่มเติม",
+      "ตรวจสอบโรคและซื้อประกันสุขภาพ",
+      "ทำบัตรประจำตัวคนซึ่งไม่มีสัญชาติไทย (เล่มชมพู)",
+      "ทำเอกสารรับรองบุคคลเข้าออกระหว่างประเทศ (เล่ม CI)",
+    ],
+    renew: [
+      "รวบรวมเอกสารเพิ่มเติม",
+      "ตรวจสอบโรคและซื้อประกันสุขภาพ",
+      "ยื่น Calling Visa กับกรมแรงงาน",
+      "ซื้อใบอนุญาตการทำงานกับกรมแรงงาน",
+      "ตีซ่าตรวจคนเข้าเมือง",
+    ],
+  };
+  const stepsMapping = () => {
+    return Array.from({ length: totalSteps }, (_, i) => {
+      return {
+        number: i + 1,
+        label: MappingSequenceOfStepLabels[typeOfTask][i],
+      };
+    });
+  };
+
+  if (isLoadingEmployerSelects) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <form
@@ -183,14 +243,12 @@ export default function TaskFormNew({
                       >
                         {field.value
                           ? (() => {
-                              const selectedEmployer = getEmployerById(
-                                field.value
+                              const selectedEmployer = employerSelects?.find(
+                                (employer) => employer.id === field.value,
                               );
 
                               return selectedEmployer
-                                ? getEmployerFullNameByEmployerId(
-                                    selectedEmployer.taxId
-                                  )
+                                ? selectedEmployer.fullName
                                 : "เลือกนายจ้าง";
                             })()
                           : "เลือกนายจ้าง"}
@@ -206,30 +264,26 @@ export default function TaskFormNew({
                         <CommandList>
                           <CommandEmpty>ไม่พบนายจ้าง</CommandEmpty>
                           <CommandGroup>
-                            {activeEmployers.map((activeEmployer) => (
+                            {employerSelects?.map((employer) => (
                               <CommandItem
-                                key={activeEmployer.taxId}
-                                value={activeEmployer.taxId}
+                                key={employer.id}
+                                value={employer.id}
                                 onSelect={() => {
-                                  field.onChange(activeEmployer.taxId);
+                                  field.onChange(employer.id);
 
                                   // Clear selected employees when employer changes
                                   setSelectedEmployeeIds([]);
 
                                   // Load new employer's employees
                                   setEmployeesOfEmployer(
-                                    getEmployeesByEmployerId(
-                                      activeEmployer.taxId
-                                    )
+                                    getEmployeesByEmployerId(employer.id),
                                   );
                                 }}
                               >
-                                {getEmployerFullNameByEmployerId(
-                                  activeEmployer.taxId
-                                )}
+                                {employer.fullName}
                                 <Check
                                   className={`ml-auto ${
-                                    activeEmployer.taxId === field.value
+                                    employer.id === field.value
                                       ? "opacity-100"
                                       : "opacity-0"
                                   }`}
@@ -338,7 +392,7 @@ export default function TaskFormNew({
                             <Checkbox
                               disabled={isReadOnly}
                               checked={selectedEmployeeIds.includes(
-                                employee.id
+                                employee.id,
                               )}
                               onCheckedChange={(checked) => {
                                 if (checked)
@@ -348,7 +402,7 @@ export default function TaskFormNew({
                                   ]);
                                 else
                                   setSelectedEmployeeIds((prev) =>
-                                    prev.filter((id) => id !== employee.id)
+                                    prev.filter((id) => id !== employee.id),
                                   );
                               }}
                             />
@@ -466,110 +520,54 @@ export default function TaskFormNew({
               </p>
             </div>
             <div className="flex flex-col gap-y-[18px]">
-              {mode === "create"
-                ? steps.map((step, index) => {
-                    return (
-                      <div
-                        key={step.step}
-                        className="flex flex-col gap-y-[10px]"
-                      >
-                        <div className="flex flex-row items-center gap-x-3">
-                          <div
-                            className={`bg-zinc-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0`}
-                          >
-                            <p className="text-white">{step.step}</p>
-                          </div>
+              {/* TODO: Steps */}
+              <div>
+                {stepsMapping().map(
+                  (step: { number: number; label: string }) => (
+                    <div key={step.number} className="flex flex-col">
+                      <div className="flex flex-row items-center gap-x-3">
+                        <div
+                          className={`bg-zinc-200 ${defaultValues?.currentStepIndex && step.number <= defaultValues?.currentStepIndex ? "bg-black" : "bg-zinc-200"} w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0`}
+                        >
+                          <p className="text-white">{step.number}</p>
+                        </div>
+                        <div>
                           <div className="flex flex-col">
                             <div className="flex flex-row gap-x-[5px]">
-                              <p className="font-normal text-zinc-700">
-                                ขั้นตอนที่ {step.step}
+                              <p className="font-normal">
+                                ขั้นตอนที่ {step.number}
                               </p>
-                              {step.step === 1 ? (
+                              {defaultValues?.currentStepIndex &&
+                              defaultValues?.currentStepIndex ===
+                                step.number ? (
+                                <div className="bg-blue-200 p-[5px] rounded-md">
+                                  <p className="font-light text-blue-700">
+                                    ขั้นตอนปัจจุบัน
+                                  </p>
+                                </div>
+                              ) : step.number === 1 ? (
                                 <div className="bg-blue-200 p-[5px] rounded-md">
                                   <p className="font-light text-blue-700">
                                     ขั้นตอนปัจจุบัน
                                   </p>
                                 </div>
                               ) : (
-                                <></>
+                                <div></div>
                               )}
                             </div>
-                            <p className="font-light text-zinc-400">
-                              {step.detail}
-                            </p>
+                            <p className="font-light">{step.label}</p>
                           </div>
                         </div>
-                        {index !== steps.length - 1 ? (
-                          <div className="w-[1px] h-10 ml-[23px] bg-zinc-300"></div>
-                        ) : (
-                          <></>
-                        )}
                       </div>
-                    );
-                  })
-                : task
-                  ? steps.map((step, index) => {
-                      const currentStep =
-                        task.stepCompletedDates.filter(
-                          (stepCompleteDate) => stepCompleteDate !== null
-                        ).length + 1;
-                      const isCompleted =
-                        task.stepCompletedDates[step.step - 1] !== null;
-                      const isPaid =
-                        getReceiptsByTaskId(task.id).find(
-                          (receipt) => receipt.step === step.step
-                        )?.status === "paid";
-                      const isCurrent = step.step === currentStep;
-
-                      return (
-                        <div
-                          key={step.step}
-                          className="flex flex-col gap-y-[10px]"
-                        >
-                          <div className="flex flex-row items-center gap-x-3">
-                            <div
-                              className={`${
-                                isCompleted
-                                  ? "bg-black"
-                                  : isPaid
-                                    ? "bg-green-500"
-                                    : "bg-zinc-200"
-                              } w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0`}
-                            >
-                              <p className="text-white">{step.step}</p>
-                            </div>
-                            <div className="flex flex-col">
-                              <div className="flex flex-row gap-x-[5px]">
-                                <p className="font-normal text-zinc-700">
-                                  ขั้นตอนที่ {step.step}
-                                </p>
-                                {isCurrent && (
-                                  <div className="bg-blue-200 p-[5px] rounded-md">
-                                    <p className="font-light text-blue-700">
-                                      ขั้นตอนปัจจุบัน
-                                    </p>
-                                  </div>
-                                )}
-                                {isCompleted && (
-                                  <div className="bg-green-200 p-[5px] rounded-md">
-                                    <p className="font-light text-green-700">
-                                      เสร็จสิ้น
-                                    </p>
-                                  </div>
-                                )}
-                              </div>
-                              <p className="font-light text-zinc-400">
-                                {step.detail}
-                              </p>
-                            </div>
-                          </div>
-                          {index !== steps.length - 1 && (
-                            <div className="w-[1px] h-10 ml-[23px] bg-zinc-300"></div>
-                          )}
-                        </div>
-                      );
-                    })
-                  : null}
+                      {step.number !== totalSteps ? (
+                        <div className="w-[1px] h-10 ml-[23px] my-[10px] bg-zinc-300"></div>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  ),
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -599,7 +597,7 @@ export default function TaskFormNew({
           {(() => {
             // คำนวณ current step (ขั้นตอนถัดไปที่ยังไม่ทำ)
             const currentStepIndex = task.stepCompletedDates.findIndex(
-              (date) => date === null
+              (date) => date === null,
             );
             const currentStepNumber = currentStepIndex + 1;
 
@@ -615,7 +613,7 @@ export default function TaskFormNew({
                   onClick={() => {
                     // TODO: Update stepCompletedDates[currentStepIndex] = new Date()
                     console.log(
-                      `Complete step ${currentStepNumber} for task ${task.id}`
+                      `Complete step ${currentStepNumber} for task ${task.id}`,
                     );
                     // router.refresh() or revalidate
                   }}
@@ -633,7 +631,7 @@ export default function TaskFormNew({
                   onClick={() => {
                     // TODO: Navigate to payment page with taskId and step
                     console.log(
-                      `Pay for step ${currentStepNumber} of task ${task.id}`
+                      `Pay for step ${currentStepNumber} of task ${task.id}`,
                     );
                   }}
                 >

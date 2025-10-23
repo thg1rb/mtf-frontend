@@ -19,6 +19,7 @@ export const ENDPOINTS = {
     base: "/employers",
     statistics: "/employers/statistics",
     detail: (id: string | number) => `/employers/${id}`,
+    selects: "/employers/selects",
     create: "/employers",
     update: (id: string | number) => `/employers/${id}`,
     delete: (id: string | number) => `/employers/${id}`,

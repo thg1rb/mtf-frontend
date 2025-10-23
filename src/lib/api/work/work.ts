@@ -2,6 +2,8 @@ import { queryOptions } from "@tanstack/react-query";
 import { apiClient } from "../client";
 import { ENDPOINTS } from "../endpoints";
 import {
+  CreateWorkRequest,
+  CreateWorkResponse,
   GetWorksRequest,
   GetWorksResponse,
   GetWorkStatsResponse,
@@ -28,6 +30,15 @@ export const getWorksQueryOption = (params?: GetWorksRequest) => {
 };
 
 // ============================================
+// Mutation Options (for React Query)
+// ============================================
+
+// Create Employee Mutation
+export const createWorkMutationOptions = {
+  mutationFn: (data: CreateWorkRequest) => createWork(data),
+};
+
+// ============================================
 // API Functions
 // ============================================
 
@@ -41,4 +52,11 @@ const getWorks = async (
   params?: GetWorksRequest,
 ): Promise<GetWorksResponse> => {
   return apiClient.get<GetWorksResponse>(ENDPOINTS.works.base, params);
+};
+
+// POST: Create Employee
+const createWork = async (
+  data: CreateWorkRequest,
+): Promise<CreateWorkResponse> => {
+  return apiClient.post<CreateWorkResponse>(ENDPOINTS.works.create, data);
 };

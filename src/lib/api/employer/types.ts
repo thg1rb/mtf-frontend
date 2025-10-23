@@ -114,6 +114,11 @@ export interface GetEmployersResponse {
   pageSize: number;
 }
 
+export type GetEmployerSelectsResponse = {
+  id: string;
+  fullName: string;
+}[];
+
 export interface CreateEmployerResponse {
   message: string;
   employerId: string;

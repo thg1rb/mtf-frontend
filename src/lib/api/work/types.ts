@@ -7,6 +7,23 @@
 // Request Types (Payloads sent to API)
 // ============================================
 
+export interface CreateWorkRequest {
+  agentId: string;
+  employerId: string;
+  workType: "ขึ้นทะเบียนใหม่" | "ต่ออายุใบอนุญาตทำงาน";
+  currentStepIndex: number;
+  currentStep:
+    | "รวบรวมเอกสารเพิ่มเติม"
+    | "ตรวจสอบโรคและซื้อประกันสุขภาพ"
+    | "ทำบัตรประจำตัวคนซึ่งไม่มีสัญชาติไทย (เล่มชมพู)"
+    | "ทำเอกสารรับรองบุคคลเข้าออกระหว่างประเทศ (เล่ม CI)"
+    | "ยื่น Calling Visa กับกรมแรงงาน"
+    | "ซื้อใบอนุญาตการทำงานกับกรมแรงงาน"
+    | "ตีซ่าตรวจคนเข้าเมือง";
+  detail: string;
+  employeeIds: string[];
+}
+
 export interface GetWorksRequest {
   size?: number;
   page?: number;
@@ -18,6 +35,11 @@ export interface GetWorksRequest {
 // ============================================
 // Response Types (Data received from API)
 // ============================================
+
+export interface CreateWorkResponse {
+  message: string;
+  workId: string;
+}
 
 export interface GetWorkStatsResponse {
   totalWorks: number;

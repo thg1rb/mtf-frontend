@@ -11,6 +11,7 @@ import type {
   GetEmployerStatsResponse,
   DeleteEmployerResponse,
   GetEmployerResponse,
+  GetEmployerSelectsResponse,
 } from "./types";
 
 // ============================================
@@ -33,6 +34,14 @@ export const getEmployersQueryOption = (params?: GetEmployersRequest) => {
   });
 };
 
+// GET: ALL Employer Selects
+export const getEmployerSelectsQueryOption = () => {
+  return queryOptions({
+    queryKey: ["employer-selects"],
+    queryFn: getEmployerSelects,
+  });
+};
+
 // GET: Single Employer
 export const getEmployerQueryOption = (id: string) => {
   return queryOptions({
@@ -47,14 +56,21 @@ export const getEmployerQueryOption = (id: string) => {
 
 // GET: Employer Statistics
 const getEmployerStats = async (): Promise<GetEmployerStatsResponse> => {
-  return apiClient.get<GetEmployerStatsResponse>(ENDPOINTS.employers.statistics);
+  return apiClient.get<GetEmployerStatsResponse>(
+    ENDPOINTS.employers.statistics,
+  );
 };
 
 // GET: All Employers (with filters/pagination)
 const getEmployers = async (
-  params?: GetEmployersRequest
+  params?: GetEmployersRequest,
 ): Promise<GetEmployersResponse> => {
   return apiClient.get<GetEmployersResponse>(ENDPOINTS.employers.base, params);
+};
+
+// GET: All Employer Selects
+const getEmployerSelects = async (): Promise<GetEmployerSelectsResponse> => {
+  return apiClient.get<GetEmployerSelectsResponse>(ENDPOINTS.employers.selects);
 };
 
 // GET: Single Employer by ID
@@ -64,20 +80,30 @@ const getEmployer = async (id: string): Promise<GetEmployerResponse> => {
 
 // POST: Create Employer
 export const createEmployer = async (
-  data: CreateEmployerRequest
+  data: CreateEmployerRequest,
 ): Promise<CreateEmployerResponse> => {
-  return apiClient.post<CreateEmployerResponse>(ENDPOINTS.employers.create, data);
+  return apiClient.post<CreateEmployerResponse>(
+    ENDPOINTS.employers.create,
+    data,
+  );
 };
 
 // PUT: Update Employer
 export const updateEmployer = async (
   id: string,
-  data: UpdateEmployerRequest
+  data: UpdateEmployerRequest,
 ): Promise<UpdateEmployerResponse> => {
-  return apiClient.put<UpdateEmployerResponse>(ENDPOINTS.employers.update(id), data);
+  return apiClient.put<UpdateEmployerResponse>(
+    ENDPOINTS.employers.update(id),
+    data,
+  );
 };
 
 // DELETE: Delete Employer
-export const deleteEmployer = async (id: string): Promise<DeleteEmployerResponse> => {
-  return apiClient.delete<DeleteEmployerResponse>(ENDPOINTS.employers.delete(id));
+export const deleteEmployer = async (
+  id: string,
+): Promise<DeleteEmployerResponse> => {
+  return apiClient.delete<DeleteEmployerResponse>(
+    ENDPOINTS.employers.delete(id),
+  );
 };
