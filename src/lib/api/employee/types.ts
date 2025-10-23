@@ -15,6 +15,14 @@ export interface GetEmployeesRequest {
   [key: string]: string | number | undefined; // Index signature for query params
 }
 
+export interface GetEmployeesByEmployerIdRequest {
+  size?: number;
+  page?: number;
+  nameContains?: string;
+  status?: "ACTIVE" | "INACTIVE";
+  [key: string]: string | number | undefined; // Index signature for query params
+}
+
 export interface CreateEmployeeRequest {
   passportNo: string;
   employerId: string;
@@ -80,6 +88,18 @@ export interface GetEmployeesResponse {
       "เอกสาร CI": "VALID" | "EXPIRING_SOON" | "EXPIRED" | "NOT_HAVE";
       บัตรชมพู: "VALID" | "EXPIRING_SOON" | "EXPIRED" | "NOT_HAVE";
     };
+  }[];
+  totalElements: number;
+  totalPages: number;
+  currentPage: number;
+  pageSize: number;
+}
+
+export interface GetEmployeesByEmployerIdResponse {
+  content: {
+    id: string;
+    fullName: string;
+    status: "ACTIVE" | "INACTIVE";
   }[];
   totalElements: number;
   totalPages: number;

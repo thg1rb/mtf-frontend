@@ -28,6 +28,7 @@ export const ENDPOINTS = {
   // Employee endpoints
   employees: {
     base: "/employees",
+    byEmployer: (id: string | number) => `/employees/by-employer/${id}`,
     statistics: "/employees/statistics",
     detail: (passportNumber: string | number) => `/employees/${passportNumber}`,
     create: "/employees",

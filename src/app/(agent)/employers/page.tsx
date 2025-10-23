@@ -76,7 +76,7 @@ export default function EmployersPage() {
         filterStatus && filterStatus.trim() !== ""
           ? (filterStatus as "ACTIVE" | "INACTIVE")
           : undefined,
-    })
+    }),
   );
 
   // Handle search button click
@@ -201,7 +201,7 @@ export default function EmployersPage() {
               <TableBody>
                 <TableRow>
                   <TableCell colSpan={5} className="text-center py-20">
-                    <p className="text-muted-foreground">ไม่พบข้อมูลนายหน้า</p>
+                    <p className="text-muted-foreground">ไม่พบข้อมูลนายจ้าง</p>
                   </TableCell>
                 </TableRow>
               </TableBody>

@@ -1,7 +1,18 @@
 import { queryOptions } from "@tanstack/react-query";
 import { apiClient } from "../client";
 import { ENDPOINTS } from "../endpoints";
-import { CreateEmployeeRequest, CreateEmployeeResponse, GetEmployeeResponse, GetEmployeesRequest, GetEmployeesResponse, GetEmployeeStatsResponse, UpdateEmployeeRequest, UpdateEmployeeResponse } from "./types";
+import {
+  CreateEmployeeRequest,
+  CreateEmployeeResponse,
+  GetEmployeeResponse,
+  GetEmployeesByEmployerIdRequest,
+  GetEmployeesByEmployerIdResponse,
+  GetEmployeesRequest,
+  GetEmployeesResponse,
+  GetEmployeeStatsResponse,
+  UpdateEmployeeRequest,
+  UpdateEmployeeResponse,
+} from "./types";
 
 // ============================================
 // Query Options (for React Query)
@@ -20,6 +31,17 @@ export const getEmployeesQueryOption = (params?: GetEmployeesRequest) => {
   return queryOptions({
     queryKey: ["employees", params],
     queryFn: () => getEmployees(params),
+  });
+};
+
+// GET: Employees By Employer Id
+export const getEmployeesByEmployerIdQueryOption = (
+  employerId: string,
+  params?: GetEmployeesByEmployerIdRequest,
+) => {
+  return queryOptions({
+    queryKey: ["by-employer", employerId, params],
+    queryFn: () => getEmployeesByEmployerId(employerId, params),
   });
 };
 
@@ -53,33 +75,54 @@ export const updateEmployeeMutationOptions = {
 // GET: Employee Statistics
 const getEmployeeStats = async (): Promise<GetEmployeeStatsResponse> => {
   return apiClient.get<GetEmployeeStatsResponse>(
-    ENDPOINTS.employees.statistics
+    ENDPOINTS.employees.statistics,
   );
 };
 
 // GET: All Employees (with filters/pagination)
 const getEmployees = async (
-  params?: GetEmployeesRequest
+  params?: GetEmployeesRequest,
 ): Promise<GetEmployeesResponse> => {
   return apiClient.get<GetEmployeesResponse>(ENDPOINTS.employees.base, params);
 };
 
+// GET: Employees By Employer ID
+const getEmployeesByEmployerId = async (
+  employerId: string,
+  params?: GetEmployeesByEmployerIdRequest,
+): Promise<GetEmployeesByEmployerIdResponse> => {
+  return apiClient.get<GetEmployeesByEmployerIdResponse>(
+    ENDPOINTS.employees.byEmployer(employerId),
+    params,
+  );
+};
+
 // GET: Single Employee By ID
-const getEmployee = async (passportNumber: string): Promise<GetEmployeeResponse> => {
-  return apiClient.get<GetEmployeeResponse>(ENDPOINTS.employees.detail(passportNumber));
+const getEmployee = async (
+  passportNumber: string,
+): Promise<GetEmployeeResponse> => {
+  return apiClient.get<GetEmployeeResponse>(
+    ENDPOINTS.employees.detail(passportNumber),
+  );
 };
 
 // POST: Create Employee
 export const createEmployee = async (
-  data: CreateEmployeeRequest
+  data: CreateEmployeeRequest,
 ): Promise<CreateEmployeeResponse> => {
-  return apiClient.post<CreateEmployeeResponse>(ENDPOINTS.employees.create, data);
+  return apiClient.post<CreateEmployeeResponse>(
+    ENDPOINTS.employees.create,
+    data,
+  );
 };
 
 // PUT: Update Employee
 export const updateEmployee = async (
   id: string,
-  data: UpdateEmployeeRequest
+  data: UpdateEmployeeRequest,
 ): Promise<UpdateEmployeeResponse> => {
-  return apiClient.put<UpdateEmployeeResponse>(ENDPOINTS.employees.update(id), data);
+  return apiClient.put<UpdateEmployeeResponse>(
+    ENDPOINTS.employees.update(id),
+    data,
+  );
 };

@@ -53,17 +53,22 @@ export const selectEmployeeTableHeaders: TableHeader[] = [
   {
     index: "header-1",
     headerName: "เลือกลูกจ้าง",
-    className: ""
+    className: "",
   },
   {
     index: "header-2",
     headerName: "ชื่อ-นามสกุล",
-    className: ""
+    className: "",
   },
   {
     index: "header-3",
+    headerName: "สถานะ",
+    className: "text-center",
+  },
+  {
+    index: "header-4",
     headerName: "ดำเนินการ",
-    className: "text-right"
+    className: "text-right",
   },
 ];
 
@@ -682,7 +687,7 @@ export const getEmployeeById = (id: string) =>
 
 export const getActiveEmployeesByEmployerId = (id: string) =>
   mockEmployees.filter(
-    (employee) => employee.employerId === id && employee.status === "active"
+    (employee) => employee.employerId === id && employee.status === "active",
   );
 
 export const getPassportNoById = (id: string) =>
@@ -710,7 +715,7 @@ export const countEmployeesDocumentValid = () =>
     ];
 
     return documents.some(
-      (expiryDate) => getDocumentStatus(expiryDate).status === "valid"
+      (expiryDate) => getDocumentStatus(expiryDate).status === "valid",
     );
   }).length;
 
@@ -725,7 +730,7 @@ export const countEmployeesDocumentExpired = () =>
     ];
 
     return documents.some(
-      (expiryDate) => getDocumentStatus(expiryDate).status === "expired"
+      (expiryDate) => getDocumentStatus(expiryDate).status === "expired",
     );
   }).length;
 
@@ -740,6 +745,6 @@ export const countEmployeesDocumentNearlyExpired = () =>
     ];
 
     return documents.some(
-      (expiryDate) => getDocumentStatus(expiryDate).status === "nearly"
+      (expiryDate) => getDocumentStatus(expiryDate).status === "nearly",
     );
   }).length;

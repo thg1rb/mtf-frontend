@@ -35,12 +35,7 @@ import { TaskFormData, taskSchema } from "@/lib/validations/task";
 import { Textarea } from "../ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Employee, Employer, Task } from "@/types";
-import {
-  getEmployeesByEmployerId,
-  getEmployerById,
-  getEmployerFullNameByEmployerId,
-  isPaidByTaskIdAndStep,
-} from "@/lib/mock-data";
+import { isPaidByTaskIdAndStep } from "@/lib/mock-data";
 import {
   Command,
   CommandEmpty,
@@ -57,7 +52,9 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Checkbox } from "../ui/checkbox";
+import { TableSkeleton } from "../shared/TableSkeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -67,10 +64,18 @@ import {
 import { isTaskCompleted } from "@/lib/utils/task";
 import {
   createWorkMutationOptions,
+  getEmployeesByEmployerIdQueryOption,
   getEmployerSelectsQueryOption,
 } from "@/lib/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { CreateWorkRequest } from "@/lib/api/work/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface TaskFormProps {
   typeOfTask: "register" | "renew";
@@ -86,11 +91,17 @@ export default function TaskFormNew({
   defaultValues,
 }: TaskFormProps) {
   const router = useRouter();
+  const [page, setPage] = useState<number>(0); // Start with 0
+
+  // Input states (what user types)
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [statusInput, setStatusInput] = useState<string>(" "); // Default to "All"
+
+  // Filter states (applied on search button click)
+  const [searchFullName, setSearchFullName] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState<string>("");
   const [showValidationAlert, setShowValidationAlert] = useState(false);
-  const [employeesOfEmployer, setEmployeesOfEmployer] = useState<Employee[]>(
-    [],
-  );
+  const [selectedEmployerId, setSelectedEmployerId] = useState<string>("");
   const [selectedEmployeeIds, setSelectedEmployeeIds] = useState<string[]>([]);
 
   const {
@@ -111,11 +122,22 @@ export default function TaskFormNew({
     mode: "onChange",
   });
 
-  // TODO: Get Employer (ID, FULLNAME)
   const { data: employerSelects, isLoading: isLoadingEmployerSelects } =
     useQuery(getEmployerSelectsQueryOption());
-
-  // TODO: Get Employee By EmployerId
+  const {
+    data: employeesByEmployerId,
+    isLoading: isLoadingEmployeesByEmployerId,
+  } = useQuery(
+    getEmployeesByEmployerIdQueryOption(selectedEmployerId || "not-found", {
+      page,
+      size: 5,
+      nameContains: searchFullName || undefined,
+      status:
+        filterStatus && filterStatus.trim() !== ""
+          ? (filterStatus as "ACTIVE" | "INACTIVE")
+          : undefined,
+    }),
+  );
 
   // Define mutations at component level (not inside handlers)
   const createMutation = useMutation({
@@ -128,12 +150,26 @@ export default function TaskFormNew({
     },
   });
 
+  // Handle search button click
+  const handleSearch = () => {
+    setSearchFullName(searchTerm);
+    setFilterStatus(statusInput);
+    setPage(0); // Reset to first page on new search
+  };
+
+  // Handle Enter key in search input
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevent form submission
+      e.stopPropagation(); // Stop event propagation
+      handleSearch();
+    }
+  };
+
   // Load employees when component mounts (for view/edit mode)
   useEffect(() => {
     if (defaultValues?.employerId) {
-      setEmployeesOfEmployer(
-        getEmployeesByEmployerId(defaultValues.employerId),
-      );
+      setSelectedEmployerId(defaultValues.employerId);
     }
     if (defaultValues?.employeeIds) {
       setSelectedEmployeeIds(defaultValues.employeeIds);
@@ -152,7 +188,7 @@ export default function TaskFormNew({
       // Transform form data to match API request format
       const payload: CreateWorkRequest = {
         agentId: "1111111111111", // TODO: Get from auth context
-        employerId: "1102003456781", // TODO: Get the employerId
+        employerId: data.employerId, // Use the selected employer ID from form
         workType:
           typeOfTask === "register"
             ? "ขึ้นทะเบียนใหม่"
@@ -274,10 +310,11 @@ export default function TaskFormNew({
                                   // Clear selected employees when employer changes
                                   setSelectedEmployeeIds([]);
 
-                                  // Load new employer's employees
-                                  setEmployeesOfEmployer(
-                                    getEmployeesByEmployerId(employer.id),
-                                  );
+                                  // Set the selected employer ID to trigger API query
+                                  setSelectedEmployerId(employer.id);
+
+                                  // Reset pagination when employer changes
+                                  setPage(0);
                                 }}
                               >
                                 {employer.fullName}
@@ -343,138 +380,196 @@ export default function TaskFormNew({
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input
                   className="pl-10"
-                  placeholder="ค้นหานายจ้างที่ต้องการ..."
+                  placeholder="ค้นหาลูกจ้างที่ต้องการ..."
                   value={searchTerm}
                   onChange={(e) => {
                     setSearchTerm(e.target.value);
                   }}
+                  onKeyDown={handleKeyPress}
                 />
               </div>
-              <Button type="button" className="font-light cursor-pointer">
+              <Select value={statusInput} onValueChange={setStatusInput}>
+                <SelectTrigger className="font-light cursor-pointer">
+                  <SelectValue placeholder="สถานะ" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value=" " className="cursor-pointer">
+                    ทั้งหมด
+                  </SelectItem>
+                  <SelectItem value="ACTIVE" className="cursor-pointer">
+                    ใช้งาน
+                  </SelectItem>
+                  <SelectItem value="INACTIVE" className="cursor-pointer">
+                    ไม่ใช้งาน
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <Button
+                type="button"
+                className="font-light cursor-pointer"
+                onClick={handleSearch}
+              >
                 ค้นหา
               </Button>
             </div>
 
-            <div className="rounded-md border">
-              {/* Employees Table */}
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="px-[20px] font-normal">
-                      เลือก
-                    </TableHead>
-                    <TableHead className="px-[20px] font-normal">
-                      ชื่อ-นามสกุล
-                    </TableHead>
-                    <TableHead className="px-[20px] font-normal">
-                      สถานะ
-                    </TableHead>
-                    <TableHead className="px-[20px] font-normal text-right">
-                      ดำเนินการ
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {employeesOfEmployer.length === 0 ? (
+            {/* Employees Table */}
+            {isLoadingEmployeesByEmployerId ? (
+              <TableSkeleton rows={5} columns={4} />
+            ) : (
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
                     <TableRow>
-                      <TableCell
-                        colSpan={4}
-                        className="text-center py-8 text-muted-foreground"
-                      >
-                        ไม่พบข้อมูลลูกจ้าง
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    employeesOfEmployer.map((employee) => {
-                      return (
-                        <TableRow key={employee.id} className="cursor-pointer">
-                          <TableCell className="font-light px-[20px]">
-                            <Checkbox
-                              disabled={isReadOnly}
-                              checked={selectedEmployeeIds.includes(
-                                employee.id,
-                              )}
-                              onCheckedChange={(checked) => {
-                                if (checked)
-                                  setSelectedEmployeeIds((prev) => [
-                                    ...prev,
-                                    employee.id,
-                                  ]);
-                                else
-                                  setSelectedEmployeeIds((prev) =>
-                                    prev.filter((id) => id !== employee.id),
+                      <TableHead className="px-[20px] font-normal">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            disabled={
+                              isReadOnly ||
+                              !employeesByEmployerId?.content?.length
+                            }
+                            checked={
+                              employeesByEmployerId?.content &&
+                              employeesByEmployerId.content.length > 0 &&
+                              selectedEmployeeIds.length ===
+                                employeesByEmployerId.content.length
+                            }
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                // Select all
+                                const allIds =
+                                  employeesByEmployerId?.content.map(
+                                    (emp) => emp.id,
                                   );
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell className="font-light px-[20px]">
-                            {employee.firstname + " " + employee.lastname}
-                          </TableCell>
-                          <TableCell className="font-light px-[20px]">
-                            <span
-                              className={`px-2 py-1 rounded-full text-xs ${
-                                employee.status === "active"
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-gray-100 text-gray-800"
-                              }`}
-                            >
-                              {employee.status === "active"
-                                ? "ใช้งาน"
-                                : "ไม่ได้ใช้งาน"}
-                            </span>
-                          </TableCell>
-                          <TableCell className="text-right px-[20px]">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger
-                                asChild
-                                className="cursor-pointer"
+                                setSelectedEmployeeIds(allIds || []);
+                              } else {
+                                // Deselect all
+                                setSelectedEmployeeIds([]);
+                              }
+                            }}
+                          />
+                          <span>เลือก</span>
+                        </div>
+                      </TableHead>
+                      <TableHead className="px-[20px] font-normal">
+                        ชื่อ-นามสกุล
+                      </TableHead>
+                      <TableHead className="px-[20px] font-normal">
+                        สถานะ
+                      </TableHead>
+                      <TableHead className="px-[20px] font-normal text-right">
+                        ดำเนินการ
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {!employeesByEmployerId?.content ||
+                    employeesByEmployerId.content.length === 0 ? (
+                      <TableRow>
+                        <TableCell
+                          colSpan={4}
+                          className="text-center py-8 text-muted-foreground"
+                        >
+                          ไม่พบข้อมูลลูกจ้าง
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      employeesByEmployerId.content.map((employee) => {
+                        return (
+                          <TableRow
+                            key={employee.id}
+                            className="cursor-pointer"
+                          >
+                            <TableCell className="font-light px-[20px]">
+                              <Checkbox
+                                disabled={isReadOnly}
+                                checked={selectedEmployeeIds.includes(
+                                  employee.id,
+                                )}
+                                onCheckedChange={(checked) => {
+                                  if (checked)
+                                    setSelectedEmployeeIds((prev) => [
+                                      ...prev,
+                                      employee.id,
+                                    ]);
+                                  else
+                                    setSelectedEmployeeIds((prev) =>
+                                      prev.filter((id) => id !== employee.id),
+                                    );
+                                }}
+                              />
+                            </TableCell>
+                            <TableCell className="font-light px-[20px]">
+                              {employee.fullName}
+                            </TableCell>
+                            <TableCell className="font-light px-[20px]">
+                              <span
+                                className={`px-2 py-1 rounded-full text-xs ${
+                                  employee.status === "ACTIVE"
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-red-200 text-red-800"
+                                }`}
                               >
-                                <Button
-                                  variant="ghost"
-                                  className="h-8 w-8 p-0"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <MoreHorizontal className="h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem
+                                {employee.status === "ACTIVE"
+                                  ? "ใช้งาน"
+                                  : "ไม่ใช้งาน"}
+                              </span>
+                            </TableCell>
+                            <TableCell className="text-right px-[20px]">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger
                                   asChild
                                   className="cursor-pointer"
-                                  onClick={(e) => e.stopPropagation()}
                                 >
-                                  <Link href={`/employees/${employee.id}`}>
-                                    <Eye className="mr-2 h-4 w-4" />
-                                    ดูข้อมูล
-                                  </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  asChild
-                                  className="cursor-pointer"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <Link href={`/employees/${employee.id}/edit`}>
-                                    <Edit className="mr-2 h-4 w-4" />
-                                    แก้ไข
-                                  </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  className="text-destructive cursor-pointer"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <Trash2 className="mr-2 h-4 w-4" />
-                                  ลบ
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })
-                  )}
-                </TableBody>
-              </Table>
-            </div>
+                                  <Button
+                                    variant="ghost"
+                                    className="h-8 w-8 p-0"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <MoreHorizontal className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem
+                                    asChild
+                                    className="cursor-pointer"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <Link href={`/employees/${employee.id}`}>
+                                      <Eye className="mr-2 h-4 w-4" />
+                                      ดูข้อมูล
+                                    </Link>
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    asChild
+                                    className="cursor-pointer"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <Link
+                                      href={`/employees/${employee.id}/edit`}
+                                    >
+                                      <Edit className="mr-2 h-4 w-4" />
+                                      แก้ไข
+                                    </Link>
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    className="text-destructive cursor-pointer"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    ลบ
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
 
             {errors.employeeIds && (
               <span className="text-red-500 font-light px-2">
@@ -483,26 +578,46 @@ export default function TaskFormNew({
             )}
 
             <div className="flex flex-row justify-between items-center">
-              <p className="font-light text-zinc-500">
-                เลือกแล้ว {selectedEmployeeIds.length} จากทั้งหมด{" "}
-                {employeesOfEmployer.length} คน
-              </p>
-              <div className="flex flex-row gap-x-[10px]">
-                <Button
-                  variant={"ghost"}
-                  type="button"
-                  className="font-light border cursor-pointer"
-                >
-                  กลับ
-                </Button>
-                <Button
-                  variant={"ghost"}
-                  type="button"
-                  className="font-light border cursor-pointer"
-                >
-                  ถัดไป
-                </Button>
+              <div className="flex flex-col gap-y-[5px] px-2">
+                <p className="font-light text-zinc-500">
+                  หน้า {page + 1} จาก {employeesByEmployerId?.totalPages}
+                </p>
+                <p className="font-light text-zinc-500">
+                  เลือกแล้ว {selectedEmployeeIds.length} คน จากทั้งหมด{" "}
+                  {employeesByEmployerId?.totalElements} คน
+                </p>
               </div>
+              {/* Pagination */}
+              {employeesByEmployerId &&
+                employeesByEmployerId.totalPages !== 0 &&
+                employeesByEmployerId.totalPages > 1 && (
+                  <div className="flex flex-row gap-x-[10px]">
+                    <Button
+                      variant={"ghost"}
+                      type="button"
+                      className="font-light border cursor-pointer"
+                      disabled={page === 0}
+                      onClick={() => setPage((p) => Math.max(0, p - 1))}
+                    >
+                      <ChevronLeft className="h-4 w-4 mr-1" />
+                      กลับ
+                    </Button>
+                    <Button
+                      variant={"ghost"}
+                      type="button"
+                      className="font-light border cursor-pointer"
+                      disabled={page >= employeesByEmployerId.totalPages - 1}
+                      onClick={() =>
+                        setPage((p) =>
+                          Math.min(employeesByEmployerId.totalPages - 1, p + 1),
+                        )
+                      }
+                    >
+                      ถัดไป
+                      <ChevronRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </div>
+                )}
             </div>
           </div>
         </div>
