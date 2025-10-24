@@ -8,6 +8,7 @@ import {
   GetWorksResponse,
   GetWorkStatsResponse,
   GetWorkResponse,
+  CompleteStepResponse,
 } from "./types";
 
 // ============================================
@@ -47,6 +48,11 @@ export const createWorkMutationOptions = {
   mutationFn: (data: CreateWorkRequest) => createWork(data),
 };
 
+// Complete Step Mutation
+export const completeStepMutationOptions = {
+  mutationFn: (workId: string) => completeStep(workId),
+};
+
 // ============================================
 // API Functions
 // ============================================
@@ -73,4 +79,9 @@ const createWork = async (
 // GET: Work by ID
 const getWork = async (workId: string): Promise<GetWorkResponse> => {
   return apiClient.get<GetWorkResponse>(ENDPOINTS.works.detail(workId));
+};
+
+// POST: Complete Step
+const completeStep = async (workId: string): Promise<CompleteStepResponse> => {
+  return apiClient.post<CompleteStepResponse>(ENDPOINTS.works.completeStep(workId));
 };

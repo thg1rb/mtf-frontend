@@ -59,6 +59,7 @@ import {
 } from "../ui/dropdown-menu";
 import {
   createWorkMutationOptions,
+  completeStepMutationOptions,
   getEmployeesByEmployerIdQueryOption,
   getEmployerSelectsQueryOption,
 } from "@/lib/api";
@@ -152,6 +153,19 @@ export default function TaskFormNew({
     },
   });
 
+  
+  // Complete step mutation
+  const completeStepMutation = useMutation({
+    ...completeStepMutationOptions,
+    onSuccess: () => {
+      // Refresh the page to show updated step status
+      router.refresh();
+    },
+    onError: (error) => {
+      console.error("Complete step failed:", error);
+    },
+  });
+
   // Handle search button click
   const handleSearch = () => {
     setSearchFullName(searchTerm);
@@ -213,10 +227,91 @@ export default function TaskFormNew({
     setShowValidationAlert(true);
   };
 
+  // Helper functions for button states and actions
+  const getCurrentStepBill = () => {
+    if (!workId || !defaultValues?.currentStepIndex) return null;
+    return billsData?.find(
+      (bill: BillResponse) => bill.stepIndex === defaultValues.currentStepIndex,
+    );
+  };
+
+  const getCurrentStepBillId = () => {
+    const currentBill = getCurrentStepBill();
+    return currentBill?.id;
+  };
+
+  // Button handlers
+  const handlePayBill = () => {
+    const billId = getCurrentStepBillId();
+    if (billId) {
+      router.push(`/receipts/${billId}`);
+    }
+  };
+
+  const handleCompleteStep = () => {
+    if (workId) {
+      completeStepMutation.mutate(workId);
+    }
+  };
+
+  // Determine what button to show
+  const getActionButtonConfig = () => {
+    if (mode === "create") {
+      return {
+        text: "เริ่มดำเนินการ",
+        action: () => {}, // Will be handled by form submit
+        disabled: false,
+        isSubmitButton: true,
+      };
+    }
+
+    // For both view and edit modes
+    if (mode === "view" || mode === "edit") {
+      const currentStepBill = getCurrentStepBill();
+
+      // If there's no bill for current step, show complete button
+      if (!currentStepBill) {
+        return {
+          text: "เสร็จสิ้น",
+          action: handleCompleteStep,
+          disabled: false,
+          isSubmitButton: false,
+        };
+      }
+
+      // If bill exists but not paid, show pay button
+      if (currentStepBill.status === "NOT_PAID") {
+        return {
+          text: "ชำระเงิน",
+          action: handlePayBill,
+          disabled: false,
+          isSubmitButton: false,
+        };
+      }
+
+      // If bill is paid, show complete button
+      if (currentStepBill.status === "PAID") {
+        return {
+          text: "เสร็จสิ้น",
+          action: handleCompleteStep,
+          disabled: false,
+          isSubmitButton: false,
+        };
+      }
+    }
+
+    return {
+      text: "เริ่มดำเนินการ",
+      action: () => {},
+      disabled: false,
+      isSubmitButton: true,
+    };
+  };
+
   const isReadOnly = mode === "view";
+  const actionButtonConfig = getActionButtonConfig();
 
   const totalSteps = typeOfTask === "register" ? 4 : 5;
-
   const MappingSequenceOfStepLabels = {
     register: [
       "รวบรวมเอกสารเพิ่มเติม",
@@ -737,50 +832,73 @@ export default function TaskFormNew({
                   (step: { number: number; label: string }) => {
                     // Find the bill for this step (if any)
                     const stepBill = billsData?.find(
-                      (bill: BillResponse) => bill.stepIndex === step.number
+                      (bill: BillResponse) => bill.stepIndex === step.number,
                     );
                     const isPaid = stepBill?.status === "PAID";
 
                     // Determine current step
-                    const currentStepIndex = defaultValues?.currentStepIndex || 1;
+                    const currentStepIndex =
+                      defaultValues?.currentStepIndex || 1;
                     const isCurrentStep = step.number === currentStepIndex;
                     const isCompletedStep = step.number < currentStepIndex;
 
                     // Determine step styling based on status
-                    let stepStyle = "bg-gray-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
+                    let stepStyle =
+                      "bg-gray-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
                     let stepTextStyle = "text-gray-700";
                     const labels = [];
 
                     if (isCurrentStep) {
                       if (isPaid) {
-                        stepStyle = "bg-green-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
+                        stepStyle =
+                          "bg-green-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
                         stepTextStyle = "text-green-800";
                         labels.push(
-                          <div key="current" className="bg-green-200 p-[5px] rounded-md">
-                            <p className="font-light text-green-700">ขั้นตอนปัจจุบัน</p>
-                          </div>
+                          <div
+                            key="current"
+                            className="bg-green-200 p-[5px] rounded-md"
+                          >
+                            <p className="font-light text-green-700">
+                              ขั้นตอนปัจจุบัน
+                            </p>
+                          </div>,
                         );
                         labels.push(
-                          <div key="paid" className="bg-green-200 p-[5px] rounded-md">
-                            <p className="font-light text-green-700">ชำระแล้ว</p>
-                          </div>
+                          <div
+                            key="paid"
+                            className="bg-green-200 p-[5px] rounded-md"
+                          >
+                            <p className="font-light text-green-700">
+                              ชำระแล้ว
+                            </p>
+                          </div>,
                         );
                       } else {
-                        stepStyle = "bg-sky-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
+                        stepStyle =
+                          "bg-sky-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
                         stepTextStyle = "text-sky-800";
                         labels.push(
-                          <div key="current" className="bg-sky-200 p-[5px] rounded-md">
-                            <p className="font-light text-sky-700">ขั้นตอนปัจจุบัน</p>
-                          </div>
+                          <div
+                            key="current"
+                            className="bg-sky-200 p-[5px] rounded-md"
+                          >
+                            <p className="font-light text-sky-700">
+                              ขั้นตอนปัจจุบัน
+                            </p>
+                          </div>,
                         );
                       }
                     } else if (isCompletedStep) {
-                      stepStyle = "bg-black w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
+                      stepStyle =
+                        "bg-black w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
                       stepTextStyle = "text-white";
                       labels.push(
-                        <div key="paid" className="bg-green-200 p-[5px] rounded-md">
+                        <div
+                          key="paid"
+                          className="bg-green-200 p-[5px] rounded-md"
+                        >
                           <p className="font-light text-green-700">ชำระแล้ว</p>
-                        </div>
+                        </div>,
                       );
                     }
                     // Future steps keep the default gray style with no labels
@@ -818,25 +936,44 @@ export default function TaskFormNew({
         </div>
       </div>
 
-      {/* SubmitAndCancelSection */}
-      {mode !== "view" && (
+      {/* CompletedOrPaidButtonSection */}
+      {mode !== "create" && (
         <div className="flex flex-col md:flex-row gap-x-[10px] gap-y-[10px] justify-end">
           <Button
-            asChild
             type="button"
             variant="ghost"
             className="font-light border border-slate-300"
+            onClick={() => router.back()}
           >
-            <Link href="/tasks">ยกเลิก</Link>
+            ยกเลิก
           </Button>
-          <Button type="submit" className="font-light">
-            {mode === "create" ? "เริ่มดำเนินการ" : "บันทึกการแก้ไข"}
-          </Button>
+          {actionButtonConfig.isSubmitButton ? (
+            <Button
+              type="submit"
+              className="font-light"
+              disabled={actionButtonConfig.disabled || createMutation.isPending}
+            >
+              {createMutation.isPending
+                ? "กำลังดำเนินการ..."
+                : actionButtonConfig.text}
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              className="font-light"
+              onClick={actionButtonConfig.action}
+              disabled={
+                actionButtonConfig.disabled ||
+                completeStepMutation.isPending
+              }
+            >
+              {completeStepMutation.isPending
+                ? "กำลังดำเนินการ..."
+                : actionButtonConfig.text}
+            </Button>
+          )}
         </div>
       )}
-
-      {/* CompletedAndPaidButtonSection */}
-      {/* TODO: AlertDialog to confirm the action of each button */}
 
       {/* AlertDialogSection */}
       <AlertDialog

@@ -74,6 +74,7 @@ export const ENDPOINTS = {
     delete: (id: string | number) => `/works/${id}`,
     register: "/works/register",
     renew: "/works/renew",
+    completeStep: (workId: string | number) => `/works/${workId}/complete-step`,
   },
 
   // Bills endpoints

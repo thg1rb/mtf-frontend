@@ -3,7 +3,7 @@ export interface Receipt {
   taskId: string;
   step: number;
   amount: number;
-  status: "paid" | "unpaid";
+  status: "PAID" | "UNPAID";
   paymentMethod: "cash" | "transfer" | "promptpay" | null;
   createdAt: Date | string;
   paidAt: Date | string | null;

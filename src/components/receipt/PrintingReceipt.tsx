@@ -209,7 +209,7 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 PrintingReceipt.displayName = "PrintingReceipt";

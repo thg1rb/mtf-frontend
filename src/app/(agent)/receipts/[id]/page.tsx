@@ -3,11 +3,15 @@
 import HeaderSection from "@/components/shared/HeaderSection";
 import PrintingReceipt from "@/components/receipt/PrintingReceipt";
 import { Button } from "@/components/ui/button";
-import { getBillByIdQueryOption, payBillMutationOptions } from "@/lib/api/bills/bills";
+import {
+  getBillByIdQueryOption,
+  payBillMutationOptions,
+} from "@/lib/api/bills/bills";
 import { CircleCheckBig, Printer, Sparkles } from "lucide-react";
 import React, { use, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 export default function ReceiptPage({
   params,
@@ -15,6 +19,7 @@ export default function ReceiptPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const router = useRouter();
   const printRef = useRef<HTMLDivElement>(null);
 
   // Fetch bill by ID
@@ -25,7 +30,8 @@ export default function ReceiptPage({
     ...payBillMutationOptions,
     onSuccess: (data) => {
       console.log("Bill paid successfully:", data);
-      // Could show success message or redirect
+      // Redirect to the previous page
+      router.back();
     },
     onError: (error) => {
       console.error("Payment failed:", error);
@@ -112,7 +118,9 @@ export default function ReceiptPage({
                   >
                     <CircleCheckBig />
                     <p className="font-light">
-                      {payBillMutation.isPending ? "กำลังดำเนินการ..." : "ชำระค่าบริการเรียบร้อย"}
+                      {payBillMutation.isPending
+                        ? "กำลังดำเนินการ..."
+                        : "ชำระค่าบริการเรียบร้อย"}
                     </p>
                   </Button>
                 )}
