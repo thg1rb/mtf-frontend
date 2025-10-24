@@ -61,3 +61,36 @@ export interface GetWorksResponse {
   currentPage: number;
   pageSize: number;
 }
+
+export interface GetWorkResponse {
+  id: string;
+  currentStepIndex: number;
+  currentStep:
+    | "รวบรวมเอกสารเพิ่มเติม"
+    | "ตรวจสอบโรคและซื้อประกันสุขภาพ"
+    | "ทำบัตรประจำตัวคนซึ่งไม่มีสัญชาติไทย (เล่มชมพู)"
+    | "ทำเอกสารรับรองบุคคลเข้าออกระหว่างประเทศ (เล่ม CI)"
+    | "ยื่น Calling Visa กับกรมแรงงาน"
+    | "ซื้อใบอนุญาตการทำงานกับกรมแรงงาน"
+    | "ตีซ่าตรวจคนเข้าเมือง";
+  workType: "ขึ้นทะเบียนใหม่" | "ต่ออายุใบอนุญาตทำงาน";
+  detail: string;
+  status: "FINISHED" | "NOT_FINISHED";
+  totalPrice: number;
+  employer: {
+    id: string;
+    fullName: string;
+    companyName: string;
+    phoneNumber: string;
+  };
+  employeesInWork: {
+    passportNumber: string;
+    fullName: string;
+    nationality: "เมียนมา" | "กัมพูชา" | "ลาว";
+  }[];
+  agent: {
+    id: string;
+    fullName: string;
+    email: string;
+  };
+}

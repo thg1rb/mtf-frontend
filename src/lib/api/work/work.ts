@@ -7,6 +7,7 @@ import {
   GetWorksRequest,
   GetWorksResponse,
   GetWorkStatsResponse,
+  GetWorkResponse,
 } from "./types";
 
 // ============================================
@@ -26,6 +27,14 @@ export const getWorksQueryOption = (params?: GetWorksRequest) => {
   return queryOptions({
     queryKey: ["employers", params],
     queryFn: () => getWorks(params),
+  });
+};
+
+// GET: Work by ID
+export const getWorkQueryOption = (workId: string) => {
+  return queryOptions({
+    queryKey: ["work", workId],
+    queryFn: () => getWork(workId),
   });
 };
 
@@ -59,4 +68,9 @@ const createWork = async (
   data: CreateWorkRequest,
 ): Promise<CreateWorkResponse> => {
   return apiClient.post<CreateWorkResponse>(ENDPOINTS.works.create, data);
+};
+
+// GET: Work by ID
+const getWork = async (workId: string): Promise<GetWorkResponse> => {
+  return apiClient.get<GetWorkResponse>(ENDPOINTS.works.detail(workId));
 };

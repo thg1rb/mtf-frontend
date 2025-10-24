@@ -1,19 +1,44 @@
+"use client";
+
 import HeaderSection from "@/components/shared/HeaderSection";
 import TaskForm from "@/components/task/TaskForm";
 import { Button } from "@/components/ui/button";
-import { getTaskById } from "@/lib/mock-data";
+import { getWorkQueryOption } from "@/lib/api/work/work";
 import { SquarePen } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { GetWorkResponse } from "@/lib/api/work/types";
+import { TaskFormData } from "@/lib/validations/task";
 
-export default async function RegisterTaskPage({
+export default function RegisterTaskPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id } = React.use(params);
 
-  const task = getTaskById(id);
+  const { data: taskData, isLoading, error } = useQuery(getWorkQueryOption(id));
+
+  // Transform API response to form's expected format
+  const transformApiDataToForm = (apiData: GetWorkResponse): Partial<TaskFormData> => {
+    return {
+      employerId: apiData.employer.id,
+      description: apiData.detail,
+      employeeIds: apiData.employeesInWork.map(emp => emp.passportNumber),
+      currentStepIndex: apiData.currentStepIndex,
+    };
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading task data</div>;
+  }
+
+  const formDefaultValues = taskData ? transformApiDataToForm(taskData) : undefined;
 
   return (
     <div className="flex flex-col gap-y-[35px] md:gap-y-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
@@ -39,8 +64,7 @@ export default async function RegisterTaskPage({
       <TaskForm
         typeOfTask="register"
         mode="view"
-        task={task}
-        defaultValues={task}
+        defaultValues={formDefaultValues}
       />
     </div>
   );

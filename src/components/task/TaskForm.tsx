@@ -5,9 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Check,
-  CheckCheck,
   ChevronsUpDown,
-  Coins,
   Edit,
   Eye,
   FileText,
@@ -34,8 +32,6 @@ import {
 import { TaskFormData, taskSchema } from "@/lib/validations/task";
 import { Textarea } from "../ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Employee, Employer, Task } from "@/types";
-import { isPaidByTaskIdAndStep } from "@/lib/mock-data";
 import {
   Command,
   CommandEmpty,
@@ -61,7 +57,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { isTaskCompleted } from "@/lib/utils/task";
 import {
   createWorkMutationOptions,
   getEmployeesByEmployerIdQueryOption,
@@ -80,14 +75,12 @@ import {
 interface TaskFormProps {
   typeOfTask: "register" | "renew";
   mode: "create" | "view" | "edit";
-  task?: Task;
   defaultValues?: Partial<TaskFormData>;
 }
 
 export default function TaskFormNew({
   typeOfTask,
   mode,
-  task,
   defaultValues,
 }: TaskFormProps) {
   const router = useRouter();
@@ -706,57 +699,6 @@ export default function TaskFormNew({
 
       {/* CompletedAndPaidButtonSection */}
       {/* TODO: AlertDialog to confirm the action of each button */}
-      {mode === "view" && task && !isTaskCompleted(task) && (
-        <div className="flex flex-col md:flex-row gap-x-[10px] gap-y-[10px] justify-end">
-          {(() => {
-            // คำนวณ current step (ขั้นตอนถัดไปที่ยังไม่ทำ)
-            const currentStepIndex = task.stepCompletedDates.findIndex(
-              (date) => date === null,
-            );
-            const currentStepNumber = currentStepIndex + 1;
-
-            // ตรวจสอบว่าขั้นตอนปัจจุบันชำระเงินแล้วหรือยัง
-            const isPaid = isPaidByTaskIdAndStep(task.id, currentStepNumber);
-
-            if (isPaid) {
-              // ถ้าชำระเงินแล้ว แสดงปุ่ม "ดำเนินการเสร็จสิ้น"
-              return (
-                <Button
-                  type="button"
-                  className="font-light"
-                  onClick={() => {
-                    // TODO: Update stepCompletedDates[currentStepIndex] = new Date()
-                    console.log(
-                      `Complete step ${currentStepNumber} for task ${task.id}`,
-                    );
-                    // router.refresh() or revalidate
-                  }}
-                >
-                  <CheckCheck />
-                  ดำเนินการเสร็จสิ้น
-                </Button>
-              );
-            } else {
-              // ถ้ายังไม่ชำระเงิน แสดงปุ่ม "ชำระเงิน"
-              return (
-                <Button
-                  type="button"
-                  className="font-light"
-                  onClick={() => {
-                    // TODO: Navigate to payment page with taskId and step
-                    console.log(
-                      `Pay for step ${currentStepNumber} of task ${task.id}`,
-                    );
-                  }}
-                >
-                  <Coins />
-                  ชำระเงิน
-                </Button>
-              );
-            }
-          })()}
-        </div>
-      )}
 
       {/* AlertDialogSection */}
       <AlertDialog
