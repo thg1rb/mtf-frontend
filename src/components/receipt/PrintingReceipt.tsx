@@ -9,13 +9,6 @@ import React, { forwardRef } from "react";
 import { Badge } from "../ui/badge";
 import { Receipt } from "@/types";
 import {
-  getTaskById,
-  getEmployerFullNameByEmployerId,
-  getTypeOfTaskLabelAndSteps,
-  getPassportNoById,
-  getEmployeeFullNameById,
-} from "@/lib/mock-data";
-import {
   Table,
   TableBody,
   TableCell,
@@ -30,17 +23,10 @@ interface PrintingReceiptProps {
 
 const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
   ({ receipt }, ref) => {
-    // Get task details
-    const task = getTaskById(receipt.taskId);
-    const employerName = task
-      ? getEmployerFullNameByEmployerId(task.employerId)
-      : "-";
-    const typeOfTaskLabel = task
-      ? getTypeOfTaskLabelAndSteps(task.typeOfTask).label
-      : "-";
-
-    // Get employee names from task
-    const employeeIds = task?.employeeIds;
+    // Use data from receipt instead of mock data
+    const employerName = receipt.employerName || "-";
+    const typeOfTaskLabel = receipt.typeOfTaskLabel || "-";
+    const employees = receipt.employees || [];
 
     // Format dates
     const formatDate = (date: Date | string | null) => {
@@ -51,17 +37,6 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
         month: "long",
         day: "numeric",
       });
-    };
-
-    // Format payment method
-    const getPaymentMethodLabel = (method: string | null) => {
-      if (!method) return "-";
-      const labels: Record<string, string> = {
-        cash: "เงินสด",
-        transfer: "โอนเงิน",
-        promptpay: "พร้อมเพย์",
-      };
-      return labels[method] || method;
     };
 
     return (
@@ -103,18 +78,18 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
             </div>
             <Badge
               className={`w-[100px] h-min ${
-                receipt?.status === "paid"
+                receipt?.status === "PAID"
                   ? "bg-green-200 text-green-700"
                   : "bg-yellow-100 text-red-700"
               } font-light`}
             >
               <div className="flex flex-row items-center gap-x-[5px]">
-                {receipt?.status === "paid" ? (
+                {receipt?.status === "PAID" ? (
                   <CircleCheckBig size={12} />
                 ) : (
                   <TriangleAlert size={12} />
                 )}{" "}
-                {receipt?.status === "paid" ? "ชำระแล้ว" : "รอชำระ"}
+                {receipt?.status === "PAID" ? "ชำระแล้ว" : "รอชำระ"}
               </div>
             </Badge>
           </div>
@@ -147,13 +122,13 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {employeeIds?.map((employeeId) => (
-                      <TableRow key={employeeId}>
+                    {employees.map((employee, index) => (
+                      <TableRow key={index}>
                         <TableCell className="px-[20px] font-light">
-                          {getPassportNoById(employeeId)}
+                          {employee.passportNumber}
                         </TableCell>
                         <TableCell className="px-[20px] font-light">
-                          {getEmployeeFullNameById(employeeId)}
+                          {employee.fullName}
                         </TableCell>
                       </TableRow>
                     ))}
@@ -188,15 +163,9 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
 
         <div className="w-full h-[1px] bg-slate-300"></div>
 
-        {receipt.status === "paid" ? (
+        {receipt.status === "PAID" ? (
           <div className="flex flex-col gap-y-[5px] p-[20px] bg-green-100 rounded-lg">
             <p className="font-normal text-green-700">ข้อมูลการชำระ</p>
-            <div className="flex flex-row justify-between">
-              <p className="font-light text-zinc-400">ช่องทางการชำระ:</p>
-              <p className="font-light text-zinc-700">
-                {getPaymentMethodLabel(receipt.paymentMethod)}
-              </p>
-            </div>
             <div className="flex flex-row justify-between">
               <p className="font-light text-zinc-400">จำนวนเงิน:</p>
               <p className="font-light text-zinc-700">

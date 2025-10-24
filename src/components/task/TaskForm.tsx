@@ -62,7 +62,9 @@ import {
   completeStepMutationOptions,
   getEmployeesByEmployerIdQueryOption,
   getEmployerSelectsQueryOption,
+  getWorkQueryOption,
 } from "@/lib/api";
+import { payBillMutationOptions } from "@/lib/api/bills/bills";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { CreateWorkRequest } from "@/lib/api/works/types";
 import {
@@ -136,6 +138,12 @@ export default function TaskFormNew({
     }),
   );
 
+  // Fetch work data for view/edit modes (only when workId is available)
+  const { data: workData } = useQuery({
+    ...getWorkQueryOption(workId || ""),
+    enabled: !!workId, // Only fetch when workId exists
+  });
+
   // Fetch bills data for view/edit modes (only when workId is available)
   const { data: billsData = [] } = useQuery({
     ...getBillDetailsQueryOption(workId ? { workId } : undefined),
@@ -153,16 +161,23 @@ export default function TaskFormNew({
     },
   });
 
-  
   // Complete step mutation
   const completeStepMutation = useMutation({
     ...completeStepMutationOptions,
+    onError: (error) => {
+      console.error("Complete step failed:", error);
+    },
+  });
+
+  // Pay bill mutation
+  const payBillMutation = useMutation({
+    ...payBillMutationOptions,
     onSuccess: () => {
-      // Refresh the page to show updated step status
+      // Refresh the page to show updated bill status
       router.refresh();
     },
     onError: (error) => {
-      console.error("Complete step failed:", error);
+      console.error("Pay bill failed:", error);
     },
   });
 
@@ -240,6 +255,30 @@ export default function TaskFormNew({
     return currentBill?.id;
   };
 
+  // Check if work is completed (FINISHED)
+  const isWorkCompleted = () => {
+    // Use actual work status if available, otherwise fallback to step index calculation
+    if (workData?.status) {
+      return workData.status === "FINISHED";
+    }
+    // Fallback for create mode or when work data is not available
+    if (!defaultValues?.currentStepIndex) return false;
+    const totalSteps = typeOfTask === "register" ? 4 : 5;
+    return defaultValues.currentStepIndex > totalSteps;
+  };
+
+  // Check if work is not finished (NOT_FINISHED)
+  const isWorkNotFinished = () => {
+    // Use actual work status if available, otherwise fallback to step index calculation
+    if (workData?.status) {
+      return workData.status === "NOT_FINISHED";
+    }
+    // Fallback for create mode or when work data is not available
+    if (!defaultValues?.currentStepIndex) return true; // Default to NOT_FINISHED for new works
+    const totalSteps = typeOfTask === "register" ? 4 : 5;
+    return defaultValues.currentStepIndex <= totalSteps;
+  };
+
   // Button handlers
   const handlePayBill = () => {
     const billId = getCurrentStepBillId();
@@ -248,9 +287,32 @@ export default function TaskFormNew({
     }
   };
 
+  const handleReset = () => {
+    router.push("/tasks");
+  };
+
   const handleCompleteStep = () => {
     if (workId) {
-      completeStepMutation.mutate(workId);
+      const currentStepIndex = defaultValues?.currentStepIndex || 1;
+      const totalSteps = typeOfTask === "register" ? 4 : 5;
+
+      // Check if this is the last step
+      const isLastStep = currentStepIndex >= totalSteps;
+
+      completeStepMutation.mutate(workId, {
+        onSuccess: () => {
+          // If this is the last step, work is done, redirect to tasks list
+          if (isLastStep) {
+            router.push("/tasks");
+          } else {
+            // Otherwise, refresh to show the next step
+            router.refresh();
+          }
+        },
+        onError: (error) => {
+          console.error("Complete step failed:", error);
+        },
+      });
     }
   };
 
@@ -267,20 +329,23 @@ export default function TaskFormNew({
 
     // For both view and edit modes
     if (mode === "view" || mode === "edit") {
-      const currentStepBill = getCurrentStepBill();
+      const currentStepIndex = defaultValues?.currentStepIndex || 1;
+      const totalSteps = typeOfTask === "register" ? 4 : 5;
 
-      // If there's no bill for current step, show complete button
-      if (!currentStepBill) {
+      // Check if this is beyond the last step (work is finished)
+      if (currentStepIndex > totalSteps) {
         return {
-          text: "เสร็จสิ้น",
-          action: handleCompleteStep,
-          disabled: false,
+          text: "เริ่มดำเนินการ",
+          action: () => {},
+          disabled: true,
           isSubmitButton: false,
         };
       }
 
-      // If bill exists but not paid, show pay button
-      if (currentStepBill.status === "NOT_PAID") {
+      const currentStepBill = getCurrentStepBill();
+
+      // If bill doesn't exist or is not paid, show pay button
+      if (!currentStepBill || currentStepBill.status === "NOT_PAID") {
         return {
           text: "ชำระเงิน",
           action: handlePayBill,
@@ -309,7 +374,63 @@ export default function TaskFormNew({
   };
 
   const isReadOnly = mode === "view";
-  const actionButtonConfig = getActionButtonConfig();
+
+  // PaidButtonSection component
+  const PaidButtonSection = () => {
+    // If mode is view and the work is not completed (status === "NOT_FINISHED"), show reset and paid buttons
+    if (mode === "view" && isWorkNotFinished()) {
+      return (
+        <div className="flex flex-row gap-x-[20px] justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            className="font-light cursor-pointer"
+            onClick={handleReset}
+          >
+            ยกเลิก
+          </Button>
+          <Button
+            type="button"
+            className="font-light cursor-pointer bg-black"
+            onClick={handlePayBill}
+            disabled={payBillMutation.isPending}
+          >
+            {payBillMutation.isPending ? "กำลังดำเนินการ..." : "ชำระเงิน"}
+          </Button>
+        </div>
+      );
+    }
+
+    // If mode is view and the work is completed (status === "FINISHED"), hide the reset and paid buttons
+    if (mode === "view" && isWorkCompleted()) {
+      return null;
+    }
+
+    // If mode isn't view (create mode), show reset and create buttons
+    if (mode !== "view") {
+      return (
+        <div className="flex flex-row gap-x-[20px] justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            className="font-light cursor-pointer"
+            onClick={handleReset}
+          >
+            ยกเลิก
+          </Button>
+          <Button
+            type="submit"
+            className="font-light cursor-pointer"
+            disabled={createMutation.isPending}
+          >
+            {createMutation.isPending ? "กำลังดำเนินการ..." : "เริ่มดำเนินการ"}
+          </Button>
+        </div>
+      );
+    }
+
+    return null;
+  };
 
   const totalSteps = typeOfTask === "register" ? 4 : 5;
   const MappingSequenceOfStepLabels = {
@@ -814,7 +935,7 @@ export default function TaskFormNew({
           </div>
         </div>
 
-        {/* StepCompletedSection */}
+        {/* StepPaidSection */}
         <div className="flex-1">
           <div className="flex flex-col gap-y-[40px] w-full p-[27px] border border-slate-300 rounded-2xl shadow-md">
             <div className="flex flex-col">
@@ -840,9 +961,8 @@ export default function TaskFormNew({
                     const currentStepIndex =
                       defaultValues?.currentStepIndex || 1;
                     const isCurrentStep = step.number === currentStepIndex;
-                    const isCompletedStep = step.number < currentStepIndex;
 
-                    // Determine step styling based on status
+                    // Simplified step styling logic
                     let stepStyle =
                       "bg-gray-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
                     let stepTextStyle = "text-gray-700";
@@ -851,18 +971,8 @@ export default function TaskFormNew({
                     if (isCurrentStep) {
                       if (isPaid) {
                         stepStyle =
-                          "bg-green-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
-                        stepTextStyle = "text-green-800";
-                        labels.push(
-                          <div
-                            key="current"
-                            className="bg-green-200 p-[5px] rounded-md"
-                          >
-                            <p className="font-light text-green-700">
-                              ขั้นตอนปัจจุบัน
-                            </p>
-                          </div>,
-                        );
+                          "bg-black w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
+                        stepTextStyle = "text-white";
                         labels.push(
                           <div
                             key="paid"
@@ -875,12 +985,12 @@ export default function TaskFormNew({
                         );
                       } else {
                         stepStyle =
-                          "bg-sky-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
-                        stepTextStyle = "text-sky-800";
+                          "bg-blue-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
+                        stepTextStyle = "text-sky-700";
                         labels.push(
                           <div
                             key="current"
-                            className="bg-sky-200 p-[5px] rounded-md"
+                            className="bg-blue-200 p-[5px] rounded-md"
                           >
                             <p className="font-light text-sky-700">
                               ขั้นตอนปัจจุบัน
@@ -888,7 +998,7 @@ export default function TaskFormNew({
                           </div>,
                         );
                       }
-                    } else if (isCompletedStep) {
+                    } else if (isPaid) {
                       stepStyle =
                         "bg-black w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
                       stepTextStyle = "text-white";
@@ -898,6 +1008,19 @@ export default function TaskFormNew({
                           className="bg-green-200 p-[5px] rounded-md"
                         >
                           <p className="font-light text-green-700">ชำระแล้ว</p>
+                        </div>,
+                      );
+                    } else if (!isPaid && step.number < currentStepIndex) {
+                      // Step before current step that's not paid
+                      stepStyle =
+                        "bg-gray-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
+                      stepTextStyle = "text-gray-700";
+                      labels.push(
+                        <div
+                          key="unpaid"
+                          className="bg-gray-200 p-[5px] rounded-md"
+                        >
+                          <p className="font-light text-gray-700">ชำระ</p>
                         </div>,
                       );
                     }
@@ -936,44 +1059,8 @@ export default function TaskFormNew({
         </div>
       </div>
 
-      {/* CompletedOrPaidButtonSection */}
-      {mode !== "create" && (
-        <div className="flex flex-col md:flex-row gap-x-[10px] gap-y-[10px] justify-end">
-          <Button
-            type="button"
-            variant="ghost"
-            className="font-light border border-slate-300"
-            onClick={() => router.back()}
-          >
-            ยกเลิก
-          </Button>
-          {actionButtonConfig.isSubmitButton ? (
-            <Button
-              type="submit"
-              className="font-light"
-              disabled={actionButtonConfig.disabled || createMutation.isPending}
-            >
-              {createMutation.isPending
-                ? "กำลังดำเนินการ..."
-                : actionButtonConfig.text}
-            </Button>
-          ) : (
-            <Button
-              type="button"
-              className="font-light"
-              onClick={actionButtonConfig.action}
-              disabled={
-                actionButtonConfig.disabled ||
-                completeStepMutation.isPending
-              }
-            >
-              {completeStepMutation.isPending
-                ? "กำลังดำเนินการ..."
-                : actionButtonConfig.text}
-            </Button>
-          )}
-        </div>
-      )}
+      {/* PaidButtonSection */}
+      <PaidButtonSection />
 
       {/* AlertDialogSection */}
       <AlertDialog

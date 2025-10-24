@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getEmployerStatsQueryOption } from "@/lib/api/employer/employer";
+import { getEmployerStatsQueryOption } from "@/lib/api";
 
 export default function Test() {
   const { data } = useQuery(getEmployerStatsQueryOption());

@@ -7,10 +7,11 @@ import {
   getBillByIdQueryOption,
   payBillMutationOptions,
 } from "@/lib/api/bills/bills";
+import { getWorkQueryOption } from "@/lib/api/works/works";
 import { CircleCheckBig, Printer, Sparkles } from "lucide-react";
 import React, { use, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 export default function ReceiptPage({
@@ -21,15 +22,34 @@ export default function ReceiptPage({
   const { id } = use(params);
   const router = useRouter();
   const printRef = useRef<HTMLDivElement>(null);
+  const queryClient = useQueryClient();
 
   // Fetch bill by ID
   const { data: bill, isLoading, error } = useQuery(getBillByIdQueryOption(id));
 
+  // Fetch work data using the workId from the bill
+  const { data: workData } = useQuery({
+    ...getWorkQueryOption(bill?.workId || ""),
+    enabled: !!bill?.workId, // Only fetch when workId is available
+  });
+
   // Pay bill mutation
   const payBillMutation = useMutation({
     ...payBillMutationOptions,
-    onSuccess: (data) => {
-      console.log("Bill paid successfully:", data);
+    onSuccess: (_data, billId) => {
+      // Invalidate relevant queries to refresh the data
+      queryClient.invalidateQueries({ queryKey: ["bill", billId] });
+
+      // Invalidate bill details query used in TaskForm (with workId parameter)
+      if (bill?.workId) {
+        queryClient.invalidateQueries({
+          queryKey: ["bill-details", { workId: bill.workId }]
+        });
+      }
+
+      // Also invalidate any bills list queries
+      queryClient.invalidateQueries({ queryKey: ["bills"] });
+
       // Redirect to the previous page
       router.back();
     },
@@ -72,10 +92,13 @@ export default function ReceiptPage({
     taskId: bill.workId,
     step: bill.stepIndex,
     amount: bill.price,
-    status: bill.status === "PAID" ? "paid" : "unpaid",
-    paymentMethod: null, // Not available in BillResponse
+    status: bill.status,
     createdAt: bill.createdAt,
     paidAt: bill.paidAt,
+    // Include additional data from work API
+    employerName: workData?.employer?.fullName || "-",
+    typeOfTaskLabel: workData?.workType || "-",
+    employees: workData?.employeesInWork || [],
   };
 
   return (

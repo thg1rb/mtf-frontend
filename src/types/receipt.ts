@@ -3,8 +3,14 @@ export interface Receipt {
   taskId: string;
   step: number;
   amount: number;
-  status: "PAID" | "UNPAID";
-  paymentMethod: "cash" | "transfer" | "promptpay" | null;
+  status: "PAID" | "NOT_PAID";
   createdAt: Date | string;
   paidAt: Date | string | null;
+  employerName?: string;
+  typeOfTaskLabel?: string;
+  employees?: Array<{
+    passportNumber: string;
+    fullName: string;
+    nationality?: string;
+  }>;
 }
