@@ -20,10 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  receiptTableHeaders,
-  getTypeOfTaskLabelAndSteps,
-} from "@/lib/mock-data";
+import { receiptTableHeaders } from "@/lib/mock-data";
 import {
   getBillsQueryOption,
   getBillStatsQueryOption,
@@ -215,9 +212,7 @@ export default function ReceiptsPage() {
                     </TableCell>
                     <TableCell className="font-light px-[20px]">
                       <div className="flex flex-col">
-                        <p className="font-light">
-                          {getTypeOfTaskLabelAndSteps(bill.workType).label}
-                        </p>
+                        <p className="font-light">{bill.workType}</p>
                         <p className="font-light text-zinc-400">
                           ขั้นตอนที่: {bill.stepIndex}
                         </p>

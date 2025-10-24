@@ -3,12 +3,12 @@
 import HeaderSection from "@/components/shared/HeaderSection";
 import TaskForm from "@/components/task/TaskForm";
 import { Button } from "@/components/ui/button";
-import { getWorkQueryOption } from "@/lib/api/work/work";
+import { getWorkQueryOption } from "@/lib/api";
 import { SquarePen } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { GetWorkResponse } from "@/lib/api/work/types";
+import { GetWorkResponse } from "@/lib/api/works/types";
 import { TaskFormData } from "@/lib/validations/task";
 
 export default function RegisterTaskPage({
@@ -21,11 +21,13 @@ export default function RegisterTaskPage({
   const { data: taskData, isLoading, error } = useQuery(getWorkQueryOption(id));
 
   // Transform API response to form's expected format
-  const transformApiDataToForm = (apiData: GetWorkResponse): Partial<TaskFormData> => {
+  const transformApiDataToForm = (
+    apiData: GetWorkResponse,
+  ): Partial<TaskFormData> => {
     return {
       employerId: apiData.employer.id,
       description: apiData.detail,
-      employeeIds: apiData.employeesInWork.map(emp => emp.passportNumber),
+      employeeIds: apiData.employeesInWork.map((emp) => emp.passportNumber),
       currentStepIndex: apiData.currentStepIndex,
     };
   };
@@ -38,7 +40,9 @@ export default function RegisterTaskPage({
     return <div>Error loading task data</div>;
   }
 
-  const formDefaultValues = taskData ? transformApiDataToForm(taskData) : undefined;
+  const formDefaultValues = taskData
+    ? transformApiDataToForm(taskData)
+    : undefined;
 
   return (
     <div className="flex flex-col gap-y-[35px] md:gap-y-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">

@@ -1,6 +1,5 @@
 "use client";
 
-import EmployeeTable from "@/components/employee/EmployeeTable";
 import EmployerForm from "@/components/employer/EmployerForm";
 import EmployerFormSkeleton from "@/components/employer/EmployerFormSkeleton";
 import HeaderSection from "@/components/shared/HeaderSection";
@@ -28,9 +27,9 @@ export default function EmployerPage({
   const { id } = use(params);
 
   const { data: employerData, isLoading } = useQuery(
-    getEmployerQueryOption(id)
+    getEmployerQueryOption(id),
   );
-  
+
   // TODO: const { data: employeesData, isLoading } = useQuery()
 
   if (!id || isLoading) {

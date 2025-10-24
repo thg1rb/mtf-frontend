@@ -1,8 +1,11 @@
-'use client'
+"use client";
 
 import WorkPermitForm from "@/components/document/WorkPermitForm";
 import HeaderSection from "@/components/shared/HeaderSection";
-import { getEmployeeQueryOption, getWorkPermit46HistoryQueryOption } from "@/lib/api";
+import {
+  getEmployeeQueryOption,
+  getWorkPermit46HistoryQueryOption,
+} from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import React, { use } from "react";
 
@@ -13,23 +16,25 @@ export default function WorkPermitPage({
 }) {
   const { id } = use(params);
 
-  const {data: employeeData, isLoading: isLoadingEmployee} = useQuery(
-    getEmployeeQueryOption(id)
+  const { data: employeeData, isLoading: isLoadingEmployee } = useQuery(
+    getEmployeeQueryOption(id),
   );
 
-  const { data: workPermitHistory, isLoading: isLoadingWorkPermits } = useQuery({
-    ...getWorkPermit46HistoryQueryOption({
-      passportNo: id,
-      employerId: employeeData?.currentEmployer?.employerId ?? "",
-      limit: 5
-    }),
-    enabled: !!employeeData?.currentEmployer?.employerId, // Only fetch when employerId is available
-  });
+  const { data: workPermitHistory, isLoading: isLoadingWorkPermits } = useQuery(
+    {
+      ...getWorkPermit46HistoryQueryOption({
+        passportNo: id,
+        employerId: employeeData?.currentEmployer?.employerId ?? "",
+        limit: 5,
+      }),
+      enabled: !!employeeData?.currentEmployer?.employerId, // Only fetch when employerId is available
+    },
+  );
 
   // // TODO: GET method `/api/employers/${id}` to fetch existing employer details
   // const data = findWorkPermitsByEmployeeId(id);
 
-    if (!id || isLoadingEmployee || isLoadingWorkPermits) {
+  if (!id || isLoadingEmployee || isLoadingWorkPermits) {
     return (
       <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
         <HeaderSection
@@ -49,7 +54,11 @@ export default function WorkPermitPage({
       <HeaderSection topic="เอกสาร บต.46" hasBackButton={true} />
 
       {/* WorkPermitFormSection */}
-      <WorkPermitForm employeeId={id} employerId={employeeData?.currentEmployer.employerId ?? ""}  workPermitHistory={workPermitHistory ?? []} />
+      <WorkPermitForm
+        employeeId={id}
+        employerId={employeeData?.currentEmployer.employerId ?? ""}
+        workPermitHistory={workPermitHistory ?? []}
+      />
 
       {/* EmployerNotFoundSection */}
       {/* {!data && <AlertDialog open={true}>

@@ -63,7 +63,7 @@ import {
   getEmployerSelectsQueryOption,
 } from "@/lib/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { CreateWorkRequest } from "@/lib/api/work/types";
+import { CreateWorkRequest } from "@/lib/api/works/types";
 import {
   Select,
   SelectContent,

@@ -67,7 +67,7 @@ export default function AgentsPage() {
         filterStatus && filterStatus.trim() !== ""
           ? (filterStatus as "ACTIVE" | "INACTIVE")
           : undefined,
-    })
+    }),
   );
 
   // Handle search button click
