@@ -355,8 +355,6 @@ export default function TaskFormNew({
           </div>
 
           {/* EmployeesTableSection */}
-          {/* TODO: Pagination */}
-          {/* TODO: filter agents by search or status */}
           <div className="flex flex-col gap-y-[20px] p-[20px] border rounded-2xl shadow-lg">
             <div className="flex flex-col">
               <div className="flex flex-row items-center gap-x-[5px]">

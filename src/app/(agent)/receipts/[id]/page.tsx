@@ -3,10 +3,11 @@
 import HeaderSection from "@/components/shared/HeaderSection";
 import PrintingReceipt from "@/components/receipt/PrintingReceipt";
 import { Button } from "@/components/ui/button";
-import { getReceiptById, getTaskById } from "@/lib/mock-data";
+import { getBillByIdQueryOption, payBillMutationOptions } from "@/lib/api/bills/bills";
 import { CircleCheckBig, Printer, Sparkles } from "lucide-react";
 import React, { use, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
+import { useQuery, useMutation } from "@tanstack/react-query";
 
 export default function ReceiptPage({
   params,
@@ -16,23 +17,66 @@ export default function ReceiptPage({
   const { id } = use(params);
   const printRef = useRef<HTMLDivElement>(null);
 
-  const receipt = getReceiptById(id);
-  const task = receipt?.taskId ? getTaskById(receipt.taskId) : undefined;
+  // Fetch bill by ID
+  const { data: bill, isLoading, error } = useQuery(getBillByIdQueryOption(id));
+
+  // Pay bill mutation
+  const payBillMutation = useMutation({
+    ...payBillMutationOptions,
+    onSuccess: (data) => {
+      console.log("Bill paid successfully:", data);
+      // Could show success message or redirect
+    },
+    onError: (error) => {
+      console.error("Payment failed:", error);
+      // Could show error message
+    },
+  });
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
-    documentTitle: `ใบเสร็จ-${receipt?.id || "unknown"}`,
+    documentTitle: `ใบเสร็จ-${bill?.id || "unknown"}`,
   });
+
+  const handlePayBill = () => {
+    if (bill) {
+      payBillMutation.mutate(bill.id);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading...
+      </div>
+    );
+  }
+
+  if (error || !bill) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Error loading receipt data
+      </div>
+    );
+  }
+
+  // Convert BillResponse to Receipt format for PrintingReceipt component
+  const receipt = {
+    id: bill.id,
+    taskId: bill.workId,
+    step: bill.stepIndex,
+    amount: bill.price,
+    status: bill.status === "PAID" ? "paid" : "unpaid",
+    paymentMethod: null, // Not available in BillResponse
+    createdAt: bill.createdAt,
+    paidAt: bill.paidAt,
+  };
 
   return (
     <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
       <div className="flex flex-col">
         {/* HeaderSection */}
-        {!receipt || !task ? (
-          <>NotFound</>
-        ) : (
-          <HeaderSection topic={receipt.id} hasBackButton={true} />
-        )}
+        <HeaderSection topic={bill.id} hasBackButton={true} />
       </div>
 
       <div className="flex flex-col lg:flex-row gap-[45px]">
@@ -59,16 +103,18 @@ export default function ReceiptPage({
                   <Printer />
                   <p className="font-light">พิมพ์ใบเสร็จ</p>
                 </Button>
-                {receipt?.status === "unpaid" ? (
+                {bill.status === "NOT_PAID" && (
                   <Button
                     type="button"
                     className="flex flex-row justify-start bg-green-200 hover:bg-green-300 text-green-700 cursor-pointer"
+                    onClick={handlePayBill}
+                    disabled={payBillMutation.isPending}
                   >
                     <CircleCheckBig />
-                    <p className="font-light">ชำระค่าบริการเรียบร้อย</p>
+                    <p className="font-light">
+                      {payBillMutation.isPending ? "กำลังดำเนินการ..." : "ชำระค่าบริการเรียบร้อย"}
+                    </p>
                   </Button>
-                ) : (
-                  <></>
                 )}
               </div>
             </div>

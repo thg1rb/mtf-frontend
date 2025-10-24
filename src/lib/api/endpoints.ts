@@ -75,4 +75,13 @@ export const ENDPOINTS = {
     register: "/works/register",
     renew: "/works/renew",
   },
+
+  // Bills endpoints
+  bills: {
+    base: "/bills",
+    detail: (id: string | number) => `/bills/${id}`,
+    details: "/bills/details",
+    pay: (id: string | number) => `/bills/${id}/pay`,
+    statistics: "/bills/statistics",
+  },
 } as const;
