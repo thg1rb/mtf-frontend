@@ -8,7 +8,7 @@ export default function NewRenewTaskPage() {
       {/* HeaderSection */}
       <HeaderSection topic="การต่ออายุใบอนุญาตทำงาน" hasBackButton={true} />
 
-      {/* TODO: Renew Form with renew mode */}
+      {/* WorkFormSection */}
       <TaskForm typeOfTask="renew" mode="create" />
     </div>
   );

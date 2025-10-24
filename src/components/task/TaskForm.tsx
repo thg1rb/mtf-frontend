@@ -361,52 +361,148 @@ export default function TaskFormNew({
             <div className="flex flex-col">
               <div className="flex flex-row items-center gap-x-[5px]">
                 <Users2 />
-                <p className="font-normal">ค้นหาลูกจ้าง</p>
+                <p className="font-normal">
+                  {isReadOnly ? "รายชื่อลูกจ้างที่เลือก" : "ค้นหาลูกจ้าง"}
+                </p>
               </div>
               <p className="font-light text-zinc-400">
-                ค้นหาจากส่วนหนึ่งของชื่อหรือนามสกุล
+                {isReadOnly
+                  ? "ลูกจ้างที่เลือกสำหรับงานนี้"
+                  : "ค้นหาจากส่วนหนึ่งของชื่อหรือนามสกุล"}
               </p>
             </div>
-            <div className="flex flex-row gap-x-[14px] md:gap-x-[26px]">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <Input
-                  className="pl-10"
-                  placeholder="ค้นหาลูกจ้างที่ต้องการ..."
-                  value={searchTerm}
-                  onChange={(e) => {
-                    setSearchTerm(e.target.value);
-                  }}
-                  onKeyDown={handleKeyPress}
-                />
+            {!isReadOnly && (
+              <div className="flex flex-row gap-x-[14px] md:gap-x-[26px]">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                    className="pl-10"
+                    placeholder="ค้นหาลูกจ้างที่ต้องการ..."
+                    value={searchTerm}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                    }}
+                    onKeyDown={handleKeyPress}
+                  />
+                </div>
+                <Select value={statusInput} onValueChange={setStatusInput}>
+                  <SelectTrigger className="font-light cursor-pointer">
+                    <SelectValue placeholder="สถานะ" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value=" " className="cursor-pointer">
+                      ทั้งหมด
+                    </SelectItem>
+                    <SelectItem value="ACTIVE" className="cursor-pointer">
+                      ใช้งาน
+                    </SelectItem>
+                    <SelectItem value="INACTIVE" className="cursor-pointer">
+                      ไม่ใช้งาน
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button
+                  type="button"
+                  className="font-light cursor-pointer"
+                  onClick={handleSearch}
+                >
+                  ค้นหา
+                </Button>
               </div>
-              <Select value={statusInput} onValueChange={setStatusInput}>
-                <SelectTrigger className="font-light cursor-pointer">
-                  <SelectValue placeholder="สถานะ" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value=" " className="cursor-pointer">
-                    ทั้งหมด
-                  </SelectItem>
-                  <SelectItem value="ACTIVE" className="cursor-pointer">
-                    ใช้งาน
-                  </SelectItem>
-                  <SelectItem value="INACTIVE" className="cursor-pointer">
-                    ไม่ใช้งาน
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              <Button
-                type="button"
-                className="font-light cursor-pointer"
-                onClick={handleSearch}
-              >
-                ค้นหา
-              </Button>
-            </div>
+            )}
 
             {/* Employees Table */}
-            {isLoadingEmployeesByEmployerId ? (
+            {isReadOnly ? (
+              // View mode - show only selected employees
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="px-[20px] font-normal">
+                        ชื่อ-นามสกุล
+                      </TableHead>
+                      <TableHead className="px-[20px] font-normal">
+                        สถานะ
+                      </TableHead>
+                      <TableHead className="px-[20px] font-normal text-right">
+                        ดำเนินการ
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {selectedEmployeeIds.length === 0 ? (
+                      <TableRow>
+                        <TableCell
+                          colSpan={3}
+                          className="text-center py-8 text-muted-foreground"
+                        >
+                          ไม่ได้เลือกลูกจ้าง
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      employeesByEmployerId?.content
+                        .filter((employee) =>
+                          selectedEmployeeIds.includes(employee.id),
+                        )
+                        .map((employee) => {
+                          return (
+                            <TableRow
+                              key={employee.id}
+                              className="cursor-pointer"
+                            >
+                              <TableCell className="font-light px-[20px]">
+                                {employee.fullName}
+                              </TableCell>
+                              <TableCell className="font-light px-[20px]">
+                                <span
+                                  className={`px-2 py-1 rounded-full text-xs ${
+                                    employee.status === "ACTIVE"
+                                      ? "bg-green-100 text-green-800"
+                                      : "bg-red-200 text-red-800"
+                                  }`}
+                                >
+                                  {employee.status === "ACTIVE"
+                                    ? "ใช้งาน"
+                                    : "ไม่ใช้งาน"}
+                                </span>
+                              </TableCell>
+                              <TableCell className="text-right px-[20px]">
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger
+                                    asChild
+                                    className="cursor-pointer"
+                                  >
+                                    <Button
+                                      variant="ghost"
+                                      className="h-8 w-8 p-0"
+                                      onClick={(e) => e.stopPropagation()}
+                                    >
+                                      <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem
+                                      asChild
+                                      className="cursor-pointer"
+                                      onClick={(e) => e.stopPropagation()}
+                                    >
+                                      <Link href={`/employees/${employee.id}`}>
+                                        <Eye className="mr-2 h-4 w-4" />
+                                        ดูข้อมูล
+                                      </Link>
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            ) : // Edit/Create mode - show searchable employees table
+            isLoadingEmployeesByEmployerId ? (
               <TableSkeleton rows={5} columns={4} />
             ) : (
               <div className="rounded-md border">
@@ -416,10 +512,7 @@ export default function TaskFormNew({
                       <TableHead className="px-[20px] font-normal">
                         <div className="flex items-center space-x-2">
                           <Checkbox
-                            disabled={
-                              isReadOnly ||
-                              !employeesByEmployerId?.content?.length
-                            }
+                            disabled={!employeesByEmployerId?.content?.length}
                             checked={
                               employeesByEmployerId?.content &&
                               employeesByEmployerId.content.length > 0 &&
@@ -474,7 +567,6 @@ export default function TaskFormNew({
                           >
                             <TableCell className="font-light px-[20px]">
                               <Checkbox
-                                disabled={isReadOnly}
                                 checked={selectedEmployeeIds.includes(
                                   employee.id,
                                 )}
@@ -571,16 +663,20 @@ export default function TaskFormNew({
 
             <div className="flex flex-row justify-between items-center">
               <div className="flex flex-col gap-y-[5px] px-2">
+                {!isReadOnly && (
+                  <p className="font-light text-zinc-500">
+                    หน้า {page + 1} จาก {employeesByEmployerId?.totalPages}
+                  </p>
+                )}
                 <p className="font-light text-zinc-500">
-                  หน้า {page + 1} จาก {employeesByEmployerId?.totalPages}
-                </p>
-                <p className="font-light text-zinc-500">
-                  เลือกแล้ว {selectedEmployeeIds.length} คน จากทั้งหมด{" "}
-                  {employeesByEmployerId?.totalElements} คน
+                  {isReadOnly
+                    ? `รายชื่อลูกจ้างที่เลือก ${selectedEmployeeIds.length} คน`
+                    : `เลือกแล้ว ${selectedEmployeeIds.length} คน จากทั้งหมด ${employeesByEmployerId?.totalElements || 0} คน`}
                 </p>
               </div>
-              {/* Pagination */}
-              {employeesByEmployerId &&
+              {/* Pagination - only show in edit/create mode */}
+              {!isReadOnly &&
+                employeesByEmployerId &&
                 employeesByEmployerId.totalPages !== 0 &&
                 employeesByEmployerId.totalPages > 1 && (
                   <div className="flex flex-row gap-x-[10px]">
