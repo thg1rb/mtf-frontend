@@ -69,6 +69,7 @@ export default function RegisterTaskPage({
         typeOfTask="register"
         mode="view"
         defaultValues={formDefaultValues}
+        workId={id}
       />
     </div>
   );

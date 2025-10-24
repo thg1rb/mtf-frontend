@@ -17,7 +17,7 @@ export default async function RenewTaskEditPage({ params }: { params: { id: stri
             />
 
             {/* Register Form with register mode */}
-            <TaskForm typeOfTask='renew' mode='edit' task={task} defaultValues={task} />
+            <TaskForm typeOfTask='renew' mode='edit' task={task} defaultValues={task} workId={id} />
         </div>
     )
 }

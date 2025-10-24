@@ -69,6 +69,7 @@ export default function RenewTaskPage({
         typeOfTask="renew"
         mode="view"
         defaultValues={formDefaultValues}
+        workId={id}
       />
     </div>
   );

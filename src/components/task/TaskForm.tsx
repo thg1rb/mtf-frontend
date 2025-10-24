@@ -71,17 +71,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { getBillDetailsQueryOption } from "@/lib/api/bills/bills";
+import { BillResponse } from "@/lib/api/bills/types";
 
 interface TaskFormProps {
   typeOfTask: "register" | "renew";
   mode: "create" | "view" | "edit";
   defaultValues?: Partial<TaskFormData>;
+  workId?: string; // Added for view/edit modes to fetch bills
 }
 
 export default function TaskFormNew({
   typeOfTask,
   mode,
   defaultValues,
+  workId,
 }: TaskFormProps) {
   const router = useRouter();
   const [page, setPage] = useState<number>(0); // Start with 0
@@ -130,6 +134,12 @@ export default function TaskFormNew({
           : undefined,
     }),
   );
+
+  // Fetch bills data for view/edit modes (only when workId is available)
+  const { data: billsData = [] } = useQuery({
+    ...getBillDetailsQueryOption(workId ? { workId } : undefined),
+    enabled: !!workId, // Only fetch when workId exists
+  });
 
   // Define mutations at component level (not inside handlers)
   const createMutation = useMutation({
@@ -231,6 +241,7 @@ export default function TaskFormNew({
     });
   };
 
+  // TODO: Loading Component (Skeleton)
   if (isLoadingEmployerSelects) {
     return <div>Loading...</div>;
   }
@@ -721,52 +732,85 @@ export default function TaskFormNew({
               </p>
             </div>
             <div className="flex flex-col gap-y-[18px]">
-              {/* TODO: Steps */}
               <div>
                 {stepsMapping().map(
-                  (step: { number: number; label: string }) => (
-                    <div key={step.number} className="flex flex-col">
-                      <div className="flex flex-row items-center gap-x-3">
-                        <div
-                          className={`bg-zinc-200 ${defaultValues?.currentStepIndex && step.number <= defaultValues?.currentStepIndex ? "bg-black" : "bg-zinc-200"} w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0`}
-                        >
-                          <p className="text-white">{step.number}</p>
+                  (step: { number: number; label: string }) => {
+                    // Find the bill for this step (if any)
+                    const stepBill = billsData?.find(
+                      (bill: BillResponse) => bill.stepIndex === step.number
+                    );
+                    const isPaid = stepBill?.status === "PAID";
+
+                    // Determine current step
+                    const currentStepIndex = defaultValues?.currentStepIndex || 1;
+                    const isCurrentStep = step.number === currentStepIndex;
+                    const isCompletedStep = step.number < currentStepIndex;
+
+                    // Determine step styling based on status
+                    let stepStyle = "bg-gray-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
+                    let stepTextStyle = "text-gray-700";
+                    const labels = [];
+
+                    if (isCurrentStep) {
+                      if (isPaid) {
+                        stepStyle = "bg-green-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
+                        stepTextStyle = "text-green-800";
+                        labels.push(
+                          <div key="current" className="bg-green-200 p-[5px] rounded-md">
+                            <p className="font-light text-green-700">ขั้นตอนปัจจุบัน</p>
+                          </div>
+                        );
+                        labels.push(
+                          <div key="paid" className="bg-green-200 p-[5px] rounded-md">
+                            <p className="font-light text-green-700">ชำระแล้ว</p>
+                          </div>
+                        );
+                      } else {
+                        stepStyle = "bg-sky-200 w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
+                        stepTextStyle = "text-sky-800";
+                        labels.push(
+                          <div key="current" className="bg-sky-200 p-[5px] rounded-md">
+                            <p className="font-light text-sky-700">ขั้นตอนปัจจุบัน</p>
+                          </div>
+                        );
+                      }
+                    } else if (isCompletedStep) {
+                      stepStyle = "bg-black w-12 h-12 rounded-full flex items-center justify-center font-medium flex-shrink-0";
+                      stepTextStyle = "text-white";
+                      labels.push(
+                        <div key="paid" className="bg-green-200 p-[5px] rounded-md">
+                          <p className="font-light text-green-700">ชำระแล้ว</p>
                         </div>
-                        <div>
-                          <div className="flex flex-col">
-                            <div className="flex flex-row gap-x-[5px]">
-                              <p className="font-normal">
-                                ขั้นตอนที่ {step.number}
-                              </p>
-                              {defaultValues?.currentStepIndex &&
-                              defaultValues?.currentStepIndex ===
-                                step.number ? (
-                                <div className="bg-blue-200 p-[5px] rounded-md">
-                                  <p className="font-light text-blue-700">
-                                    ขั้นตอนปัจจุบัน
-                                  </p>
-                                </div>
-                              ) : step.number === 1 ? (
-                                <div className="bg-blue-200 p-[5px] rounded-md">
-                                  <p className="font-light text-blue-700">
-                                    ขั้นตอนปัจจุบัน
-                                  </p>
-                                </div>
-                              ) : (
-                                <div></div>
-                              )}
+                      );
+                    }
+                    // Future steps keep the default gray style with no labels
+
+                    return (
+                      <div key={step.number} className="flex flex-col">
+                        <div className="flex flex-row items-center gap-x-3">
+                          <div className={stepStyle}>
+                            <p className={stepTextStyle}>{step.number}</p>
+                          </div>
+                          <div>
+                            <div className="flex flex-col">
+                              <div className="flex flex-row gap-x-[5px]">
+                                <p className="font-normal">
+                                  ขั้นตอนที่ {step.number}
+                                </p>
+                                {labels}
+                              </div>
+                              <p className="font-light">{step.label}</p>
                             </div>
-                            <p className="font-light">{step.label}</p>
                           </div>
                         </div>
+                        {step.number !== totalSteps ? (
+                          <div className="w-[1px] h-10 ml-[23px] my-[10px] bg-zinc-300"></div>
+                        ) : (
+                          <></>
+                        )}
                       </div>
-                      {step.number !== totalSteps ? (
-                        <div className="w-[1px] h-10 ml-[23px] my-[10px] bg-zinc-300"></div>
-                      ) : (
-                        <></>
-                      )}
-                    </div>
-                  ),
+                    );
+                  },
                 )}
               </div>
             </div>
