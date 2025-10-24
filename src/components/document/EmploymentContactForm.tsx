@@ -31,7 +31,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../ui/alert-dialog";
-import { EmploymentContract } from "@/types";
 import {
   GetEmploymentContractHistoryResponse,
   CreateEmploymentContractRequest,
@@ -130,27 +129,7 @@ export default function EmploymentContactForm({
     }
   }, [employmentContractData, setValue]);
 
-  // Handler to populate form with selected work permit data
-  const handleLoadEmploymentContract = (contract: EmploymentContract) => {
-    setValue("typeOfWorkTh", contract.typeOfWorkTh);
-    setValue("typeOfWorkEn", contract.typeOfWorkEn);
-    setValue("incomePerDay", contract.incomePerDay);
-    setValue("payIncomeDate", contract.payIncomeDate);
-    setValue("periodOfEmployment", contract.periodOfEmployment);
-    setValue("workingHourLimit", contract.workingHourLimit);
-    setValue("workingDayPerWeek", contract.workingDayPerWeek);
-    setValue("daysOffWeeklyTh", contract.daysOffWeeklyTh);
-    setValue("daysOffWeeklyEn", contract.daysOffWeeklyEn);
-    setValue("daysOffHolidayTh", contract.daysOffHolidayTh);
-    setValue("daysOffHolidayEn", contract.daysOffHolidayEn);
-    setValue("daysAnnualLeaveTh", contract.daysAnnualLeaveTh);
-    setValue("daysAnnualLeaveEn", contract.daysAnnualLeaveEn);
-    setValue("overtimeRateTh", contract.overtimeRateTh);
-    setValue("overtimeRateEn", contract.overtimeRateEn);
-    setValue("holidayOvertimeRateTh", contract.holidayOvertimeRateTh);
-    setValue("holidayOvertimeRateEn", contract.holidayOvertimeRateEn);
-  };
-
+  
   // Transform form data to API request format
   const transformToCreateRequest = (
     data: EmploymentContractFormData

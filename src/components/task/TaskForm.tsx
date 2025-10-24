@@ -59,7 +59,6 @@ import {
 } from "../ui/dropdown-menu";
 import {
   createWorkMutationOptions,
-  completeStepMutationOptions,
   getEmployeesByEmployerIdQueryOption,
   getEmployerSelectsQueryOption,
   getWorkQueryOption,
@@ -161,14 +160,7 @@ export default function TaskFormNew({
     },
   });
 
-  // Complete step mutation
-  const completeStepMutation = useMutation({
-    ...completeStepMutationOptions,
-    onError: (error) => {
-      console.error("Complete step failed:", error);
-    },
-  });
-
+  
   // Pay bill mutation
   const payBillMutation = useMutation({
     ...payBillMutationOptions,
@@ -291,88 +283,8 @@ export default function TaskFormNew({
     router.push("/tasks");
   };
 
-  const handleCompleteStep = () => {
-    if (workId) {
-      const currentStepIndex = defaultValues?.currentStepIndex || 1;
-      const totalSteps = typeOfTask === "register" ? 4 : 5;
-
-      // Check if this is the last step
-      const isLastStep = currentStepIndex >= totalSteps;
-
-      completeStepMutation.mutate(workId, {
-        onSuccess: () => {
-          // If this is the last step, work is done, redirect to tasks list
-          if (isLastStep) {
-            router.push("/tasks");
-          } else {
-            // Otherwise, refresh to show the next step
-            router.refresh();
-          }
-        },
-        onError: (error) => {
-          console.error("Complete step failed:", error);
-        },
-      });
-    }
-  };
-
-  // Determine what button to show
-  const getActionButtonConfig = () => {
-    if (mode === "create") {
-      return {
-        text: "เริ่มดำเนินการ",
-        action: () => {}, // Will be handled by form submit
-        disabled: false,
-        isSubmitButton: true,
-      };
-    }
-
-    // For both view and edit modes
-    if (mode === "view" || mode === "edit") {
-      const currentStepIndex = defaultValues?.currentStepIndex || 1;
-      const totalSteps = typeOfTask === "register" ? 4 : 5;
-
-      // Check if this is beyond the last step (work is finished)
-      if (currentStepIndex > totalSteps) {
-        return {
-          text: "เริ่มดำเนินการ",
-          action: () => {},
-          disabled: true,
-          isSubmitButton: false,
-        };
-      }
-
-      const currentStepBill = getCurrentStepBill();
-
-      // If bill doesn't exist or is not paid, show pay button
-      if (!currentStepBill || currentStepBill.status === "NOT_PAID") {
-        return {
-          text: "ชำระเงิน",
-          action: handlePayBill,
-          disabled: false,
-          isSubmitButton: false,
-        };
-      }
-
-      // If bill is paid, show complete button
-      if (currentStepBill.status === "PAID") {
-        return {
-          text: "เสร็จสิ้น",
-          action: handleCompleteStep,
-          disabled: false,
-          isSubmitButton: false,
-        };
-      }
-    }
-
-    return {
-      text: "เริ่มดำเนินการ",
-      action: () => {},
-      disabled: false,
-      isSubmitButton: true,
-    };
-  };
-
+  
+  
   const isReadOnly = mode === "view";
 
   // PaidButtonSection component

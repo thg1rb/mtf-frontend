@@ -108,30 +108,6 @@ export default function EmployeeForm({
   });
 
   const cleanedDefaultValues: EmployeeFormData = useMemo(() => {
-    // Helper to find document expiry date by type from array
-    const findDocumentExpiry = (type: string): string | null => {
-      if (
-        !defaultValues?.documents ||
-        !Array.isArray(defaultValues.documents)
-      ) {
-        return null;
-      }
-      const doc = (defaultValues.documents as any[]).find(
-        (d: any) => d.type === type
-      );
-      if (!doc?.expiryDate) return null;
-
-      // If it's already a string, return it
-      if (typeof doc.expiryDate === "string") return doc.expiryDate;
-
-      // If it's a Date, convert to ISO string
-      if (doc.expiryDate instanceof Date) {
-        return doc.expiryDate.toISOString();
-      }
-
-      return null;
-    };
-
     return {
       passportNumber: defaultValues?.passportNumber ?? "",
       employerId: defaultValues?.employerId ?? "",
@@ -147,12 +123,12 @@ export default function EmployeeForm({
         provinceTh: defaultValues?.address?.provinceTh ?? "",
         postalCode: defaultValues?.address?.postalCode ?? "",
       },
-      documents: {
-        healthCheckExpiryDate: findDocumentExpiry("ใบรับรองแพทย์"),
-        insuranceExpiryDate: findDocumentExpiry("ประกันสุขภาพ"),
-        workPermitExpiryDate: findDocumentExpiry("ใบอนุญาตทำงาน"),
-        certificateOfIdentityExpiryDate: findDocumentExpiry("เอกสาร CI"),
-        nonThaiIdentificationExpiryDate: findDocumentExpiry("บัตรชมพู"),
+      documents: defaultValues?.documents ?? {
+        healthCheckExpiryDate: null,
+        insuranceExpiryDate: null,
+        workPermitExpiryDate: null,
+        certificateOfIdentityExpiryDate: null,
+        nonThaiIdentificationExpiryDate: null,
       },
     };
   }, [defaultValues]);

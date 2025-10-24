@@ -30,6 +30,39 @@ export default function EmployeePage({
     getEmployeeQueryOption(id)
   );
 
+  // Transform documents array to form format
+  const transformDocumentsToForm = (documents: { id: string; type: string; expiryDate: string }[]) => {
+    const result: {
+      healthCheckExpiryDate?: string | null;
+      insuranceExpiryDate?: string | null;
+      workPermitExpiryDate?: string | null;
+      certificateOfIdentityExpiryDate?: string | null;
+      nonThaiIdentificationExpiryDate?: string | null;
+    } = {};
+
+    documents.forEach((doc) => {
+      switch (doc.type) {
+        case "ใบรับรองแพทย์":
+          result.healthCheckExpiryDate = doc.expiryDate;
+          break;
+        case "ประกันสุขภาพ":
+          result.insuranceExpiryDate = doc.expiryDate;
+          break;
+        case "ใบอนุญาตทำงาน":
+          result.workPermitExpiryDate = doc.expiryDate;
+          break;
+        case "เอกสาร CI":
+          result.certificateOfIdentityExpiryDate = doc.expiryDate;
+          break;
+        case "บัตรชมพู":
+          result.nonThaiIdentificationExpiryDate = doc.expiryDate;
+          break;
+      }
+    });
+
+    return result;
+  };
+
   // Transform API response to form props
   const employeeFormProps = employeeData ? {
     passportNumber: employeeData.passportNumber,
@@ -40,7 +73,7 @@ export default function EmployeePage({
     bloodType: employeeData.bloodType,
     status: employeeData.status,
     address: employeeData.address,
-    documents: employeeData.documents as any, // Documents array will be transformed by EmployeeForm
+    documents: transformDocumentsToForm(employeeData.documents),
   } : undefined;
 
   if (!id || isLoading) {
