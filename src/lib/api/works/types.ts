@@ -33,11 +33,6 @@ export interface CreateWorkResponse {
   workId: string;
 }
 
-export interface CompleteStepResponse {
-  message: string;
-  workId: string;
-}
-
 export interface GetWorkStatsResponse {
   totalWorks: number;
   finishedWorks: number;
