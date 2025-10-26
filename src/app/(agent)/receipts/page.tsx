@@ -173,9 +173,7 @@ export default function ReceiptsPage() {
                 {receiptTableHeaders.map((tableHeader) => (
                   <TableHead
                     key={tableHeader.index}
-                    className={`font-normal px-[20px] ${
-                      tableHeader.index === "header-5" ? "text-right" : ""
-                    }`}
+                    className={`font-normal px-[20px] ${tableHeader.className}`}
                   >
                     {tableHeader.headerName}
                   </TableHead>

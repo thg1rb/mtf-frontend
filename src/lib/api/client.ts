@@ -43,9 +43,9 @@ class ApiClient {
     const url = this.buildURL(endpoint, params);
     
     // Add default headers
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
       ...API_CONFIG.headers,
-      ...fetchOptions?.headers,
+      ...(fetchOptions?.headers as Record<string, string>),
     };
 
     // Add authorization header if token exists

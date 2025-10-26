@@ -369,15 +369,6 @@ export default function EmployeeForm({
                               value={employer.id}
                               onSelect={() => {
                                 field.onChange(employer.id);
-
-                                // Clear selected employees when employer changes
-                                setSelectedEmployeeIds([]);
-
-                                // Set the selected employer ID to trigger API query
-                                setSelectedEmployerId(employer.id);
-
-                                // Reset pagination when employer changes
-                                setPage(0);
                               }}
                             >
                               {employer.fullName}
