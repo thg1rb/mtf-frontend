@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Kanit } from "next/font/google";
 import "./globals.css";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { ConditionalSidebar } from "@/components/layout/ConditionalSidebar";
 import { cookies } from "next/headers";
 import QueryProvider from "@/providers/query-provider";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const kanit = Kanit({
   variable: "--font-kanit",
@@ -29,9 +29,11 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${kanit.variable} antialiased`}>
         <QueryProvider>
-          <SidebarProvider defaultOpen={defaultOpen}>
-            <ConditionalSidebar>{children}</ConditionalSidebar>
-          </SidebarProvider>
+          <AuthProvider>
+            <ConditionalSidebar defaultOpen={defaultOpen}>
+              {children}
+            </ConditionalSidebar>
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>

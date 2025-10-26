@@ -27,6 +27,10 @@ export interface CreateEmployerRequest {
     subDistrictTh: string;
     provinceTh: string;
     postalCode: string;
+    addrDetailEn: string;
+    districtEn: string;
+    subDistrictEn: string;
+    provinceEn: string;
   };
 }
 
@@ -49,6 +53,10 @@ export interface UpdateEmployerRequest {
     subDistrictTh?: string;
     provinceTh?: string;
     postalCode?: string;
+    addrDetailEn?: string;
+    districtEn?: string;
+    subDistrictEn?: string;
+    provinceEn?: string;
   };
   // Note: All fields optional for partial updates
 }

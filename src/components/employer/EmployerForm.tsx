@@ -32,7 +32,10 @@ import {
 } from "../ui/alert-dialog";
 import { useMutation } from "@tanstack/react-query";
 import { createEmployer, updateEmployer } from "@/lib/api";
-import { CreateEmployerRequest, UpdateEmployerRequest } from "@/lib/api/employer/types";
+import {
+  CreateEmployerRequest,
+  UpdateEmployerRequest,
+} from "@/lib/api/employers/types";
 
 interface EmployerFormProps {
   mode: "create" | "view" | "edit";
@@ -96,7 +99,7 @@ export default function EmployerForm({
         postalCode: defaultValues?.address?.postalCode ?? "",
       },
     }),
-    [defaultValues]
+    [defaultValues],
   );
 
   const {
@@ -143,6 +146,10 @@ export default function EmployerForm({
           subDistrictTh: data.address.subDistrictTh,
           provinceTh: data.address.provinceTh,
           postalCode: data.address.postalCode,
+          addrDetailEn: data.address.addrDetailEn,
+          districtEn: data.address.districtEn,
+          subDistrictEn: data.address.subDistrictEn,
+          provinceEn: data.address.provinceEn,
         },
       };
 
@@ -168,6 +175,10 @@ export default function EmployerForm({
           subDistrictTh: data.address.subDistrictTh,
           provinceTh: data.address.provinceTh,
           postalCode: data.address.postalCode,
+          addrDetailEn: data.address.addrDetailEn,
+          districtEn: data.address.districtEn,
+          subDistrictEn: data.address.subDistrictEn,
+          provinceEn: data.address.provinceEn,
         },
       };
 

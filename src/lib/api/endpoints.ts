@@ -4,6 +4,11 @@
  */
 
 export const ENDPOINTS = {
+  // Authentication endpoints
+  auth: {
+    login: "/auth/login",
+  },
+
   // Agent endpoints
   agents: {
     base: "/agents",

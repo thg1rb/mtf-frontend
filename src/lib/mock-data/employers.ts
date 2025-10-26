@@ -12,11 +12,6 @@ export const employerTableHeaders: TableHeader[] = [
     className: "text-left",
   },
   {
-    index: "header-3",
-    headerName: "จำนวนลูกจ้าง",
-    className: "text-center",
-  },
-  {
     index: "header-4",
     headerName: "สถานะ",
     className: "text-center",

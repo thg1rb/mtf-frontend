@@ -1,4 +1,5 @@
 import { API_CONFIG } from './config';
+import { getAuthToken } from '@/lib/auth/storage';
 
 type QueryParams = Record<string, string | number | boolean | undefined | null>;
 
@@ -46,6 +47,12 @@ class ApiClient {
       ...API_CONFIG.headers,
       ...fetchOptions?.headers,
     };
+
+    // Add authorization header if token exists
+    const token = getAuthToken();
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
 
     try {
       const response = await fetch(url, {

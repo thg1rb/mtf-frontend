@@ -4,6 +4,7 @@ export { apiClient } from "./client";
 export { ENDPOINTS } from "./endpoints";
 
 // Export all API query options
+export * from "./auth/auth";
 export * from "./agents/agents";
 export * from "./employers/employers";
 export * from "./employees/employees";
