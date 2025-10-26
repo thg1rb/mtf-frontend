@@ -8,29 +8,32 @@
 // ============================================
 
 export interface CreateAgentRequest {
-  citizenId: string;
+  id: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  firstname: string;
-  lastname: string;
-  addressDetails: string;
-  subDistrict: string;
-  district: string;
-  province: string;
-  postelCode: string;
-  // Note: status is set by backend, not in create request
+  status: "ACTIVE" | "INACTIVE";
+  address: {
+    addrDetailTh: string;
+    subDistrictTh: string;
+    districtTh: string;
+    provinceTh: string;
+    postalCode: string;
+  };
 }
 
 export interface UpdateAgentRequest {
+  firstName?: string;
+  lastName?: string;
   email?: string;
-  firstname?: string;
-  lastname?: string;
-  status?: "active" | "inactive";
-  addressDetails?: string;
-  subDistrict?: string;
-  district?: string;
-  province?: string;
-  postelCode?: string;
-  // Note: All fields optional for partial updates
+  status?: "ACTIVE" | "INACTIVE";
+  address?: {
+    addrDetailTh?: string;
+    subDistrictTh?: string;
+    districtTh?: string;
+    provinceTh?: string;
+    postalCode?: string;
+  };
 }
 
 export interface GetAgentsRequest {
@@ -52,16 +55,18 @@ export interface GetAgentStatsResponse {
 }
 
 export interface GetAgentResponse {
+  id: string;
   firstname: string;
   lastname: string;
   email: string;
   status: "ACTIVE" | "INACTIVE";
   address: {
+    id: string;
     addrDetailTh: string;
-    districtTh: string;
     subDistrictTh: string;
+    districtTh: string;
     provinceTh: string;
-    postelCode: string;
+    postalCode: string;
   };
 }
 
@@ -76,6 +81,17 @@ export interface GetAgentsResponse {
   totalPages: number;
   currentPage: number;
   pageSize: number;
+}
+
+export interface CreateAgentResponse {
+  password: string;
+  message: string;
+  agentId: string;
+}
+
+export interface UpdateAgentResponse {
+  agentId: string;
+  message: string;
 }
 
 export interface DeleteAgentResponse {

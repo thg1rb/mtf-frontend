@@ -41,6 +41,20 @@ export const getAgentQueryOption = (id: string) => {
   });
 };
 
+// POST: Create Agent
+export const createAgentQueryOption = () => {
+  return {
+    mutationFn: (data: CreateAgentRequest) => createAgent(data),
+  };
+};
+
+// PUT: Update Agent
+export const updateAgentQueryOption = (id: string) => {
+  return {
+    mutationFn: (data: UpdateAgentRequest) => updateAgent(id, data),
+  };
+};
+
 // ============================================
 // API Functions
 // ============================================
@@ -52,7 +66,7 @@ const getAgentStats = async (): Promise<GetAgentStatsResponse> => {
 
 // GET: All Agents (with filters/pagination)
 const getAgents = async (
-  params?: GetAgentsRequest
+  params?: GetAgentsRequest,
 ): Promise<GetAgentsResponse> => {
   return apiClient.get<GetAgentsResponse>(ENDPOINTS.agents.base, params);
 };
@@ -63,21 +77,21 @@ const getAgent = async (id: string): Promise<GetAgentResponse> => {
 };
 
 // POST: Create Agent
-export const createAgent = async (
-  data: CreateAgentRequest
+const createAgent = async (
+  data: CreateAgentRequest,
 ): Promise<CreateAgentResponse> => {
   return apiClient.post<CreateAgentResponse>(ENDPOINTS.agents.create, data);
 };
 
 // PUT: Update Agent
-export const updateAgent = async (
+const updateAgent = async (
   id: string,
-  data: UpdateAgentRequest
+  data: UpdateAgentRequest,
 ): Promise<UpdateAgentResponse> => {
   return apiClient.put<UpdateAgentResponse>(ENDPOINTS.agents.update(id), data);
 };
 
 // DELETE: Delete Agent
-export const deleteAgent = async (id: string): Promise<DeleteAgentResponse> => {
+const deleteAgent = async (id: string): Promise<DeleteAgentResponse> => {
   return apiClient.delete<DeleteAgentResponse>(ENDPOINTS.agents.delete(id));
 };

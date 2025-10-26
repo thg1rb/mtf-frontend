@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { getAgentQueryOption } from "@/lib/api";
+import { transformAgentResponseToFormData } from "@/lib/api/agents/utils";
 import { useQuery } from "@tanstack/react-query";
 import { SquarePen } from "lucide-react";
 import Link from "next/link";
@@ -28,6 +29,11 @@ export default function AgentPage({
 
   // TODO: test this api again
   const { data: agentData, isLoading } = useQuery(getAgentQueryOption(id!));
+
+  // Transform API data to form format
+  const formData = agentData
+    ? transformAgentResponseToFormData(agentData)
+    : null;
 
   if (!id || isLoading) {
     return (
@@ -62,7 +68,11 @@ export default function AgentPage({
         ]}
       />
 
-      <AgentForm mode="view" defaultValues={agentData} />
+      <AgentForm
+        mode="view"
+        defaultValues={formData || undefined}
+        agentId={id}
+      />
 
       {!agentData && (
         <AlertDialog open={true}>

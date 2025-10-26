@@ -4,8 +4,6 @@ import HeaderSection from "@/components/shared/HeaderSection";
 import TaskForm from "@/components/task/TaskForm";
 import { Button } from "@/components/ui/button";
 import { getWorkQueryOption } from "@/lib/api";
-import { SquarePen } from "lucide-react";
-import Link from "next/link";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { GetWorkResponse } from "@/lib/api/works/types";
@@ -55,12 +53,7 @@ export default function RenewTaskPage({
             asChild
             key="แก้ไขข้อมูล"
             className="font-normal px-[17px] py-[5px] w-full md:w-auto"
-          >
-            <Link href={`/tasks/renew/${id}/edit`}>
-              <SquarePen className="size-[24px] mr-2" />
-              แก้ไขข้อมูล
-            </Link>
-          </Button>,
+          ></Button>,
         ]}
       />
 

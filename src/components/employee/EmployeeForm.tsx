@@ -32,7 +32,10 @@ import {
   createEmployeeMutationOptions,
   updateEmployeeMutationOptions,
 } from "@/lib/api";
-import { CreateEmployeeRequest, UpdateEmployeeRequest } from "@/lib/api/employee/types";
+import {
+  CreateEmployeeRequest,
+  UpdateEmployeeRequest,
+} from "@/lib/api/employees/types";
 
 interface EmployeeFormProps {
   mode: "create" | "view" | "edit";
@@ -151,7 +154,7 @@ export default function EmployeeForm({
 
   // Transform form data to API request format for CREATE
   const transformToCreateRequest = (
-    data: EmployeeFormData
+    data: EmployeeFormData,
   ): CreateEmployeeRequest => {
     const documents: { type: string; expiryDate: string }[] = [];
 
@@ -198,7 +201,7 @@ export default function EmployeeForm({
 
   // Transform form data to API request format for UPDATE
   const transformToUpdateRequest = (
-    data: EmployeeFormData
+    data: EmployeeFormData,
   ): UpdateEmployeeRequest => {
     const documents: { type: string; expiryDate: string }[] = [];
 
@@ -570,7 +573,7 @@ export default function EmployeeForm({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[25px] md:gap-x-[50px] gap-y-[15px]">
           {documentFieldConfigs.map((fieldConfig) => {
             const fieldName = fieldConfig.name.split(
-              "."
+              ".",
             )[1] as keyof EmployeeFormData["documents"];
 
             return (

@@ -160,7 +160,6 @@ export default function TaskFormNew({
     },
   });
 
-  
   // Pay bill mutation
   const payBillMutation = useMutation({
     ...payBillMutationOptions,
@@ -283,8 +282,6 @@ export default function TaskFormNew({
     router.push("/tasks");
   };
 
-  
-  
   const isReadOnly = mode === "view";
 
   // PaidButtonSection component
@@ -292,7 +289,7 @@ export default function TaskFormNew({
     // If mode is view and the work is not completed (status === "NOT_FINISHED"), show reset and paid buttons
     if (mode === "view" && isWorkNotFinished()) {
       return (
-        <div className="flex flex-row gap-x-[20px] justify-end">
+        <div className="flex flex-col md:flex-row gap-x-[20px] gap-y-[10px] justify-end">
           <Button
             type="button"
             variant="outline"
