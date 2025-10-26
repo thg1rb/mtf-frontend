@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -16,12 +17,24 @@ import {
 import { Users, Eye, EyeOff, AlertCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
-export default function LoginPage() {
+export default function HomePage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
-  const { login, isLoading: isLoadingLogin } = useAuth();
+  const { login, isLoading: isLoadingLogin, isAuthenticated, user, isLoading } = useAuth();
+
+  // Redirect authenticated users to their appropriate dashboard
+  useEffect(() => {
+    if (!isLoading && isAuthenticated && user) {
+      if (user.role === "ADMIN") {
+        router.push("/agents");
+      } else if (user.role === "AGENT") {
+        router.push("/tasks");
+      }
+    }
+  }, [isLoading, isAuthenticated, user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,6 +48,24 @@ export default function LoginPage() {
       }
     }
   };
+
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  // Don't show login form if user is authenticated (they will be redirected)
+  if (isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
