@@ -31,9 +31,6 @@ export default function WorkPermitPage({
     },
   );
 
-  // // TODO: GET method `/api/employers/${id}` to fetch existing employer details
-  // const data = findWorkPermitsByEmployeeId(id);
-
   if (!id || isLoadingEmployee || isLoadingWorkPermits) {
     return (
       <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">

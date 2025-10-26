@@ -5,19 +5,13 @@ import HeaderSection from "@/components/shared/HeaderSection";
 import StatGrid from "@/components/shared/StatGrid";
 import { Button } from "@/components/ui/button";
 import { getEmployeeStatsQueryOption } from "@/lib/api";
-import {
-  mockEmployees,
-} from "@/lib/mock-data";
-import { Employee } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, CircleX, Loader, Plus, Users2 } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 
 export default function EmployersPage() {
-  const [employees] = useState<Employee[]>(mockEmployees); // TODO: search and filter employees
-
-  const { data: employeeStats } = useQuery(getEmployeeStatsQueryOption())
+  const { data: employeeStats } = useQuery(getEmployeeStatsQueryOption());
   const statItems = [
     {
       id: "stat-1",
@@ -73,8 +67,8 @@ export default function EmployersPage() {
       {/* StatGrid */}
       <StatGrid statItems={statItems} />
 
-      {/* TODO: TableSection */}
-      <EmployeeTable employees={employees} />
+      {/* TableSection */}
+      <EmployeeTable />
     </div>
   );
 }

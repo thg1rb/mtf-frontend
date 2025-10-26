@@ -26,9 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import Link from "next/link";
-import {
-  employeeTableHeaders,
-} from "@/lib/mock-data";
+import { employeeTableHeaders } from "@/lib/mock-data";
 import { useRouter } from "next/navigation";
 import StatusBadge from "../shared/StatusBadge";
 import DocumentExpiryBadge from "./DocumentExpiryBadge";
@@ -58,7 +56,7 @@ export default function EmployeeTable() {
         filterStatus && filterStatus.trim() !== ""
           ? (filterStatus as "ACTIVE" | "INACTIVE")
           : undefined,
-    })
+    }),
   );
 
   // Handle search button click
@@ -75,7 +73,6 @@ export default function EmployeeTable() {
     }
   };
 
-  // TODO: Header text align
   return (
     // {/* TableSection */ }
     <div className="flex flex-col gap-y-[20px] p-[20px] border rounded-2xl shadow-lg">
@@ -253,7 +250,6 @@ export default function EmployeeTable() {
       )}
 
       <div className="flex flex-row justify-between items-center">
-        {/* TODO: insert the amount of agents and filtered agents */}
         <p className="font-light text-zinc-500">
           {" "}
           หน้า {(employeesData?.currentPage ?? 0) + 1} จาก{" "}

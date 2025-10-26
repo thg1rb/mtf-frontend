@@ -26,10 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import Link from "next/link";
-import { employeeTableHeaders } from "@/lib/mock-data";
-import { useRouter } from "next/navigation";
 import StatusBadge from "../shared/StatusBadge";
-import DocumentExpiryBadge from "./DocumentExpiryBadge";
 import { useQuery } from "@tanstack/react-query";
 import { getEmployeesByEmployerIdQueryOption } from "@/lib/api";
 import { TableSkeleton } from "../shared/TableSkeleton";
@@ -39,7 +36,6 @@ export default function EmployeeByEmployerIdTableSection({
 }: {
   employerId: string;
 }) {
-  const router = useRouter();
   const [page, setPage] = useState<number>(0); // Start with 0
 
   // Input states (what user types)
@@ -77,7 +73,6 @@ export default function EmployeeByEmployerIdTableSection({
     }
   };
 
-  // TODO: Header text align
   return (
     // {/* TableSection */ }
     <div className="flex flex-col gap-y-[20px] p-[20px] border rounded-2xl shadow-lg">

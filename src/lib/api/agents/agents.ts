@@ -9,7 +9,6 @@ import type {
   GetAgentsRequest,
   GetAgentsResponse,
   GetAgentStatsResponse,
-  DeleteAgentResponse,
   GetAgentResponse,
 } from "./types";
 
@@ -92,6 +91,3 @@ const updateAgent = async (
 };
 
 // DELETE: Delete Agent
-const deleteAgent = async (id: string): Promise<DeleteAgentResponse> => {
-  return apiClient.delete<DeleteAgentResponse>(ENDPOINTS.agents.delete(id));
-};

@@ -102,7 +102,7 @@ export default function AgentsPage() {
     {
       id: "stat-3",
       title: "นายหน้าที่ไม่ใช้งาน (คน)",
-      amount: agentStats?.inactiveAgents ?? 0, // TODO: GET method `/api/agents/inactive`,
+      amount: agentStats?.inactiveAgents ?? 0,
       amountTextColor: "text-red-500",
       icon: CircleX,
     },

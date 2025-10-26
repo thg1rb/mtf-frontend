@@ -266,7 +266,6 @@ export default function TasksPage() {
                     <TableCell className="font-light px-[20px]">
                       <div className="flex flex-col">
                         <div className="flex flex-row items-center gap-x-[8px]">
-                          {/* TODO: The current Step Number */}
                           {"ขั้นตอนที่ " +
                             mappingCurrentStepIndex[
                               work.workType === "ขึ้นทะเบียนใหม่"

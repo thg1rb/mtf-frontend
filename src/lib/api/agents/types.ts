@@ -93,8 +93,3 @@ export interface UpdateAgentResponse {
   agentId: string;
   message: string;
 }
-
-export interface DeleteAgentResponse {
-  success: boolean;
-  message: string;
-}

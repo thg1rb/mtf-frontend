@@ -121,12 +121,10 @@ export default function ReceiptsPage() {
       <StatGrid statItems={statItems} />
 
       {/* TableSection */}
-      {/* TODO: Pagination */}
-      {/* TODO: filter agents by search or status */}
       <div className="flex flex-col gap-y-[20px] p-[20px] border rounded-2xl shadow-lg">
         <div className="flex flex-col">
           <p className="font-normal">ค้นหาใบเสร็จ</p>
-          <p className="font-light">ค้นหาจากหมายเลขใบเสร็จหรือชื่อนายจ้าง</p>
+          <p className="font-light">ค้นหาจากส่วนหขึ่งของชื่อนายจ้าง</p>
         </div>
         <div className="flex flex-row gap-x-[14px] md:gap-x-[26px]">
           <div className="relative flex-1">

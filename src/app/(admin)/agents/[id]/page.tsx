@@ -27,15 +27,16 @@ export default function AgentPage({
 }) {
   const { id } = use(params);
 
-  // TODO: test this api again
-  const { data: agentData, isLoading } = useQuery(getAgentQueryOption(id!));
+  const { data: agentData, isLoading: isLoadingAgent } = useQuery(
+    getAgentQueryOption(id!),
+  );
 
   // Transform API data to form format
   const formData = agentData
     ? transformAgentResponseToFormData(agentData)
     : null;
 
-  if (!id || isLoading) {
+  if (!id || isLoadingAgent) {
     return (
       <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
         <HeaderSection

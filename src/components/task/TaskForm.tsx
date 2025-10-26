@@ -210,7 +210,7 @@ export default function TaskFormNew({
       // Transform form data to match API request format
       const payload: CreateWorkRequest = {
         agentId: "1234567890126", // TODO: Get from auth context
-        employerId: data.employerId, // Use the selected employer ID from form
+        employerId: data.employerId,
         workType:
           typeOfTask === "register"
             ? "ขึ้นทะเบียนใหม่"
@@ -220,11 +220,7 @@ export default function TaskFormNew({
         detail: data.description,
         employeeIds: data.employeeIds,
       };
-
       createMutation.mutate(payload);
-    } else if (mode === "edit") {
-      // TODO: PUT method `api/employers/{id}`
-      router.push("/tasks");
     }
   };
 
