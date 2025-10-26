@@ -3,7 +3,6 @@
 import HeaderSection from "@/components/shared/HeaderSection";
 import StatGrid from "@/components/shared/StatGrid";
 import StatusBadge from "@/components/shared/StatusBadge";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -27,10 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  employerTableHeaders,
-  countEmployeesByEmployerId,
-} from "@/lib/mock-data";
+import { employerTableHeaders } from "@/lib/mock-data";
 import {
   Edit,
   Mail,
@@ -243,11 +239,6 @@ export default function EmployersPage() {
                           {employer.phoneNumber}
                         </div>
                       </div>
-                    </TableCell>
-                    <TableCell className="font-light px-[20px] text-center">
-                      <Badge variant="outline" className="w-[70px] font-light">
-                        {countEmployeesByEmployerId(employer.id)} คน
-                      </Badge>
                     </TableCell>
                     <TableCell className="px-[20px] text-center">
                       {<StatusBadge status={employer.status} />}

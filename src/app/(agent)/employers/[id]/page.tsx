@@ -3,6 +3,7 @@
 import EmployerForm from "@/components/employer/EmployerForm";
 import EmployerFormSkeleton from "@/components/employer/EmployerFormSkeleton";
 import HeaderSection from "@/components/shared/HeaderSection";
+import EmployeeByEmployerIdTableSection from "@/components/employee/EmployeeByEmployerIdTable";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -68,8 +69,8 @@ export default function EmployerPage({
       {/* FormSection */}
       <EmployerForm mode="view" defaultValues={employerData} />
 
-      {/* TODO: EmployeeTableSection */}
-      {/* <EmployeeTable employees={employees} /> */}
+      {/* EmployeeByEmployerIdTableSection */}
+      <EmployeeByEmployerIdTableSection employerId={id} />
 
       {/* EmployerNotFoundSection */}
       {!employerData && (
