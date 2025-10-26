@@ -1,10 +1,10 @@
 export const API_CONFIG = {
   // Base URL - changes based on environment
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api/v1',
-  
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+
   // Request timeout (10 seconds)
   timeout: 10000,
-  
+
   // Default headers for all requests
   headers: {
     'Content-Type': 'application/json',

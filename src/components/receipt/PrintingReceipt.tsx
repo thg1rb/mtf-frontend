@@ -46,7 +46,7 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
       >
         <style>
           {`
-            @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@100..900&display=swap');
+            @import url('${process.env.NEXT_PUBLIC_GOOGLE_FONTS_URL || 'https://fonts.googleapis.com/css2?family=Kanit:wght@100..900&display=swap'}');
             * {
               font-family: 'Kanit', sans-serif !important;
             }

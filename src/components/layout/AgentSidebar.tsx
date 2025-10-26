@@ -119,7 +119,7 @@ export default function AgentSidebar() {
                     <div className="text-left">
                       <p className="font-extralight">นายหน้า</p>
                       <p className="text-thin text-sidebar-foreground/70">
-                        {user?.email || "agent@mtf.com"}
+                        {user?.email || "unknown"}
                       </p>
                     </div>
                   </div>

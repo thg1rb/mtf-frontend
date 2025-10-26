@@ -95,7 +95,7 @@ export default function AdminSidebar() {
                     <div className="text-left">
                       <p className="font-extralight">ผู้ดูแลระบบ</p>
                       <p className="text-thin text-sidebar-foreground/70">
-                        {user?.email || "admin@mtf.com"}
+                        {user?.email || "unknown"}
                       </p>
                     </div>
                   </div>
