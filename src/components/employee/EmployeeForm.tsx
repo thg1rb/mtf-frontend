@@ -27,15 +27,26 @@ import {
   AlertDialogTitle,
 } from "../ui/alert-dialog";
 import { DatePicker } from "../shared/DatePicker";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   createEmployeeMutationOptions,
   updateEmployeeMutationOptions,
+  getEmployersQueryOption,
 } from "@/lib/api";
 import {
   CreateEmployeeRequest,
   UpdateEmployeeRequest,
 } from "@/lib/api/employees/types";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/command";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 interface EmployeeFormProps {
   mode: "create" | "view" | "edit";
@@ -88,6 +99,20 @@ export default function EmployeeForm({
     useState<boolean>(false);
   const [showInvalidEmployerId, setInvalidEmployerId] =
     useState<boolean>(false);
+  const [selectedEmployerId, setSelectedEmployerId] = useState<string>("");
+  const [selectedEmployeeIds, setSelectedEmployeeIds] = useState<string[]>([]);
+  const [page, setPage] = useState<number>(0);
+
+  // Fetch employers for dropdown selection
+  const { data: employersData } = useQuery(
+    getEmployersQueryOption({
+      page: 0,
+      size: 100, // Get a larger list for selection
+      status: "ACTIVE", // Only show active employers
+    }),
+  );
+
+  const employerSelects = employersData?.content || [];
 
   // Define mutations at component level (not inside handlers)
   const createMutation = useMutation({
@@ -288,6 +313,7 @@ export default function EmployeeForm({
               readOnly={isReadOnly}
               id="passportNumber"
               {...register("passportNumber")}
+              maxLength={8}
               className={`${isReadOnly ? "text-zinc-500" : ""}`}
             />
             {errors.passportNumber && (
@@ -297,25 +323,89 @@ export default function EmployeeForm({
             )}
           </div>
 
-          {/* TODO: Selection Controller */}
-          <div className="flex flex-col gap-y-[10px]">
-            <Label htmlFor="employerId" className="font-light text-zinc-700">
-              เลขประจำตัวผู้เสียภาษีนายจ้าง (13 หลัก)
-            </Label>
-            <Input
-              readOnly={isReadOnly}
-              maxLength={13}
-              inputMode="numeric"
-              id="employerId"
-              {...register("employerId")}
-              className={`${isReadOnly ? "text-zinc-500" : ""}`}
-            />
-            {errors.employerId && (
-              <span className="text-red-500 font-light">
-                {errors.employerId.message}
-              </span>
+          <Controller
+            name="employerId"
+            control={control}
+            render={({ field }) => (
+              <div className="flex flex-col gap-y-[10px]">
+                <Label
+                  htmlFor="employerId"
+                  className="font-light text-zinc-700"
+                >
+                  นายจ้าง
+                </Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      disabled={isReadOnly}
+                      type="button"
+                      variant="outline"
+                      role="combobox"
+                      className={`w-full flex flex-row justify-between font-light ${isReadOnly ? "text-zinc-500" : ""}`}
+                    >
+                      {field.value
+                        ? (() => {
+                            const selectedEmployer = employerSelects?.find(
+                              (employer) => employer.id === field.value,
+                            );
+
+                            return selectedEmployer
+                              ? selectedEmployer.fullName
+                              : "เลือกนายจ้าง";
+                          })()
+                        : "เลือกนายจ้าง"}
+                      <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[300px] p-0">
+                    <Command>
+                      <CommandInput
+                        placeholder="ค้นหาชื่อหรือนามสกุล..."
+                        className="h-9"
+                      />
+                      <CommandList>
+                        <CommandEmpty>ไม่พบนายจ้าง</CommandEmpty>
+                        <CommandGroup>
+                          {employerSelects?.map((employer) => (
+                            <CommandItem
+                              key={employer.id}
+                              value={employer.id}
+                              onSelect={() => {
+                                field.onChange(employer.id);
+
+                                // Clear selected employees when employer changes
+                                setSelectedEmployeeIds([]);
+
+                                // Set the selected employer ID to trigger API query
+                                setSelectedEmployerId(employer.id);
+
+                                // Reset pagination when employer changes
+                                setPage(0);
+                              }}
+                            >
+                              {employer.fullName}
+                              <Check
+                                className={`ml-auto ${
+                                  employer.id === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                }`}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                {errors.employerId && (
+                  <span className="text-red-500 font-light">
+                    {errors.employerId.message}
+                  </span>
+                )}
+              </div>
             )}
-          </div>
+          />
 
           <div className="flex flex-col gap-y-[10px]">
             <Label htmlFor="firstname" className="font-light text-zinc-700">
