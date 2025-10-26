@@ -99,9 +99,6 @@ export default function EmployeeForm({
     useState<boolean>(false);
   const [showInvalidEmployerId, setInvalidEmployerId] =
     useState<boolean>(false);
-  const [selectedEmployerId, setSelectedEmployerId] = useState<string>("");
-  const [selectedEmployeeIds, setSelectedEmployeeIds] = useState<string[]>([]);
-  const [page, setPage] = useState<number>(0);
 
   // Fetch employers for dropdown selection
   const { data: employersData } = useQuery(

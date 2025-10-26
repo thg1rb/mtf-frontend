@@ -1,4 +1,3 @@
-import { queryOptions } from "@tanstack/react-query";
 import { apiClient } from "../client";
 import { ENDPOINTS } from "../endpoints";
 import type {

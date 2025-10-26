@@ -1,5 +1,5 @@
 import React from "react";
-import { Users, Building, ChevronUp, LogOut, User } from "lucide-react";
+import { Users, Building, ChevronUp, LogOut } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -15,7 +15,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
