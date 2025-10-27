@@ -75,6 +75,7 @@ import {
 } from "../ui/select";
 import { getBillDetailsQueryOption } from "@/lib/api/bills/bills";
 import { BillResponse } from "@/lib/api/bills/types";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface TaskFormProps {
   typeOfTask: "register" | "renew";
@@ -90,6 +91,7 @@ export default function TaskFormNew({
   workId,
 }: TaskFormProps) {
   const router = useRouter();
+  const { user } = useAuth();
   const [page, setPage] = useState<number>(0); // Start with 0
 
   // Input states (what user types)
@@ -209,7 +211,7 @@ export default function TaskFormNew({
     if (mode === "create") {
       // Transform form data to match API request format
       const payload: CreateWorkRequest = {
-        agentId: "1234567890126", // TODO: Get from auth context
+        agentId: user?.id || "",
         employerId: data.employerId,
         workType:
           typeOfTask === "register"

@@ -13,4 +13,6 @@ export interface Receipt {
     fullName: string;
     nationality?: string;
   }>;
+  agentName?: string;
+  agentEmail?: string;
 }

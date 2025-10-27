@@ -99,6 +99,8 @@ export default function ReceiptPage({
     employerName: workData?.employer?.fullName || "-",
     typeOfTaskLabel: workData?.workType || "-",
     employees: workData?.employeesInWork || [],
+    agentName: workData?.agent?.fullName || "-",
+    agentEmail: workData?.agent?.email || "-",
   };
 
   return (

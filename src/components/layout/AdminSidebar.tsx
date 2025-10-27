@@ -94,7 +94,7 @@ export default function AdminSidebar() {
                     </Avatar>
                     <div className="text-left">
                       <p className="font-extralight">ผู้ดูแลระบบ</p>
-                      <p className="text-thin text-sidebar-foreground/70">
+                      <p className="text-thin text-sidebar-foreground/70 truncate">
                         {user?.email || "unknown"}
                       </p>
                     </div>

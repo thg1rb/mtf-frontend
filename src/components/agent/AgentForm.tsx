@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AgentFormData, agentSchema } from "@/lib/validations";
-import { Home, Info } from "lucide-react";
+import { Check, Copy, Home, Info } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -30,7 +30,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createAgentQueryOption, updateAgentQueryOption } from "@/lib/api";
 import {
   transformFormDataToCreateAgentRequest,
-  transformFormDataToUpdateAgentRequest
+  transformFormDataToUpdateAgentRequest,
 } from "@/lib/api/agents/utils";
 
 interface AgentFormProps {
@@ -39,15 +39,26 @@ interface AgentFormProps {
   agentId?: string; // Required for edit mode
 }
 
-export default function AgentForm({ mode, defaultValues, agentId }: AgentFormProps) {
+export default function AgentForm({
+  mode,
+  defaultValues,
+  agentId,
+}: AgentFormProps) {
   const router = useRouter();
   const [showValidationAlert, setShowValidationAlert] = useState(false);
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+  const [agentPassword, setAgentPassword] = useState<string>("");
+  const [isCopied, setIsCopied] = useState(false);
 
   // Define mutations
   const createMutation = useMutation({
     ...createAgentQueryOption(),
-    onSuccess: () => {
-      router.push("/agents");
+    onSuccess: (data) => {
+      // Show password dialog with the generated password
+      if (data?.password) {
+        setAgentPassword(data.password);
+        setShowPasswordDialog(true);
+      }
     },
     onError: (error) => {
       console.error("Create agent failed:", error);
@@ -95,6 +106,20 @@ export default function AgentForm({ mode, defaultValues, agentId }: AgentFormPro
   useEffect(() => {
     reset(cleanedDefaultValues);
   }, [cleanedDefaultValues, reset]);
+
+  const handleCopyPassword = async () => {
+    try {
+      await navigator.clipboard.writeText(agentPassword);
+      setIsCopied(true);
+
+      // Reset icon back to copy after 1 second
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 1000);
+    } catch (error) {
+      console.error("Failed to copy password:", error);
+    }
+  };
 
   // Form submit successfully (There is no invalid input)
   const handleFormSubmit = async (data: AgentFormData) => {
@@ -353,9 +378,12 @@ export default function AgentForm({ mode, defaultValues, agentId }: AgentFormPro
           </Button>
           <Button type="submit" disabled={isLoading} className="font-light">
             {isLoading
-              ? (mode === "create" ? "กำลังบันทึกข้อมูล..." : "กำลังบันทึกการแก้ไข...")
-              : (mode === "create" ? "บันทึกข้อมูล" : "บันทึกการแก้ไข")
-            }
+              ? mode === "create"
+                ? "กำลังบันทึกข้อมูล..."
+                : "กำลังบันทึกการแก้ไข..."
+              : mode === "create"
+                ? "บันทึกข้อมูล"
+                : "บันทึกการแก้ไข"}
           </Button>
 
           {hasError && (
@@ -363,10 +391,13 @@ export default function AgentForm({ mode, defaultValues, agentId }: AgentFormPro
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle className="font-medium">
-                    {mode === "create" ? "เพิ่มนายหน้าใหม่ไม่สำเร็จ!" : "แก้ไขข้อมูลนายหน้าไม่สำเร็จ!"}
+                    {mode === "create"
+                      ? "เพิ่มนายหน้าใหม่ไม่สำเร็จ!"
+                      : "แก้ไขข้อมูลนายหน้าไม่สำเร็จ!"}
                   </AlertDialogTitle>
                   <AlertDialogDescription className="font-light">
-                    เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง
+                    เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์
+                    กรุณาลองใหม่อีกครั้ง
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -403,6 +434,57 @@ export default function AgentForm({ mode, defaultValues, agentId }: AgentFormPro
               <AlertDialogFooter>
                 <AlertDialogAction className="font-light">
                   ตกลง
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
+          {/* Password Dialog */}
+          <AlertDialog
+            open={showPasswordDialog}
+            onOpenChange={(open) => {
+              if (!open) {
+                router.push("/agents");
+              }
+            }}
+          >
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="font-medium text-center">
+                  สร้างนายหน้าใหม่สำเร็จ
+                </AlertDialogTitle>
+                <AlertDialogDescription className="font-light text-center">
+                  รหัสผ่านสำหรับนายหน้า :
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <div className="my-4 p-4 bg-slate-100 rounded-lg border border-slate-200">
+                <div className="flex items-center justify-between gap-3 mx-2">
+                  <p className="text-center text-lg font-mono font-medium text-slate-800">
+                    {agentPassword}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleCopyPassword}
+                    className="p-2 hover:bg-slate-200 rounded-md transition-colors duration-200"
+                    title="คัดลอกรหัสผ่าน"
+                  >
+                    {isCopied ? (
+                      <Check className="h-5 w-5 text-green-600" />
+                    ) : (
+                      <Copy className="h-5 w-5 text-slate-600" />
+                    )}
+                  </button>
+                </div>
+              </div>
+              <AlertDialogFooter>
+                <AlertDialogAction
+                  className="font-light"
+                  onClick={() => {
+                    setShowPasswordDialog(false);
+                    router.push("/agents");
+                  }}
+                >
+                  ยืนยัน
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

@@ -3,6 +3,7 @@ import {
   CircleCheckBig,
   ScrollText,
   TriangleAlert,
+  User,
   User2,
 } from "lucide-react";
 import React, { forwardRef } from "react";
@@ -46,7 +47,7 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
       >
         <style>
           {`
-            @import url('${process.env.NEXT_PUBLIC_GOOGLE_FONTS_URL || 'https://fonts.googleapis.com/css2?family=Kanit:wght@100..900&display=swap'}');
+            @import url('${process.env.NEXT_PUBLIC_GOOGLE_FONTS_URL || "https://fonts.googleapis.com/css2?family=Kanit:wght@100..900&display=swap"}');
             * {
               font-family: 'Kanit', sans-serif !important;
             }
@@ -92,6 +93,25 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
                 {receipt?.status === "PAID" ? "ชำระแล้ว" : "รอชำระ"}
               </div>
             </Badge>
+          </div>
+        </div>
+
+        <div className="w-full h-[1px] bg-slate-300"></div>
+
+        <div className="flex flex-col gap-y-[20px]">
+          <div className="flex flex-row gap-x-[5px]">
+            <User />
+            <p className="font-normal">ข้อมูลนายหน้า</p>
+          </div>
+          <div className="flex flex-col ml-[20px]">
+            <div className="flex flex-row gap-x-[10px]">
+              <p className="font-light text-zinc-400">นายหน้าที่รับผิดชอบ:</p>
+              <p className="font-light">{receipt.agentName}</p>
+            </div>
+            <div className="flex flex-row gap-x-[10px]">
+              <p className="font-light text-zinc-400">อีเมล:</p>
+              <p className="font-light">{receipt.agentEmail}</p>
+            </div>
           </div>
         </div>
 

@@ -124,14 +124,14 @@ export default function ReceiptsPage() {
       <div className="flex flex-col gap-y-[20px] p-[20px] border rounded-2xl shadow-lg">
         <div className="flex flex-col">
           <p className="font-normal">ค้นหาใบเสร็จ</p>
-          <p className="font-light">ค้นหาจากส่วนหขึ่งของชื่อนายจ้าง</p>
+          <p className="font-light">ค้นหาจากส่วนหนึ่งของชื่อนายจ้าง</p>
         </div>
         <div className="flex flex-row gap-x-[14px] md:gap-x-[26px]">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               className="pl-10"
-              placeholder="ค้นหาจากหมายเลขใบเสร็จหรือชื่อนายจ้าง..."
+              placeholder="ค้นหาจากชื่อนายจ้าง..."
               value={searchInput}
               onChange={(e) => {
                 setSearchInput(e.target.value);
