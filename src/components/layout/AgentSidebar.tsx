@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/navigation";
 import {
   Building,
   Users,
@@ -53,6 +54,7 @@ const menuItems = [
 ];
 
 export default function AgentSidebar() {
+  const router = useRouter();
   const { user, logout } = useAuth();
 
   // Get initials from fullname
@@ -127,7 +129,7 @@ export default function AgentSidebar() {
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/profile")}>
                   <User className="w-4 h-4 mr-2" />
                   ตั้งค่าบัญชี
                 </DropdownMenuItem>
