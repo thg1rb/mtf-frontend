@@ -978,11 +978,11 @@ export default function TaskFormNew({
           <AlertDialogHeader>
             <AlertDialogTitle className="font-medium">
               {mode === "create"
-                ? "เพิ่มลูกจ้างใหม่ไม่สำเร็จ!"
-                : "แก้ไขข้อมูลลูกจ้างไม่สำเร็จ!"}
+                ? "เพิ่มงานใหม่ไม่สำเร็จ!"
+                : "แก้ไขข้อมูลงานไม่สำเร็จ!"}
             </AlertDialogTitle>
             <AlertDialogDescription className="font-light">
-              ระบุข้อมูลของลูกจ้างให้ครบถ้วนและตรวจสอบรูปแบบของข้อมูลให้ถูกต้องก่อนคลิก{" "}
+              ตรวจสอบข้อมูลให้ครบถ้วนก่อนคลิก{" "}
               {mode === "create" ? "บันทึกข้อมูล" : "บันทึกการแก้ไข"}
             </AlertDialogDescription>
           </AlertDialogHeader>

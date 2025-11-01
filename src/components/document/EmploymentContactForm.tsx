@@ -592,11 +592,11 @@ export default function EmploymentContactForm({
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle className="font-medium">
-                    บันทึกข้อมูลของเอกสาร บต. 46 ไม่สำเร็จ
+                    บันทึกข้อมูลของเอกสารสัญญาจ้าง 3 ภาษาไม่สำเร็จ
                   </AlertDialogTitle>
                   <AlertDialogDescription className="font-light">
-                    ระบุข้อมูลของนายจ้างให้ครบถ้วนและตรวจสอบรูปแบบของข้อมูลของนายจ้างให้ถูกต้องก่อนคลิก
-                    บันทึกข้อมูล
+                    ระบุข้อมูลของเอกสารให้ครบถ้วนและตรวจสอบรูปแบบของข้อมูลให้ถูกต้องก่อนคลิก
+                    บันทึกข้อมูลล่าสุด
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
