@@ -1,5 +1,8 @@
-# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,macos,windows,nextjs
-# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,macos,windows,nextjs
+# Created by https://www.toptal.com/developers/gitignore/api/macos,windows,visualstudiocode,dotenv,nextjs
+# Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,visualstudiocode,dotenv,nextjs
+
+### dotenv ###
+.env
 
 ### macOS ###
 # General
@@ -114,4 +117,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,macos,windows,nextjs
+# Claude Code
+CLAUDE.md
+PROMPT.md
+
+# End of https://www.toptal.com/developers/gitignore/api/macos,windows,visualstudiocode,dotenv,nextjs
