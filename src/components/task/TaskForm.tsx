@@ -12,7 +12,6 @@ import {
   Info,
   MoreHorizontal,
   Search,
-  Trash2,
   Users2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -768,13 +767,6 @@ export default function TaskFormNew({
                                       แก้ไข
                                     </Link>
                                   </DropdownMenuItem>
-                                  <DropdownMenuItem
-                                    className="text-destructive cursor-pointer"
-                                    onClick={(e) => e.stopPropagation()}
-                                  >
-                                    <Trash2 className="mr-2 h-4 w-4" />
-                                    ลบ
-                                  </DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </TableCell>
@@ -983,7 +975,7 @@ export default function TaskFormNew({
             </AlertDialogTitle>
             <AlertDialogDescription className="font-light">
               ตรวจสอบข้อมูลให้ครบถ้วนก่อนคลิก{" "}
-              {mode === "create" ? "บันทึกข้อมูล" : "บันทึกการแก้ไข"}
+              {mode === "create" ? "เริ่มดำเนินการ" : "บันทึกการแก้ไข"}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

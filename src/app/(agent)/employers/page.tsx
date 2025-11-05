@@ -34,7 +34,6 @@ import {
   Phone,
   Plus,
   Search,
-  Trash2,
   UserCheck2,
   Users2,
   UserX2,
@@ -264,13 +263,6 @@ export default function EmployersPage() {
                               <Edit className="mr-2 h-4 w-4" />
                               แก้ไข
                             </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            className="text-destructive cursor-pointer"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            ลบ
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

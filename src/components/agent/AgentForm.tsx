@@ -427,7 +427,7 @@ export default function AgentForm({
                     : "แก้ไขข้อมูลนายหน้าไม่สำเร็จ!"}
                 </AlertDialogTitle>
                 <AlertDialogDescription className="font-light">
-                  ระบุข้อมูลของนายหน้าให้ครบถ้วนและตรวจสอบรูปแบบของข้อมูลของนายหน้าให้ถูกต้องก่อนคลิก{" "}
+                  ระบุข้อมูลของนายหน้าให้ครบถ้วนและตรวจสอบรูปแบบของข้อมูลให้ถูกต้องก่อนคลิก{" "}
                   {mode === "create" ? "บันทึกข้อมูล" : "บันทึกการแก้ไข"}
                 </AlertDialogDescription>
               </AlertDialogHeader>

@@ -23,7 +23,7 @@ export const employeeSchema = z.object({
   status: z.enum(["ACTIVE", "INACTIVE"], "กรุณาระบุสถานะ"),
 
   address: z.object({
-    addrDetailTh: z.string().min(1, "กรุณาระบุที่อยู่"),
+    addrDetailTh: z.string().min(1, "กรุณาระบุบ้านเลขที่, หมู่, ซอย, ถนน"),
 
     districtTh: z.string().min(1, "กรุณาระบุเขตหรืออำเภอ"),
 

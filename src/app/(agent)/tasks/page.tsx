@@ -39,7 +39,6 @@ import {
   MoreHorizontal,
   Plus,
   Search,
-  Trash2,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -311,13 +310,6 @@ export default function TasksPage() {
                               <Edit className="mr-2 h-4 w-4" />
                               แก้ไข
                             </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            className="text-destructive cursor-pointer"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            ลบ
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

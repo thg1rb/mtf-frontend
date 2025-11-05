@@ -19,7 +19,7 @@ export const agentSchema = z.object({
 
   status: z.enum(["ACTIVE", "INACTIVE"], "กรุณาระบุสถานะ"),
 
-  addressDetails: z.string().min(1, "กรุณาระบุที่อยู่"),
+  addressDetails: z.string().min(1, "กรุณาระบุบ้านเลขที่, หมู่, ซอย, ถนน"),
 
   district: z.string().min(1, "กรุณาระบุเขต/อำเภอ"),
 

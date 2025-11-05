@@ -129,7 +129,6 @@ export default function EmploymentContactForm({
     }
   }, [employmentContractData, setValue]);
 
-  
   // Transform form data to API request format
   const transformToCreateRequest = (
     data: EmploymentContractFormData
@@ -225,6 +224,8 @@ export default function EmploymentContactForm({
                 id="incomePerDay"
                 {...register("incomePerDay", { valueAsNumber: true })}
                 type="number"
+                inputMode="decimal"
+                step="0.01"
                 min={0}
               />
               {errors.incomePerDay && (

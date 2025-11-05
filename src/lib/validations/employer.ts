@@ -55,9 +55,9 @@ export const employerSchema = z.object({
     .min(1, "ช่วงระยะเวลาของรายได้ปัจจุบันต้องมากกว่า 0"),
 
   address: z.object({
-    addrDetailTh: z.string().min(1, "กรุณาระบุที่อยู่เป็นภาษาไทย"),
+    addrDetailTh: z.string().min(1, "กรุณาระบุบ้านเลขที่, หมู่, ซอย, ถนนเป็นภาษาไทย"),
 
-    addrDetailEn: z.string().min(1, "กรุณาระบุที่อยู่เป็นภาษาอังกฤษ"),
+    addrDetailEn: z.string().min(1, "กรุณาระบุบ้านเลขที่, หมู่, ซอย, ถนนเป็นภาษาอังกฤษ"),
 
     districtTh: z.string().min(1, "กรุณาระบุเขตหรืออำเภอเป็นภาษาไทย"),
 

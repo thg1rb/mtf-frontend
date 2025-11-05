@@ -54,8 +54,8 @@ const toDateOrNull = (value: string | Date | null | undefined): Date | null => {
 
 const formatDateToYYYYMMDD = (date: Date): string => {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
 
@@ -149,7 +149,7 @@ export default function WorkPermitForm({
     setShowValidationAlert(false);
 
     const payload = transformToCreateRequest(data);
-    console.log(payload)
+    console.log(payload);
     createMutation.mutate(payload);
   };
 
@@ -304,6 +304,8 @@ export default function WorkPermitForm({
                 id="incomePerDay"
                 {...register("incomePerDay", { valueAsNumber: true })}
                 type="number"
+                inputMode="decimal"
+                step="0.01"
                 min={0}
               />
               {errors.incomePerDay && (
@@ -324,6 +326,8 @@ export default function WorkPermitForm({
                 id="benefitPerDay"
                 {...register("benefitPerDay", { valueAsNumber: true })}
                 type="number"
+                inputMode="decimal"
+                step="0.01"
                 min={0}
               />
               {errors.benefitPerDay && (
