@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import React, { forwardRef } from "react";
 import { Badge } from "../ui/badge";
-import { Receipt } from "@/types";
+import { NotPrintedReceipt, PrintedReceipt } from "@/types";
 import {
   Table,
   TableBody,
@@ -19,7 +19,7 @@ import {
 } from "../ui/table";
 
 interface PrintingReceiptProps {
-  receipt: Receipt;
+  receipt: NotPrintedReceipt | PrintedReceipt;
 }
 
 const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
@@ -28,6 +28,12 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
     const employerName = receipt.employerName || "-";
     const typeOfTaskLabel = receipt.typeOfTaskLabel || "-";
     const employees = receipt.employees || [];
+
+    // Check if this is a printed receipt
+    const isPrintedReceipt = 'reason' in receipt && 'printCount' in receipt && 'printDate' in receipt;
+    const reason = isPrintedReceipt ? receipt.reason : "-";
+    const printCount = isPrintedReceipt ? receipt.printCount : 0;
+    const printDate = isPrintedReceipt ? receipt.printDate : null;
 
     // Format dates
     const formatDate = (date: Date | string | null) => {
@@ -56,8 +62,8 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
 
         <div className="flex flex-col justify-center items-center">
           <p className="font-semibold">ใบเสร็จอิเล็กทรอนิกส์</p>
-          <p className="font-medium">{receipt.id}</p>
-          <p className="font-light text-zinc-800">หมายเหตุ: {"-"}</p>
+          <p className="font-medium">{receipt.id}{printCount === 0 ? "" : "/" + printCount}</p>
+          <p className="font-light text-zinc-800">หมายเหตุ: {reason}</p>
         </div>
 
         <div className="w-full h-[1px] bg-slate-300"></div>
@@ -208,7 +214,7 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
         <div className="flex flex-col items-end mt-[20px]">
           <p className="font-light text-zinc-800">ลงชื่อ __________________________</p>
           <p className="font-light text-zinc-800">({receipt.agentName})</p>
-          <p className="font-light text-zinc-800">วันที่ {formatDate(new Date().toLocaleDateString())}</p>
+          <p className="font-light text-zinc-800">วันที่ {formatDate(printDate)}</p>
         </div>
       </div>
     );

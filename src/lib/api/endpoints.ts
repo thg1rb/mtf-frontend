@@ -88,5 +88,6 @@ export const ENDPOINTS = {
     details: "/bills/details",
     pay: (id: string | number) => `/bills/${id}/pay`,
     statistics: "/bills/statistics",
+    print: (id: string | number) => `/bills/${id}/print`,
   },
 } as const;

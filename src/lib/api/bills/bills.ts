@@ -8,8 +8,9 @@ import {
   GetBillsRequest,
   GetBillsResponse,
   BillStatsResponse,
+  PostPrintedBillResponse,
+  PostPrintedBillRequest,
 } from "./types";
-
 
 // ============================================
 // Query Options (for React Query)
@@ -56,6 +57,12 @@ export const payBillMutationOptions = {
   mutationFn: (billId: string) => payBillById(billId),
 };
 
+// Printed Bill Mutation
+export const printedBillMutationOptions = {
+  mutationFn: (agentId: string, data: PostPrintedBillRequest) =>
+    postPrintedBillById(agentId, data),
+};
+
 // ============================================
 // API Functions
 // ============================================
@@ -67,9 +74,20 @@ const getBillById = async (billId: string): Promise<BillResponse> => {
 
 // GET: Bill Details by Work ID and optional Step Index
 const getBillDetails = async (
-  params?: GetBillDetailsRequest,
+  params?: GetBillDetailsRequest
 ): Promise<BillResponse[]> => {
   return apiClient.get<BillResponse[]>(ENDPOINTS.bills.details, params);
+};
+
+// POST: Print Bill by ID
+export const postPrintedBillById = async (
+  billId: string,
+  data: PostPrintedBillRequest
+): Promise<PostPrintedBillResponse> => {
+  return apiClient.post<PostPrintedBillResponse>(
+    ENDPOINTS.bills.print(billId),
+    data
+  );
 };
 
 // POST: Pay Bill by ID
@@ -78,7 +96,9 @@ const payBillById = async (billId: string): Promise<PayBillResponse> => {
 };
 
 // GET: All Bills with pagination and filters
-const getBills = async (params?: GetBillsRequest): Promise<GetBillsResponse> => {
+const getBills = async (
+  params?: GetBillsRequest
+): Promise<GetBillsResponse> => {
   return apiClient.get<GetBillsResponse>(ENDPOINTS.bills.base, params);
 };
 

@@ -13,6 +13,11 @@ export interface GetBillDetailsRequest {
   [key: string]: string | number | undefined; // Index signature for query params
 }
 
+export interface PostPrintedBillRequest {
+  agentId: string;
+  reason: string;
+}
+
 // ============================================
 // Response Types (Data received from API)
 // ============================================
@@ -26,6 +31,26 @@ export interface BillResponse {
   createdAt: string;
   paidAt: string | null;
   workId: string;
+}
+
+export interface PostPrintedBillResponse {
+  bill: {
+    id: string;
+    stepIndex: number;
+    stepName: string;
+    price: number;
+    status: "NOT_PAID" | "PAID";
+    createdAt: string;
+    paidAt: string | null;
+    workId: string;
+    printCount: number;
+    lastPrintedAt: string;
+    printStatus: "NOT_PRINTED" | "PRINTED" | "REPRINTED";
+  };
+  printRound: number;
+  printedAt: string;
+  printedByAgentName: string;
+  printReason: string;
 }
 
 export interface PayBillResponse {

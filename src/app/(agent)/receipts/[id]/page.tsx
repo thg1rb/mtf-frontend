@@ -6,13 +6,26 @@ import { Button } from "@/components/ui/button";
 import {
   getBillByIdQueryOption,
   payBillMutationOptions,
+  printedBillMutationOptions,
 } from "@/lib/api/bills/bills";
 import { getWorkQueryOption } from "@/lib/api/works/works";
-import { CircleCheckBig, Printer, Sparkles } from "lucide-react";
-import React, { use, useRef } from "react";
+import { CircleCheckBig, Sparkles } from "lucide-react";
+import React, { use, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { PostPrintedBillRequest, PostPrintedBillResponse } from "@/lib/api/bills/types";
+import { getAuthUser } from "@/lib/auth/storage";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { PrintedReceipt } from "@/types";
 
 export default function ReceiptPage({
   params,
@@ -23,6 +36,9 @@ export default function ReceiptPage({
   const router = useRouter();
   const printRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [reason, setReason] = useState("");
+  const [ printedReceipt, setPrintedReceipt ] = useState<PrintedReceipt | null>(null);
 
   // Fetch bill by ID
   const { data: bill, isLoading, error } = useQuery(getBillByIdQueryOption(id));
@@ -43,7 +59,7 @@ export default function ReceiptPage({
       // Invalidate bill details query used in TaskForm (with workId parameter)
       if (bill?.workId) {
         queryClient.invalidateQueries({
-          queryKey: ["bill-details", { workId: bill.workId }]
+          queryKey: ["bill-details", { workId: bill.workId }],
         });
       }
 
@@ -62,6 +78,50 @@ export default function ReceiptPage({
   const handlePrint = useReactToPrint({
     contentRef: printRef,
     documentTitle: `ใบเสร็จ-${bill?.id || "unknown"}`,
+  });
+
+  // Printed bill mutation
+  const printedBillMutation = useMutation({
+    mutationFn: ({
+      billId,
+      data,
+    }: {
+      billId: string;
+      data: PostPrintedBillRequest;
+    }) => printedBillMutationOptions.mutationFn(billId, data),
+    onSuccess: (data: PostPrintedBillResponse) => {
+      console.log("Bill marked as printed");
+
+      // Convert PostPrintedBillResponse to PrintedReceipt format for PrintingReceipt component
+      const convertedReceipt: PrintedReceipt = {
+        id: data.bill.id,
+        taskId: data.bill.workId,
+        step: data.bill.stepIndex,
+        amount: data.bill.price,
+        status: data.bill.status,
+        createdAt: data.bill.createdAt,
+        paidAt: data.bill.paidAt,
+        // PrintedReceipt specific fields
+        reason: data.printReason,
+        printCount: data.bill.printCount,
+        printDate: data.printedAt,
+        // Use work data for additional fields
+        employerName: workData?.employer?.fullName || "-",
+        typeOfTaskLabel: data.bill.stepName || workData?.workType || "-",
+        employees: workData?.employeesInWork || [],
+        agentName: data.printedByAgentName || workData?.agent?.fullName || "-",
+        agentEmail: workData?.agent?.email || "-",
+      };
+
+      setPrintedReceipt(convertedReceipt);
+      // Trigger print after setting the printed receipt data
+      setTimeout(() => {
+        handlePrint();
+      }, 100);
+    },
+    onError: (error) => {
+      console.error("Marking bill as printed failed:", error);
+    },
   });
 
   const handlePayBill = () => {
@@ -113,7 +173,8 @@ export default function ReceiptPage({
       <div className="flex flex-col lg:flex-row gap-[45px]">
         {/* Receipt Display */}
         <div className="flex-2">
-          {receipt && <PrintingReceipt ref={printRef} receipt={receipt} />}
+          {/* {receipt && <PrintingReceipt ref={printRef} receipt={receipt} />} */}
+          { printedReceipt ? (<PrintingReceipt ref={printRef} receipt={printedReceipt} />) : (<PrintingReceipt ref={printRef} receipt={receipt} />)}
         </div>
 
         <div className="flex-1">
@@ -125,7 +186,48 @@ export default function ReceiptPage({
             </div>
             <div className="flex flex-col gap-y-[25px] ">
               <div className="flex flex-col gap-y-[18px]">
-                <Button
+                <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+                  <DialogTrigger asChild className="flex flex-row justify-start w-full">
+                    <Button variant="outline" className="font-light">พิมพ์ใบเสร็จ</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <form onSubmit={(e) => {
+                      e.preventDefault();
+                      if (!bill) return;
+                      const agentId = getAuthUser()?.id || "";
+                      printedBillMutation.mutate({
+                        billId: bill.id,
+                        data: {
+                          agentId,
+                          reason,
+                        },
+                      });
+                      setOpenDialog(false);
+                    }}>
+                      <DialogHeader>
+                        <DialogTitle className="font-medium text-center">ยืนยันการพิมพ์ใบเสร็จ</DialogTitle>
+                      </DialogHeader>
+                      <div className="grid gap-4 mt-5">
+                        <div className="grid gap-3">
+                          <Textarea
+                            id="reason"
+                            name="reason"
+                            placeholder="ระบุเหตุผลในการพิมพ์ใบเสร็จนี้"
+                            className="font-light"
+                            value={reason}
+                            onChange={(e) => setReason(e.target.value)}
+                            required
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter className="mt-5">
+                        <Button type="submit" className="font-normal">ยืนยัน</Button>
+                      </DialogFooter>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+                
+                {/* <Button
                   type="button"
                   variant="outline"
                   className="flex flex-row justify-start cursor-pointer"
@@ -133,7 +235,8 @@ export default function ReceiptPage({
                 >
                   <Printer />
                   <p className="font-light">พิมพ์ใบเสร็จ</p>
-                </Button>
+                </Button> */}
+
                 {bill.status === "NOT_PAID" && (
                   <Button
                     type="button"
