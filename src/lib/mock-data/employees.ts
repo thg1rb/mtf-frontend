@@ -3,46 +3,51 @@ import { TableHeader } from "@/types";
 export const employeeTableHeaders: TableHeader[] = [
   {
     index: "header-1",
-    headerName: "ชื่อ-นามสกุล",
+    headerName: "รหัสประตัว",
     className: "text-left",
   },
   {
     index: "header-2",
-    headerName: "นายจ้าง",
+    headerName: "ชื่อ-นามสกุล",
     className: "text-left",
   },
   {
     index: "header-3",
+    headerName: "นายจ้าง",
+    className: "text-left",
+  },
+  {
+    index: "header-4",
     headerName: "ใบรับรองแพทย์",
     className: "text-center",
   },
   {
-    index: "header-4",
+    index: "header-5",
     headerName: "ประกันสุขภาพ",
     className: "text-center",
   },
   {
-    index: "header-5",
+    index: "header-6",
     headerName: "ใบอนุญาตทำงาน",
     className: "text-center",
   },
   {
-    index: "header-6",
+    index: "header-7",
     headerName: "เอกสาร CI",
     className: "text-center",
   },
   {
-    index: "header-7",
+    index: "header-8",
     headerName: "บัตรชมพู",
     className: "text-center",
   },
   {
-    index: "header-8",
+    index: "header-9",
     headerName: "สถานะ",
     className: "text-center",
   },
   {
-    index: "header-9",
+    index: "header-10",
     headerName: "ดำเนินการ",
     className: "text-right",
   },

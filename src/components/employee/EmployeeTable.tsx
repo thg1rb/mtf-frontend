@@ -165,6 +165,9 @@ export default function EmployeeTable() {
                   }
                 >
                   <TableCell className="font-light px-[20px]">
+                    {employee.passportNumber}
+                  </TableCell>
+                  <TableCell className="font-light px-[20px]">
                     {employee.fullName}
                   </TableCell>
                   <TableCell className="font-light px-[20px]">

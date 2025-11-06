@@ -225,6 +225,9 @@ export default function EmployersPage() {
                     onClick={() => router.push(`/employers/${employer.id}`)}
                   >
                     <TableCell className="font-light px-[20px]">
+                      {employer.id}
+                    </TableCell>
+                    <TableCell className="font-light px-[20px]">
                       {employer.fullName}
                     </TableCell>
                     <TableCell className="font-light px-[20px]">

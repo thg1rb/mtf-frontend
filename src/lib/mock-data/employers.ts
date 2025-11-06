@@ -3,11 +3,16 @@ import { TableHeader } from "@/types";
 export const employerTableHeaders: TableHeader[] = [
   {
     index: "header-1",
-    headerName: "ชื่อ-นามสกุล",
+    headerName: "รหัสประตัว",
     className: "text-left",
   },
   {
     index: "header-2",
+    headerName: "ชื่อ-นามสกุล",
+    className: "text-left",
+  },
+  {
+    index: "header-3",
     headerName: "ช่องทางติดต่อ",
     className: "text-left",
   },
