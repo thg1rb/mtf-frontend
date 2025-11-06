@@ -107,7 +107,7 @@ export default function ReceiptPage({
     <div className="flex flex-col gap-[51px] w-full px-[20px] md:px-[36px] py-[8px] md:py-[20px]">
       <div className="flex flex-col">
         {/* HeaderSection */}
-        <HeaderSection topic={bill.id} hasBackButton={true} />
+        <HeaderSection topic="ข้อมูลใบเสร็จ" hasBackButton={true} />
       </div>
 
       <div className="flex flex-col lg:flex-row gap-[45px]">

@@ -54,7 +54,15 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
           `}
         </style>
 
-        <div className="flex flex-col lg:flex-row justify-between gap-y-[15px]">
+        <div className="flex flex-col justify-center items-center">
+          <p className="font-semibold">ใบเสร็จอิเล็กทรอนิกส์</p>
+          <p className="font-medium">{receipt.id}</p>
+          <p className="font-light text-zinc-800">หมายเหตุ: {"-"}</p>
+        </div>
+
+        <div className="w-full h-[1px] bg-slate-300"></div>
+
+        <div className="flex flex-col md:flex-row justify-between gap-y-[15px]">
           <div>
             <div className="flex flex-row items-center gap-x-[5px]">
               <Building />
@@ -177,7 +185,7 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
         <div className="flex flex-row justify-between gap-y-[5px]">
           <p className="font-medium">รวมทั้งสิ้น</p>
           <p className="font-medium text-sky-700">
-            ฿ {receipt.amount.toLocaleString()}
+            ฿ {receipt.amount.toLocaleString()} ถ้วน
           </p>
         </div>
 
@@ -196,9 +204,15 @@ const PrintingReceipt = forwardRef<HTMLDivElement, PrintingReceiptProps>(
         ) : (
           <></>
         )}
+
+        <div className="flex flex-col items-end mt-[20px]">
+          <p className="font-light text-zinc-800">ลงชื่อ __________________________</p>
+          <p className="font-light text-zinc-800">({receipt.agentName})</p>
+          <p className="font-light text-zinc-800">วันที่ {formatDate(new Date().toLocaleDateString())}</p>
+        </div>
       </div>
     );
-  },
+  }
 );
 
 PrintingReceipt.displayName = "PrintingReceipt";
